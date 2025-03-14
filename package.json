@@ -1,0 +1,21 @@
+{
+  "name": "tabler-dist-vite-build",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-legacy": "^6.0.2",
+    "fast-glob": "^3.3.3",
+    "vite": "^6.2.0",
+    "vite-plugin-glob": "^0.3.2",
+    "vite-plugin-static-copy": "^2.3.0"
+  },
+  "dependencies": {
+    "glob": "^11.0.1"
+  }
+}
