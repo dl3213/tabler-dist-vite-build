@@ -430,8 +430,8 @@
                                 first
                             </a>
                         </li>
-                        <li class="page-item disabled page-prev-btn">
-                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                        <li class="page-item   page-prev-btn">
+                            <a class="page-link" href="#"  >
                                 <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                      viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -464,7 +464,7 @@
                         </li>
                         <li class="page-item">
                             <input type="text" class="form-control page-size-input"
-                                   name="example-text-input" value="12">
+                                   name="example-text-input" value="30">
                         </li>
                         <li class="page-item">
                             <select name="user[day]" class="form-select page-select ">
@@ -542,8 +542,8 @@
                                 first
                             </a>
                         </li>
-                        <li class="page-item disabled page-prev-btn">
-                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                        <li class="page-item page-prev-btn">
+                            <a class="page-link" href="#" >
                                 <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                      viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -576,7 +576,7 @@
                         </li>
                         <li class="page-item">
                             <input type="text" class="form-control page-size-input"
-                                   name="example-text-input" value="12">
+                                   name="example-text-input" value="30">
                         </li>
                         <li class="page-item">
                             <select name="user[day]" class="form-select page-select ">
@@ -607,10 +607,16 @@
         const apiUrl = server.API_URL
         document.getElementById('dropzone-custom').action = apiUrl + '/api/rest/v1/file/upload';
         var danger_ok_btn = document.getElementById("danger_ok");
-        var pageSizeInput = Array.from(document.getElementsByClassName("page-size-input"))[0];
+        var pageSizeInputList = Array.from(document.getElementsByClassName("page-size-input")); 
         var keywordInput = document.getElementById("keyword");
         var totalInfoDiv = document.getElementById("totalInfo");
         var page_select_list = Array.from(document.getElementsByClassName("page-select"));
+
+        var pagePrevBtnList = Array.from(document.getElementsByClassName("page-prev-btn"));
+        var pageNextBtnList = Array.from(document.getElementsByClassName("page-next-btn"));
+
+        var contextHtml = document.getElementById('gallery-context');
+
         var config = {
             maxFilesize: 10240000,
             uploadMultiple: false,
@@ -626,16 +632,21 @@
 
         var request = {
             pageNumber: 1,
-            pageSize: pageSizeInput.value,
+            pageSize: pageSizeInputList[0].value,
             lastPageNumber: 1,
         }
-        load_photo(request, 1)
+        load_data(request, 1)
 
-        pageSizeInput.addEventListener("change", function (evt) {
-            if (Number(evt.currentTarget.value) < Number(3)) {
-                evt.currentTarget.value = 3
-            }
+        pageSizeInputList.forEach(pageSizeInput => {
+            pageSizeInput.addEventListener("change", function (evt) {
+                console.log('pageSizeInput -> ' + evt.currentTarget.value)
+                if (Number(evt.currentTarget.value) < Number(3)) {
+                    evt.currentTarget.value = 3
+                }
+                request.pageSize = evt.currentTarget.value
+            })
         })
+        
 
 
         page_select_list.forEach(element => {
@@ -643,13 +654,13 @@
                 var selectedValue = event.target.value;
                 console.log("Selected value is: " + selectedValue);
                 request.pageNumber = selectedValue
-                load_photo(request, 1)
+                load_data(request, 1)
             })
         })
 
         document.getElementById("search-btn").addEventListener("click", function (event) {
             //request.pageNumber = 1
-            load_photo(request , 1)
+            load_data(request , 1)
         })
  
         function buildGallery(item, url) {
@@ -660,6 +671,20 @@
                                     class="card-img-top"  ></a>
                             <div class="card-body base-info-div"  >
                               <div class="row row-cards"   >
+                                 <div class="col-xs-2 col-sm-2 col-md-2">
+                                  <div class="mb-3">
+                                        <a target-id="` + item.id + `" class="btn btn-link delete-btn">
+                                            delete
+                                        </a>
+                                  </div>
+                                </div>
+                                <div class="col-xs-1 col-sm-1 col-md-1">
+                                </div>
+                                <div class="col-xs-1 col-sm-6 col-md-6">
+                                  <div class="mb-3"> 
+                                    <input type="text" class="form-control" name="example-disabled-input" placeholder="Readonly..." value="` + (item.realName) + `" readonly="">
+                                  </div>
+                                </div>
                                 <div class="col-xs-2 col-sm-2 col-md-2">
                                   <div class="mb-3">
                                     <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -681,31 +706,23 @@
                                     </div>
                                   </div>
                                 </div>
+                              </div>
+                            </div>
+                            <div class="card-body"  >
+                              <div class="row row-cards"   >
+                                <div class="col-xs-3 col-md-3 col-lg-3"> 
+                                    <input type="text" class="form-control-plaintext" name="example-disabled-input" placeholder="Readonly..." value="` + (item.type) + `" readonly="" disabled>
+                                </div> 
                                 <div class="col-xs-1 col-sm-1 col-md-1">
                                 </div>
-                                <div class="col-xs-1 col-sm-6 col-md-6">
-                                  <div class="mb-3"> 
-                                    <input type="text" class="form-control" name="example-disabled-input" placeholder="Readonly..." value="` + (item.realName) + `" readonly="">
+                                <div class="col-xs-5 col-sm-5 col-md-5">
+                                  <div class="mb-3">
+                                    <input type="text" class="form-control-plaintext" name="example-disabled-input"  value="` + (item.createTime) + `" disabled>
                                   </div>
                                 </div>
                                 <div class="col-xs-3 col-md-3 col-lg-3"> 
                                     <input type="text" class="form-control-plaintext" name="example-disabled-input" placeholder="Readonly..." value="` + ((item.size / 1024.0 / 1024.0).toFixed(1)) + `MB" readonly="" disabled>
                                 </div> 
- 
-                              </div>
-                            </div>
-                            <div class="card-body"  >
-                              <div class="row row-cards"   >
-                                <div class="col-xs-2 col-sm-2 col-md-2"> 
-                                </div>
-                                <div class="col-xs-1 col-sm-1 col-md-1">
-                                </div>
-                                <div class="col-xs-1 col-sm-7 col-md-7">
-                                  <div class="mb-3">
-                                    <input type="text" class="form-control-plaintext" name="example-disabled-input"  value="` + (item.createTime) + `" disabled>
-                                  </div>
-                                </div>
-                                <div class="col-xs-1 col-md-2 col-lg-2"></div>
 
                               </div>
                             </div>
@@ -915,7 +932,7 @@
                     console.log(response)
                     response = response.data
                     if(response.code == 200){
-                        load_photo(request)
+                        load_data(request)
                     }else{
                         document.getElementById("modal-danger-context").textContent = response.msg
                         document.getElementById("danger-btn").click();
@@ -1036,45 +1053,43 @@
 
         }
 
-        function load_photo(request, show) {
+        function load_data(request, show) {
+            const start = new Date().getTime();
+ 
             if(show){
                 var temp = showLoading('gallery-context')
             }
             axios
                 .post( apiUrl + '/api/rest/v1/file/page', {
                     ...request,
-                    "pageSize": pageSizeInput.value,
                     "keyword": keywordInput?.value,
                     "hash": document.getElementById("hash")?.checked ? document.getElementById("hash")?.value : "0",
                     "isDeleted": document.getElementById("isDeleted")?.checked ? document.getElementById("isDeleted")?.value : "0",
                     //"type": "image",
                 })
                 .then(response => {
-                    var data = response.data;
-                    console.log(data)
-                    var totalInfo = "<text>total = " + data.total + "</text>";
+                    var resp = response.data;
+                    console.log(resp)
+                    var totalInfo = "<text>total = " + resp.total + "</text>";
                     console.log(totalInfo)
                     totalInfoDiv.innerHTML = totalInfo;
-                    if (data.pageNumber == 1) {
-                        Array.from(document.getElementsByClassName("page-prev-btn")).forEach(e => e.classList.add("disabled"))
-                    } else {
-                        Array.from(document.getElementsByClassName("page-prev-btn")).forEach(e => e.classList.remove("disabled"))
-                    }
-
-                    page_select_build(data)
-
-                    page_index_build(data, "page-index-top");
-                    page_index_build(data, "page-index-bottom");
-                    document.getElementById('gallery-context').innerHTML = ""
-                    data.data.forEach(item => {
-
-                        var url = "/static-file/" + item.relativePath;
-                        var div = item.type?.startsWith("text") || item.type?.startsWith("application") ? buildCard(item, url) : buildGallery(item, url);
-
-                        document.getElementById('gallery-context').innerHTML += div
-
-                        
+ 
+                    pageSizeInputList.forEach(item =>{
+                        item.value = resp.pageSize
                     })
+
+                    page_select_build(resp)
+
+                    page_index_build(resp, "page-index-top");
+                    page_index_build(resp, "page-index-bottom");
+                    contextHtml.innerHTML = ""
+                    var context = ""
+                    resp.data.forEach(item => {
+                        var url = resp.prevUrl + item.relativePath;
+                        var div = item.type?.startsWith("text") || item.type?.startsWith("application") ? buildCard(item, url) : buildGallery(item, url);
+                        context += div
+                    })
+                    contextHtml.innerHTML = context
 
                     edit_btn_build()
                     delete_btn_build()
@@ -1084,6 +1099,9 @@
                 .catch(error => {
                     console.log(error)
                 })
+                .finally(()=>{
+                    console.log('load_data cost = ' + (new Date().getTime() - start))
+                })
 
             document.getElementById("top")?.click()
         }
@@ -1092,14 +1110,14 @@
         for (let el of page_index_top_list) {
             el.addEventListener('click', function (evt) {
                 request.pageNumber = el.innerText
-                load_photo(request, 1)
+                load_data(request, 1)
             })
         }
         var page_index_bottom_list = document.getElementsByClassName("page-index-bottom");
         for (let el of page_index_bottom_list) {
             el.addEventListener('click', function (evt) {
                 request.pageNumber = el.innerText
-                load_photo(request, 1)
+                load_data(request, 1)
             })
         }
 
@@ -1134,30 +1152,33 @@
         })
 
 
-        Array.from(document.getElementsByClassName("page-prev-btn")).forEach(el => {
+        pagePrevBtnList.forEach(el => {
             el.addEventListener('click', function (evt) {
                 request.pageNumber = numberSub(request.pageNumber, 1)
-                load_photo(request,1)
+                if(request.pageNumber <= 0){
+                    request.pageNumber = 1
+                }
+                load_data(request,1)
             })
         })
-        Array.from(document.getElementsByClassName("page-next-btn")).forEach(el => {
+        pageNextBtnList.forEach(el => {
             el.addEventListener('click', function (evt) {
                 request.pageNumber = numberAdd(request.pageNumber, 1)
-                load_photo(request,1)
+                load_data(request,1)
             })
         })
 
         Array.from(document.getElementsByClassName("first-btn")).forEach(el => {
             el.addEventListener('click', function (evt) {
                 request.pageNumber = 1
-                load_photo(request,1)
+                load_data(request,1)
             })
         })
 
         Array.from(document.getElementsByClassName("last-btn")).forEach(el => {
             el.addEventListener('click', function (evt) {
                 request.pageNumber = request.lastPageNumber
-                load_photo(request,1)
+                load_data(request,1)
             })
         })
 
