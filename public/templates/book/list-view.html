@@ -704,7 +704,7 @@
             const formJson = JSON.stringify(addForm);
             console.log(formJson)
             axios
-                .post('/api/rest/v1/book/add', addForm)
+                .post(apiUrl + '/api/rest/v1/book/add', addForm)
                 .then(response => {
                     console.log(response)
                     if (response.data.code == 200) {
