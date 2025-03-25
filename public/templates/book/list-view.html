@@ -12,15 +12,15 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title th:text="${title}">Gallery - Tabler - Premium and Open Source dashboard template with responsive and high
-        quality UI.</title>
+ 
     <!-- CSS files -->
-    <link href="/libs/dropzone/dropzone.css?1692870487" rel="stylesheet"/>
+    <link href="/css/dropzone.css?1692870487" rel="stylesheet"/>
     <link href="/css/tabler.min.css?1692870487" rel="stylesheet"/>
     <link href="/css/tabler-flags.min.css?1692870487" rel="stylesheet"/>
     <link href="/css/tabler-payments.min.css?1692870487" rel="stylesheet"/>
     <link href="/css/tabler-vendors.min.css?1692870487" rel="stylesheet"/>
     <link href="/css/demo.min.css?1692870487" rel="stylesheet"/>
+    <link href="/css/fancybox.css?1692870487" rel="stylesheet"/>
     <style>
         @import url('/css/inter.css');
 
@@ -39,11 +39,11 @@
     <div class="page-wrapper">
         <!-- Page header -->
         <div class="page-header d-print-none">
-
             <div hidden="hidden">
                 <input id="success-btn" class="btn" data-bs-toggle="modal" data-bs-target="#modal-success">
                 <input id="danger-btn" class="btn" data-bs-toggle="modal" data-bs-target="#modal-danger">
             </div>
+
 
             <div class="container-xl">
 
@@ -207,194 +207,263 @@
                     <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
                 </div>
 
-                <div class="row g-2 align-items-center">
-                    <div class="col">
-                        <h2 class="page-title">
-                            Book
-                        </h2>
-                        <div class="text-secondary mt-1" id="totalInfo">1-12 of 241 photos</div>
-                    </div>
-                    <!-- Page title actions -->
-                    <div class="col-auto ms-auto d-print-none">
-                        <div class="d-flex" style="justify-content: center;align-items: center">
-                            <div class="me-3">
-                                <label class="form-check form-check-inline">
-                                    <input class="form-check-input" type="checkbox" id="isDeleted" value="1">
-                                    <span class="form-check-label">isDeleted</span>
-                                </label>
-                            </div>
-                            <div class="me-3">
-                                <div class="input-icon">
-                                    <input type="text" value="" id="keyword" class="form-control" placeholder="Search…">
-                                    <span class="input-icon-addon" id="search">
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="me-3">
-                                <a href="#" class="btn btn-primary" id="search-btn">
+
+                <div class="modal modal-blur fade">
+                    <a href="#" id="entity-detail-btn" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal"
+                       data-bs-target="#detail-div">
+                        <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                            <path d="M12 5l0 14"/>
+                            <path d="M5 12l14 0"/>
+                        </svg>
+                        New+
+                    </a>
+                </div>
+                <div class="modal modal-blur fade " id="detail-div" tabindex="-1" role="dialog" aria-hidden="true" style="height: 100%">
+                    <div class="modal-dialog modal-fullscreen modal-fullscreen-md-down" role="document">
+                        <div class="modal-content">
+                            <iframe id="entity-detail-iframe" class="modal-body card"  >
+        
+                            </iframe>
+                            <div class="modal-footer">
+                                <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                                    Cancel
+                                </a>
+                                <a href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
                                     <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                          viewBox="0 0 24 24"
                                          stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
                                          stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                        <path
-                                                d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0"/>
-                                        <path d="M21 21l-6 -6"/>
-                                    </svg>
-                                    Search
-                                </a>
-                            </div>
-                            <div class="me-3">
-                                <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal"
-                                   data-bs-target="#modal-report">
-                                    <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                         stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
                                         <path d="M12 5l0 14"/>
                                         <path d="M5 12l14 0"/>
                                     </svg>
                                     New+
                                 </a>
-                                <a href="#" class="btn btn-primary d-sm-none btn-icon" data-bs-toggle="modal"
-                                   data-bs-target="#modal-report" aria-label="Create new report">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+ 
+            </div>
+
+            <div class="modal modal-blur fade">
+                <a href="#" id="book-detail-btn" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal"
+                   data-bs-target="#book-detail">
+                    <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                         stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M12 5l0 14"/>
+                        <path d="M5 12l14 0"/>
+                    </svg>
+                    New+
+                </a>
+            </div>
+            <div class="modal modal-blur fade " id="book-detail" tabindex="-1" role="dialog" aria-hidden="true" style="height: 100%">
+                <div class="modal-dialog modal-fullscreen modal-fullscreen-md-down" role="document">
+                    <div class="modal-content">
+                        <iframe id="book-detail-iframe" class="modal-body card" src="/api/rest/v1/book/detail/view.html?id=">
+    
+                        </iframe>
+                        <div class="modal-footer">
+                            <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                                Cancel
+                            </a>
+                            <a href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
+                                Confirm
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal modal-blur fade" id="modal-report" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">New+</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-btn"></button>
+                        </div>
+                        <form class="card" id="entity-form">
+                            <input hidden name="id" value="" readonly /> 
+ 
+                            <input hidden name="isDeleted" value="" readonly />  
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Name</label>
+                                    <input type="text" class="form-control" name="name"
+                                           placeholder="name">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">type</label>
+                                    <input type="text" class="form-control" name="type"
+                                           placeholder="type">
+                                </div>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">absolutePath</label>
+                                            <input type="text" class="form-control" name="absolutePath" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">relativePath</label>
+                                            <input type="text" class="form-control" name="relativePath" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">createId</label>
+                                            <input type="text" class="form-control" name="createId" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">updateId</label>
+                                            <input type="text" class="form-control" name="updateId" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">createTime</label>
+                                            <input type="date-time" class="form-control" name="createTime"   >
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">updateTime</label>
+                                            <input type="date-time" class="form-control" name="updateTime"  >
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <div>
+                                            <label class="form-label">description</label>
+                                            <textarea class="form-control" rows="3" name="description"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="modal-footer">
+                            <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                                Cancel
+                            </a>
+                            <a href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal" id="add-submit">
+                                Put
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container-xl"> 
+                <div class="card-body">
+                    <div class="row row-cards">
+                        <div class="col-xs-4 col-md-4 col-lg-4">
+                            <div class="col">
+                                <h2 class="page-title">
+                                    Book
+                                </h2>
+                                <div class="text-secondary mt-1" id="totalInfo">1-12 of 241 photos</div>
+                            </div>
+                        </div>
+                        <div class="col-xs-2 col-md-2 col-lg-2">
+                            
+                        </div>
+                        <div class="col-xs-2 col-sm-2 col-md-2">
+                            <div class="d-flex" style="justify-content: center;align-items: center">
+                                <div class="me-3">
+                                    <label class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="isDeleted" value="1">
+                                        <span class="form-check-label">isDeleted</span>
+                                    </label>
+                                </div>
+                                <div class="me-3">
+                                    <label class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" id="hash" value="1">
+                                        <span class="form-check-label">hash</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-4 col-md-4 col-lg-4">
+                            <div class="d-flex" style="justify-content: center;align-items: center">
+                                <div class="me-3">
+                
+                                    <div class="input-icon">
+                                        <input type="text" value="" id="keyword" class="form-control" placeholder="Search…">
+                                        <span class="input-icon-addon" id="search">
+                                        </span>
+                                    </div>
+                                </div>
+                                <a href="#" class="btn btn-primary" id="search-btn">
                                     <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                         stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                        <path d="M12 5l0 14"/>
-                                        <path d="M5 12l14 0"/>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                        <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+                                        <path d="M21 21l-6 -6" />
                                     </svg>
+                                    Search
                                 </a>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="modal modal-blur fade" id="modal-report" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">New+</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form class="card" id="entity-form">
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label class="form-label">Name</label>
-                                <input type="text" class="form-control" name="name"
-                                       placeholder="name">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Author</label>
-                                <input type="text" class="form-control" name="author"
-                                       placeholder="author">
-                            </div>
-                        </div>
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Page Num</label>
-                                        <input type="text" class="form-control" name="pageNum">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="mb-3">
-                                        <label class="form-label">Code</label>
-                                        <input type="date" class="form-control" name="code">
-                                    </div>
-                                </div>
-                                <div class="col-lg-12">
-                                    <div>
-                                        <label class="form-label">description</label>
-                                        <textarea class="form-control" rows="3" name="description"></textarea>
-                                    </div>
+                                <div class="me-3">
+                                    <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal"
+                                       data-bs-target="#modal-report">
+                                        <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                             stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                            <path d="M12 5l0 14"/>
+                                            <path d="M5 12l14 0"/>
+                                        </svg>
+                                        New+
+                                    </a>
+                                    <a href="#" class="btn btn-primary d-sm-none btn-icon" data-bs-toggle="modal"
+                                       data-bs-target="#modal-report" aria-label="Create new report">
+                                        <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                             stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                            <path d="M12 5l0 14"/>
+                                            <path d="M5 12l14 0"/>
+                                        </svg>
+                                    </a>
                                 </div>
                             </div>
                         </div>
-                    </form>
-                    <div class="modal-footer">
-                        <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
-                            Cancel
-                        </a>
-                        <a href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal" id="form-submit">
-                            <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                 viewBox="0 0 24 24"
-                                 stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                 stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                <path d="M12 5l0 14"/>
-                                <path d="M5 12l14 0"/>
-                            </svg>
-                            New+
-                        </a>
                     </div>
-                </div>
+                </div> 
             </div>
-        </div>
-
-        <div class="modal modal-blur fade">
-            <a href="#" id="book-detail-btn" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal"
-               data-bs-target="#book-detail">
-                <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                     stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                    <path d="M12 5l0 14"/>
-                    <path d="M5 12l14 0"/>
-                </svg>
-                New+
-            </a>
-        </div>
-        <div class="modal modal-blur fade " id="book-detail" tabindex="-1" role="dialog" aria-hidden="true" style="height: 100%">
-            <div class="modal-dialog modal-fullscreen modal-fullscreen-md-down" role="document">
-                <div class="modal-content">
-                    <iframe id="book-detail-iframe" class="modal-body card" src="/api/rest/v1/book/detail/view.html?id=">
-
-                    </iframe>
-                    <div class="modal-footer">
-                        <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
-                            Cancel
-                        </a>
-                        <a href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
-                            <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                 viewBox="0 0 24 24"
-                                 stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                 stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                <path d="M12 5l0 14"/>
-                                <path d="M5 12l14 0"/>
-                            </svg>
-                            New+
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </div> 
         <div class="page-body">
             <div class="container-xl">
-                <div class="row row-cards" id="gallery-context">
-                </div>
                 <div class="d-flex">
 
                     <ul class="pagination ms-auto align-items-center">
                         <li class="page-item">
-                            <a class="page-link" id="top" href="#" tabindex="-1" aria-disabled="true">
+                            <a class="page-link top-btn" href="#" tabindex="-1" aria-disabled="true">
                                 top
                             </a>
                         </li>
-
-                        <li class="page-item disabled" id="page-prev">
-                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
+                        <li class="page-item">
+                            <a class="page-link first-btn" href="#" tabindex="-1" aria-disabled="true">
+                                first
+                            </a>
+                        </li>
+                        <li class="page-item   page-prev-btn">
+                            <a class="page-link" href="#"  >
                                 <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
                                      viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
@@ -404,12 +473,12 @@
                                 </svg>
                             </a>
                         </li>
-                        <li class="page-item"><a class="page-link page-index" href="#">1</a></li>
-                        <li class="page-item active"><a class="page-link page-index" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link page-index" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link page-index" href="#">4</a></li>
-                        <li class="page-item"><a class="page-link page-index" href="#">5</a></li>
-                        <li class="page-item" id="page-next">
+                        <li class="page-item"><a class="page-link page-index-top" href="#">1</a></li>
+                        <li class="page-item active"><a class="page-link page-index-top" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link page-index-top" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link page-index-top" href="#">4</a></li>
+                        <li class="page-item"><a class="page-link page-index-top" href="#">5</a></li>
+                        <li class="page-item page-next-btn">
                             <a class="page-link" href="#">
                                 <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
@@ -421,11 +490,74 @@
                             </a>
                         </li>
                         <li class="page-item">
-                            <input type="text" class="form-control" id="page-size"
-                                   name="example-text-input" value="12">
+                            <a class="page-link last-btn" href="#" tabindex="-1" aria-disabled="true">
+                                last
+                            </a>
                         </li>
                         <li class="page-item">
-                            <select name="user[day]" class="form-select" id="page-select">
+                            <input type="text" class="form-control page-size-input"
+                                   name="example-text-input" value="30">
+                        </li>
+                        <li class="page-item">
+                            <select   class="form-select page-select ">
+                            </select>
+                        </li>
+                    </ul>
+                </div>
+                <div class="row row-cards" id="gallery-context">
+                </div>
+                
+                <div class="d-flex">
+
+                    <ul class="pagination ms-auto align-items-center">
+                        <li class="page-item">
+                            <a class="page-link top-btn" href="#" tabindex="-1" aria-disabled="true">
+                                top
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link first-btn" href="#" tabindex="-1" aria-disabled="true">
+                                first
+                            </a>
+                        </li>
+                        <li class="page-item page-prev-btn">
+                            <a class="page-link" href="#" >
+                                <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                     stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M15 6l-6 6l6 6"/>
+                                </svg>
+                            </a>
+                        </li>
+                        <li class="page-item"><a class="page-link page-index-bottom" href="#">1</a></li>
+                        <li class="page-item active"><a class="page-link page-index-bottom" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link page-index-bottom" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link page-index-bottom" href="#">4</a></li>
+                        <li class="page-item"><a class="page-link page-index-bottom" href="#">5</a></li>
+                        <li class="page-item page-next-btn">
+                            <a class="page-link" href="#">
+                                <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                     stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M9 6l6 6l-6 6"/>
+                                </svg>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link last-btn" href="#" tabindex="-1" aria-disabled="true">
+                                last
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <input type="text" class="form-control page-size-input"
+                                   name="example-text-input" value="30">
+                        </li>
+                        <li class="page-item">
+                            <select  class="form-select page-select ">
                             </select>
                         </li>
                     </ul>
@@ -436,205 +568,128 @@
 </div>
 <!-- Libs JS -->
 <!-- Tabler Core -->
-<script src="/js/dropzone-min.js?1692870487" defer></script>
+<script src="/js/nouislider.min.js?1692870487" defer></script>
+<script src="/js/litepicker.js?1692870487" defer></script>
+<script src="/js/tom-select.base.min.js?1692870487" defer></script>
+<script src="/js/dropzone-min.js?1692870487" defer></script> 
 <script src="/js/tabler.min.js?1692870487" defer></script>
-<script src="/js/demo.min.js?1692870487" defer></script>
-<script src="/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="/js/demo.min.js?1692870487" defer></script> 
 <script src="/js/axios.min.js" type="text/javascript" charset="utf-8"></script>
-<script src="/js/layer.js"></script>
+<script src="/js/fancybox.umd.js" type="text/javascript" charset="utf-8"></script>
 <script src="/js/common/common.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         console.log("DOMContentLoaded...")
-        const apiUrl = server.API_URL
+        const apiUrl = server.API_URL 
         var danger_ok_btn = document.getElementById("danger_ok");
-        var pageSizeInput = document.getElementById("page-size");
+        var pageSizeInputList = Array.from(document.getElementsByClassName("page-size-input")); 
         var keywordInput = document.getElementById("keyword");
-        var page_select = document.getElementById("page-select");
         var totalInfoDiv = document.getElementById("totalInfo");
+        var page_select_list = Array.from(document.getElementsByClassName("page-select"));
 
+        var pagePrevBtnList = Array.from(document.getElementsByClassName("page-prev-btn"));
+        var pageNextBtnList = Array.from(document.getElementsByClassName("page-next-btn"));
+
+        var contextHtml = document.getElementById('gallery-context');
+ 
         var request = {
             pageNumber: 1,
-            pageSize: pageSizeInput.value,
+            pageSize: pageSizeInputList[0].value,
+            lastPageNumber: 1,
         }
-        load_request(request)
+        load_data(request, 1)
 
-        pageSizeInput.addEventListener("change", function (evt) {
-            if (Number(evt.currentTarget.value) < Number(3)) {
-                evt.currentTarget.value = 3
-            }
+        pageSizeInputList.forEach(pageSizeInput => {
+            pageSizeInput.addEventListener("change", function (evt) {
+                console.log('pageSizeInput -> ' + evt.currentTarget.value)
+                if (Number(evt.currentTarget.value) < Number(3)) {
+                    evt.currentTarget.value = 3
+                }
+                request.pageSize = evt.currentTarget.value
+            })
         })
+        
 
-        document.getElementById("page-select").addEventListener("change", function (event) {
-            var selectedValue = event.target.value;
-            console.log("Selected value is: " + selectedValue);
-            request.pageNumber = selectedValue
-            load_request(request)
+
+        page_select_list.forEach(element => {
+            element.addEventListener("change", function (event) {
+                var selectedValue = event.target.value;
+                console.log("Selected value is: " + selectedValue);
+                request.pageNumber = selectedValue
+                load_data(request, 1)
+            })
         })
 
         document.getElementById("search-btn").addEventListener("click", function (event) {
             //request.pageNumber = 1
-            load_request(request)
+            load_data(request , 1)
         })
-
+ 
         function buildGallery(item, url) {
             return `<div class="col-sm-8 col-sm-6 col-lg-4" id="">
                         <div class="card card-sm">
-                            <a ` + 'href123' + `="` + apiUrl + ('/api/rest/v1/book/detail/first/' + item.id) + `" class="d-block card-img-top entity" id="` + item.id + `"  data-fslightbox="gallery" ><img
+                            <a href123 ="` + apiUrl + ('/api/rest/v1/book/detail/first/' + item.id) + `" class="d-block card-img-top entity" id="` + item.id + `"  data-fslightbox="gallery" ><img
                                     src="` + apiUrl + ('/api/rest/v1/book/detail/first/' + item.id) + `"
                                     class="card-img-top"  ></a>
-                            <div class="card-body">
-                              <div class="row row-cards">
+                            <div class="card-body base-info-div"  >
+                              <div class="row row-cards"   >
+                                 <div class="col-xs-2 col-sm-2 col-md-2">
+                                  <div class="mb-3">
+                                        <a target-id="` + item.id + `" class="btn btn-link delete-btn">
+                                            delete
+                                        </a>
+                                  </div>
+                                </div>
+                                <div class="col-xs-1 col-sm-1 col-md-1">
+                                </div>
+                                <div class="col-xs-1 col-sm-6 col-md-6">
+                                  <div class="mb-3"> 
+                                    <input type="text" class="form-control" name="example-disabled-input" placeholder="Readonly..." value="` + (item.name) + `" readonly="">
+                                  </div>
+                                </div>
                                 <div class="col-xs-2 col-sm-2 col-md-2">
                                   <div class="mb-3">
                                     <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                       Action
                                     </button>
                                     <div class="dropdown-menu">
-                                      <a class="dropdown-item text-red delete-btn" target-id="` + item.id + `" >
-                                        delete
-                                      </a>
-                                      <a class="dropdown-item rename-btn" target-id="` + item.id + `">
-                                        rename
-                                      </a>
+                                      <a class="dropdown-item edit-btn" target-id="` + item.id + `"  data-bs-toggle="modal" data-bs-target="#modal-report">
+                                        edit
+                                      </a> 
                                       <a class="dropdown-item move-btn" target-id="` + item.id + `">
                                         move
                                       </a>
-                                      <a class="dropdown-item move-btn" target-id="` + item.id + `">
+                                      <a class="dropdown-item text-red delete-btn" target-id="` + item.id + `" >
+                                        delete
+                                      </a>
+                                      <a class="dropdown-item restore-btn" target-id="` + item.id + `">
                                         restore
                                       </a>
                                     </div>
                                   </div>
                                 </div>
-                                <div class="col-xs-1 col-sm-1 col-md-1">
-                                </div>
-                                <div class="col-xs-1 col-sm-9 col-md-9">
-                                  <div class="mb-3">
-                                    <input type="text" class="form-control" name="example-disabled-input"  value="` + (item.name.length > 23 ? item.name.substring(0, 23) + "..." : item.name) + `" disabled>
-                                  </div>
-                                </div>
                               </div>
-                            </div>
+                            </div> 
                         </div>
                     </div>`
         }
 
-        //<div class="form-control-plaintext">`+(item.name.length > 23 ? item.name.substring(0, 23) + "..." : item.name)+`</div>
-
-
-        function load_request(request) {
-
-
-            axios
-                .post(apiUrl + '/api/rest/v1/book/page', {
-                    ...request,
-                    "pageSize": pageSizeInput.value,
-                    "keyword": keywordInput?.value,
-                    "isDeleted": document.getElementById("isDeleted")?.checked ? document.getElementById("isDeleted")?.value : "0",
-                })
-                .then(response => {
-                    var data = response.data;
-                    console.log(data)
-                    var totalInfo = "<text>total = " + data.total + "</text>";
-                    console.log(totalInfo)
-                    totalInfoDiv.innerHTML = totalInfo;
-                    if (data.pageNumber == 1) {
-                        document.getElementById("page-prev").classList.add("disabled")
-                    } else {
-                        document.getElementById("page-prev").classList.remove("disabled")
-                    }
-
-                    var pageIndex_size = (data.total / data.pageSize)
-
-                    page_select.innerHTML = ""
-                    pageIndex_size = pageIndex_size == 0 ? 1 : pageIndex_size;
-                    for (let i = 1; i <= (pageIndex_size + 1); i++) {
-                        if (i == data.pageNumber) {
-                            page_select.innerHTML += `<option selected value="` + i + `" >` + i + `</option>`
-                        } else {
-                            page_select.innerHTML += `<option value="` + i + `" >` + i + `</option>`
-                        }
-                    }
-
-                    var page_index_list = document.getElementsByClassName("page-index");
-                    if (data.pageNumber > (3)) {
-
-                    }
-
-                    var start = data.pageNumber == 1 && data.pageNumber < 2 ? 1 : data.pageNumber - 2;
-                    for (let el of page_index_list) {
-                        el.innerText = start
-                        start = numberAdd(start, 1)
-                    }
-
-                    for (let el of page_index_list) {
-                        if (el.innerText == data.pageNumber) {
-                            el.parentElement.classList.add("active")
-                        } else {
-                            el.parentElement.classList.remove("active")
-                        }
-
-                    }
-
-
-                    document.getElementById('gallery-context').innerHTML = ""
-                    data.data.forEach(item => {
-
-                        var url = "/static-file/" + item.relativePath;
-                        var div = buildGallery(item, url);
-
-                        document.getElementById('gallery-context').innerHTML += div
-                        //refreshFsLightbox();
-
-                        load_del_btn()
-                        load_rename_btn()
-                    })
-
-                    load_detail()
-                })
-                .catch(error => {
-                    console.log(error)
-                })
-
-            document.getElementById("top").click()
-        }
-
-        function load_detail() {
-            var items = document.querySelectorAll('#gallery-context .entity');
-            items.forEach(function (item) {
-                item.addEventListener('click', function (evt) {
-                    evt.preventDefault()
-                    evt.stopImmediatePropagation()
-                    evt.stopPropagation()
-                    document.getElementById("book-detail-btn").click()
-                    var detail_iframe = document.getElementById("book-detail-iframe");
-                    detail_iframe.src = "/templates/book/detail-view.html?id=" + evt.currentTarget.id;
-                });
-            });
-        }
-
-        function load_rename_btn() {
-            var btn_list = document.getElementsByClassName("rename-btn");
-            for (let el of btn_list) {
-                el.addEventListener('click', function (evt) {
-                    console.log(el.getAttribute("target-id"))
-                })
-            }
-        }
-
-        function load_del_btn() {
+ 
+        function delete_btn_build() {
             var delete_btn_list = document.getElementsByClassName("delete-btn");
             for (let el of delete_btn_list) {
                 el.addEventListener('click', function (evt) {
+                    console.log(el.getAttribute("target-id")) 
+                    danger_ok_btn.setAttribute("target-id", el.getAttribute("target-id"))
 
-                    var id = el.getAttribute("target-id");
+                    var id = danger_ok_btn.getAttribute("target-id");
                     console.log(id)
-                    var parentElement = el.parentElement;
+                    var parentElement = el.parentElement.parentElement.parentElement.parentElement;
                     if (id) {
                         parentElement.innerHTML = `
-                                    <span class="input-icon-addon ms-3">
-                                          <div class="spinner-border spinner-border-sm text-secondary" role="status"></div>
-                                    </span>
+                                    <div class="col-xs-12 col-sm-12 col-md-12"> 
+                                        <div class="spinner-border spinner-border-sm text-secondary" role="status"></div>
+                                    </div> 
                                     `
                         axios
                             .delete(apiUrl + '/api/rest/v1/book/delete/' + id)
@@ -642,16 +697,22 @@
                                 console.log(response)
                                 //alert(response.data.msg)
                                 if (response.data.code == 200) {
+                                    //document.getElementById("modal-success-context").textContent = response.data.msg
+                                    //document.getElementById("success-btn").click();
                                     parentElement.innerHTML = `
-                                                <div class="alert alert-success" style="margin:0" role="alert">
-                                                  <div class="d-flex">
-                                                    <div>
-                                                      <!-- Download SVG icon from http://tabler-icons.io/i/check -->
-                                                      <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>
+                                                <div class="col-xs-12 col-sm-12 col-md-12"> 
+                                                    <div class="alert alert-success" style="margin:0" role="alert">
+                                                        <div class="d-flex">
+                                                            <div>
+                                                                <!-- Download SVG icon from http://tabler-icons.io/i/check -->
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>
+                                                                 `+ response.data.msg +`   
+                                                                </div>
+                                                        </div>
                                                     </div>
-                                                  </div>
                                                 </div>
                                                 `
+                                    //load_photo(request)
                                 } else {
                                     document.getElementById("modal-danger-context").textContent = response.data.msg
                                     document.getElementById("danger-btn").click();
@@ -672,28 +733,35 @@
             }
         }
 
-        var page_index_list = document.getElementsByClassName("page-index");
-        for (let el of page_index_list) {
-            el.addEventListener('click', function (evt) {
-                request.pageNumber = el.innerText
-                load_request(request)
-            })
+        function edit_btn_build() {
+            var btn_list = document.getElementsByClassName("edit-btn");
+            for (let el of btn_list) {
+                el.addEventListener('click', function (evt) {
+                    var id = el.getAttribute("target-id");
+                    console.log(id)
+                    var temp = showLoading('entity-form')
+                    axios
+                        .get(apiUrl + '/api/rest/v1/book/detail/' + id)
+                        .then(response => {
+                            response = response.data
+                            console.log(response)
+                            if(response.code == 200){
+                                document.getElementById('entity-form').innerHTML = temp
+                                formSetData('entity-form', response.data)
+                            }else{
+                                showLoading('entity-form', response.msg)
+                            }
+                        })
+                        .catch(error => {
+                            console.log(error) 
+                        })
+                        .finally(() => { 
+                        })
+                })
+            }
         }
 
-        document.getElementById("page-prev").addEventListener('click', function (evt) {
-            if (request.pageNumber == 1) {
-                return
-            }
-            request.pageNumber = numberSub(request.pageNumber, 1)
-            load_request(request)
-        })
-        document.getElementById("page-next").addEventListener('click', function (evt) {
-            request.pageNumber = numberAdd(request.pageNumber, 1)
-            load_request(request)
-        })
-
-
-        var update = document.getElementById('form-submit');
+        var update = document.getElementById('add-submit');
         update.addEventListener('click', (e) => {
             console.log("submit onclick...")
             const form = document.querySelector('#entity-form');
@@ -704,17 +772,232 @@
             const formJson = JSON.stringify(addForm);
             console.log(formJson)
             axios
-                .post(apiUrl + '/api/rest/v1/book/add', addForm)
+                .put(apiUrl + '/api/rest/v1/book/put', addForm)
                 .then(response => {
                     console.log(response)
                     if (response.data.code == 200) {
-                        load_request(request)
+                        console.log(form.reset())
+                        load_data(request)
                     }
                 })
                 .catch(error => {
                     console.log(error)
                 })
         })
+
+
+        document.getElementById('close-btn').addEventListener('click', (e) => {
+            console.log("close-btn onclick...")
+            const form = document.querySelector('#entity-form');
+            form.reset()
+        })
+
+        function restore_btn_build() {
+            var btn_list = document.getElementsByClassName("restore-btn");
+            for (let el of btn_list) {
+                el.addEventListener('click', function (evt) {
+                    console.log(el.getAttribute("target-id")) 
+                    danger_ok_btn.setAttribute("target-id", el.getAttribute("target-id"))
+
+                    var id = danger_ok_btn.getAttribute("target-id");
+ 
+                    var parentElement = el.parentElement.parentElement.parentElement.parentElement;
+                    if (id) {
+                        parentElement.innerHTML = `
+                                    <div class="col-xs-12 col-sm-12 col-md-12"> 
+                                        <div class="spinner-border spinner-border-sm text-secondary" role="status"></div>
+                                    </div>
+                                    
+                                    `
+                        axios
+                            .post(apiUrl + '/api/rest/v1/book/restore/' + id)
+                            .then(response => {
+                                console.log(response) 
+                                if (response.data.code == 200) { 
+                                    parentElement.innerHTML = `
+                                            <div class="col-xs-12 col-sm-12 col-md-12"> 
+                                                <div class="alert alert-success" style="margin:0" role="alert">
+                                                  <div class="d-flex">
+                                                    <div>
+                                                      <!-- Download SVG icon from http://tabler-icons.io/i/check -->
+                                                      <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>
+                                                         `+ response.data.msg +`
+                                                      </div>
+                                                  </div>
+                                                </div>
+                                            </div>
+                                               
+                                                `
+                                    //load_photo(request)
+                                } else {
+                                    document.getElementById("modal-danger-context").textContent = response.data.msg
+                                    document.getElementById("danger-btn").click();
+                                }
+                            })
+                            .catch(error => {
+                                console.log(error)
+                                document.getElementById("modal-danger-context").textContent = error.message
+                                document.getElementById("danger-btn").click();
+                            })
+                            .finally(() => {
+                                console.log('deleted')
+                                danger_ok_btn.setAttribute("target-id", "")
+                            })
+                    }
+
+                })
+            }
+        }
+ 
+        function page_index_build(data, elClass) {
+            var page_index_list = document.getElementsByClassName(elClass);
+            if (data.pageNumber > (3)) {
+
+            }
+            var start = data.pageNumber == 1 && data.pageNumber < 2 ? 1 : data.pageNumber - 2;
+            for (let el of page_index_list) {
+                el.innerText = start
+                start = numberAdd(start, 1)
+            }
+
+            for (let el of page_index_list) {
+                if (el.innerText == data.pageNumber) {
+                    el.parentElement.classList.add("active")
+                } else {
+                    el.parentElement.classList.remove("active")
+                }
+
+            }
+        }
+
+        function page_select_build(data) {
+            
+            var pageIndex_size = (data.total / data.pageSize)
+            request.lastPageNumber = pageIndex_size + 1
+            page_select_list.forEach(el => el.innerHTML = '')
+            pageIndex_size = pageIndex_size == 0 ? 1 : pageIndex_size;
+            for (let i = 1; i <= (pageIndex_size + 1); i++) {
+                if (i == data.pageNumber) {
+                    page_select_list.forEach(el => el.innerHTML += `<option selected value="` + i + `" >` + i + `</option>`)
+                } else {
+                    page_select_list.forEach(el => el.innerHTML += `<option value="` + i + `" >` + i + `</option>`)
+                }
+            }
+        }
+
+        function load_detail() {
+            var items = document.querySelectorAll('#gallery-context .entity');
+            items.forEach(function (item) {
+                item.addEventListener('click', function (evt) {
+                    evt.preventDefault()
+                    evt.stopImmediatePropagation()
+                    evt.stopPropagation()
+                    document.getElementById("book-detail-btn").click()
+                    var detail_iframe = document.getElementById("book-detail-iframe");
+                    detail_iframe.src = "/templates/book/detail-view.html?id=" + evt.currentTarget.id;
+                });
+            });
+
+        }
+
+        function load_data(request, show) {
+            const start = new Date().getTime();
+ 
+            if(show){
+                var temp = showLoading('gallery-context')
+            }
+            axios
+                .post( apiUrl + '/api/rest/v1/book/page', {
+                    ...request,
+                    "keyword": keywordInput?.value, 
+                    "isDeleted": document.getElementById("isDeleted")?.checked ? document.getElementById("isDeleted")?.value : "0",
+                    //"type": "image",
+                })
+                .then(response => {
+                    var resp = response.data;
+                    console.log(resp)
+                    var totalInfo = "<text>total = " + resp.total + "</text>";
+                    console.log(totalInfo)
+                    totalInfoDiv.innerHTML = totalInfo;
+ 
+                    pageSizeInputList.forEach(item =>{
+                        item.value = resp.pageSize
+                    })
+
+                    page_select_build(resp)
+
+                    page_index_build(resp, "page-index-top");
+                    page_index_build(resp, "page-index-bottom");
+                    contextHtml.innerHTML = ""
+                    var context = ""
+                    resp.data.forEach(item => {
+                        var url = resp.prevUrl + item.relativePath;
+                        var div =  buildGallery(item, url);
+                        context += div
+                    })
+                    contextHtml.innerHTML = context
+
+                    edit_btn_build()
+                    delete_btn_build()
+                    restore_btn_build()
+                    load_detail()
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+                .finally(()=>{
+                    console.log('load_data cost = ' + (new Date().getTime() - start))
+                })
+
+            document.getElementById("top")?.click()
+        }
+
+        var page_index_top_list = document.getElementsByClassName("page-index-top");
+        for (let el of page_index_top_list) {
+            el.addEventListener('click', function (evt) {
+                request.pageNumber = el.innerText
+                load_data(request, 1)
+            })
+        }
+        var page_index_bottom_list = document.getElementsByClassName("page-index-bottom");
+        for (let el of page_index_bottom_list) {
+            el.addEventListener('click', function (evt) {
+                request.pageNumber = el.innerText
+                load_data(request, 1)
+            })
+        }
+ 
+
+        pagePrevBtnList.forEach(el => {
+            el.addEventListener('click', function (evt) {
+                request.pageNumber = numberSub(request.pageNumber, 1)
+                if(request.pageNumber <= 0){
+                    request.pageNumber = 1
+                }
+                load_data(request,1)
+            })
+        })
+        pageNextBtnList.forEach(el => {
+            el.addEventListener('click', function (evt) {
+                request.pageNumber = numberAdd(request.pageNumber, 1)
+                load_data(request,1)
+            })
+        })
+
+        Array.from(document.getElementsByClassName("first-btn")).forEach(el => {
+            el.addEventListener('click', function (evt) {
+                request.pageNumber = 1
+                load_data(request,1)
+            })
+        })
+
+        Array.from(document.getElementsByClassName("last-btn")).forEach(el => {
+            el.addEventListener('click', function (evt) {
+                request.pageNumber = request.lastPageNumber
+                load_data(request,1)
+            })
+        })
+
 
     });
 </script>
