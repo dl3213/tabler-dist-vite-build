@@ -419,6 +419,7 @@
                 var main = document.getElementById('index-main-iframe');
                 //console.log(main)
                 if (main && link) {
+                    link = link === '/' ? '/templates/index/home.html' : link
                     link = link.includes("templates") ? link : "/templates/"+link
                     console.log(link)
                     main.src = link

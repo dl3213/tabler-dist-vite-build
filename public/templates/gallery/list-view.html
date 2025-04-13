@@ -343,38 +343,52 @@
             <div class="container-xl">
                 
                 <div class="card-body">
-                    <div class="row row-cards">
-                        <div class="col-xs-4 col-md-4 col-lg-4">
+                    <div class="row row-cards" >
+                        <div class="col-xs-3 col-md-3 col-lg-3">
                             <div class="col">
                                 <h2 class="page-title">
                                     Gallery
                                 </h2>
-                                <div class="text-secondary mt-1" id="totalInfo">1-12 of 241 photos</div>
+                                <div class="text-secondary mt-1" id="totalInfo"></div>
                             </div>
                         </div>
                         <div class="col-xs-2 col-md-2 col-lg-2">
-                            
+                            <div class="mb-3">
+                                <label class="form-label">order by</label>
+                                <select type="text" class="form-select" id="select-order-field" value="">
+                                  <option value="createTime">createTime</option>
+                                  <option value="updateTime">updateTime</option>
+                                  <option value="realName">realName</option>
+                                  <option value="size">size</option> 
+                                </select>
+                              </div>
                         </div>
-                        <div class="col-xs-2 col-sm-2 col-md-2">
-                            <div class="d-flex" style="justify-content: center;align-items: center">
-                                <div class="me-3">
-                                    <label class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="isDeleted" value="1">
-                                        <span class="form-check-label">isDeleted</span>
-                                    </label>
-                                </div>
-                                <div class="me-3">
-                                    <label class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="hash" value="1">
-                                        <span class="form-check-label">hash</span>
-                                    </label>
-                                </div>
+                        <div class="col-xs-2 col-md-2 col-lg-2" >
+                            <div class="mb-3">
+                                <label class="form-label">order direction</label>
+                                <select type="text" class="form-select" id="orderDirection" value="">
+                                  <option value="asc">asc</option>
+                                  <option value="desc">desc</option> 
+                                </select>
+                              </div>
+                        </div>
+                        <div class="col-xs-1 col-sm-1 col-md-1" >
+                            <div class="me-3">
+                                <label class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="isDeleted" value="1">
+                                    <span class="form-check-label">isDeleted</span>
+                                </label>
                             </div>
-                        </div>
+                            <div class="me-3">
+                                <label class="form-check form-check-inline">
+                                    <input class="form-check-input" type="checkbox" id="hash" value="1">
+                                    <span class="form-check-label">hash</span>
+                                </label>
+                            </div>
+                        </div> 
                         <div class="col-xs-4 col-md-4 col-lg-4">
-                            <div class="d-flex" style="justify-content: center;align-items: center">
+                            <div class="d-flex">
                                 <div class="me-3">
-                
                                     <div class="input-icon">
                                         <input type="text" value="" id="keyword" class="form-control" placeholder="Search…">
                                         <span class="input-icon-addon" id="search">
@@ -413,8 +427,8 @@
                                         <input name="file" type="file"/>
                                     </div>
                                     <div class="dz-message">
-                                        <h3 class="dropzone-msg-title">Your text here</h3>
-                                        <span class="dropzone-msg-desc">Your custom description here</span>
+                                        <h3 class="dropzone-msg-title" id="dropzone-msg-title">Your text here</h3>
+                                        <span class="dropzone-msg-desc" id="dropzone-msg-desc">Your custom description here</span>
                                     </div>
                                 </form>
                             </div>
@@ -480,7 +494,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class="row row-cards" id="gallery-context">
+                <div class="row row-cards" id="gallery-context" style="will-change: transform; backface-visibility: hidden;">
                 </div>
                 
                 <div class="d-flex">
@@ -552,6 +566,7 @@
 <script src="/js/demo.min.js?1692870487" defer></script> 
 <script src="/js/axios.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="/js/fancybox.umd.js" type="text/javascript" charset="utf-8"></script>
+<script src="/js/typed.umd.js" type="text/javascript" charset="utf-8"></script>
 <script src="/js/common/common.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -563,24 +578,60 @@
         var keywordInput = document.getElementById("keyword");
         var totalInfoDiv = document.getElementById("totalInfo");
         var page_select_list = Array.from(document.getElementsByClassName("page-select"));
-
+ 
         var pagePrevBtnList = Array.from(document.getElementsByClassName("page-prev-btn"));
         var pageNextBtnList = Array.from(document.getElementsByClassName("page-next-btn"));
 
-        var contextHtml = document.getElementById('gallery-context');
+        var select_order_field = document.getElementById('select-order-field');
+        var orderDirection = document.getElementById('orderDirection');
 
+        var contextHtml = document.getElementById('gallery-context'); 
         var config = {
             maxFilesize: 10240000,
             uploadMultiple: false,
             parallelUploads: 1,
         }
 
+
         Fancybox.bind("[data-fancybox]", {
             // Custom options for all galleries
         });
 
         new Dropzone("#dropzone-custom", config)
+        //https://github.com/mattboldt/typed.js
+        var totalInfoTyped = new Typed('#totalInfo', {
+            strings: ['1-12 of 241 photos'], 
+            typeSpeed: 10,
+            backSpeed: 10,
+            backDelay: 500,
+            startDelay: 10,
+            loop: false,
+            showCursor: false,
+        });
+ 
 
+        //MutationObserver+IntersectionObserver+ResizeObserver
+        var observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) {
+                if ('childList' === mutation.type) {
+                    //console.log(mutation)
+                    edit_btn_build()
+                    delete_btn_build()
+                    restore_btn_build()
+                    load_detail()
+                }
+
+            });
+        });
+        // 开始观察目标节点
+        observer.observe(contextHtml, {
+            childList: true,        // 子节点的增减
+            attributes: false,       // 属性的变动
+            characterData: false,    // 节点内容或节点文本的变动
+            subtree: false,          // 是否将观察器应用于该节点的所有后代节点
+            attributeOldValue: false, // 记录变动前的属性值（attributes变动时）
+            characterDataOldValue: false, // 记录变动前的数据（characterData变动时）
+        });
 
         var request = {
             pageNumber: 1,
@@ -588,6 +639,35 @@
             lastPageNumber: 1,
         }
         load_data(request, 1)
+        //requestAnimationFrame(load_data)
+
+        // let worker;
+        // workerTest()
+        // function workerTest(){
+        //     const workerCode = `
+        //         self.onmessage = function(e) {
+        //         const n = e.data;
+        //         let sum = 0;
+        //         for(let i=1; i<=n; i++) sum += i;
+        //         self.postMessage(sum);
+        //         };
+        //     `;
+        //     const blob = new Blob([workerCode], { type: 'application/javascript' });
+
+        //     worker = worker = new Worker(URL.createObjectURL(blob));
+        //      // 接收消息
+        //     worker.onmessage = function(e) {
+        //         console.log('worker.onmessage -> ' + e.data)
+        //     };
+
+        //     // 错误处理
+        //     worker.onerror = function(e) {
+        //         console.log('worker.onerror -> ' + e)
+        //     };
+
+        //     // 发送数据到Worker
+        //     worker.postMessage(10)
+        // }
 
         pageSizeInputList.forEach(pageSizeInput => {
             pageSizeInput.addEventListener("change", function (evt) {
@@ -599,7 +679,6 @@
             })
         })
         
-
 
         page_select_list.forEach(element => {
             element.addEventListener("change", function (event) {
@@ -712,83 +791,83 @@
         } // <div class="col-xs-4 col-md-2 col-lg-2"><a href="` + url + `" class="btn btn-primary  ms-auto">Go Detail</a></div>
 
         function buildCard(item, url) {
-            return `
-                <div class="col-sm-8 col-sm-6 col-lg-4">
+            return `<div class="col-sm-8 col-sm-6 col-lg-4" >
                     <div class="card">
-                      <div class="card-body">
-                        <h3 class="card-title">` + (item.realName) + `</h3>
-                        <p class="text-secondary">file desc.</p>
-                      </div>
-                      <div class="card-body base-info-div"  >
-                              <div class="row row-cards"   >
+                        <div class="card-body">
+                            <h3 class="card-title">` + (item.realName) + `</h3>
+                            <p class="text-secondary">file desc.</p>
+                        </div>
+                        <div class="card-body base-info-div"  >
+                            <div class="row row-cards"   >
                                 <div class="col-xs-2 col-sm-2 col-md-2">
-                                  <div class="mb-3">
-                                    <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                      Action
-                                    </button>
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item detail-btn" target-id="` + item.id + ` " href="` + apiUrl + url + `" target="_blank">
-                                        detail
-                                        </a> 
-                                        <a class="dropdown-item edit-btn" target-id="` + item.id + `"  data-bs-toggle="modal" data-bs-target="#modal-info-view">
-                                        edit
-                                        </a> 
-                                        <a class="dropdown-item text-red delete-btn" target-id="` + item.id + `" >
-                                            delete
-                                        </a>  
-                                        <a class="dropdown-item restore-btn" target-id="` + item.id + `">
-                                            restore
-                                        </a>
-                                        <a class="dropdown-item move-btn" target-id="` + item.id + `">
-                                            search similar
-                                        </a>
+                                    <div class="mb-3">
+                                        <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Action
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item detail-btn" target-id="` + item.id + `" href="` + apiUrl + url + `" target="_blank">
+                                                detail
+                                            </a>
+                                            <a class="dropdown-item edit-btn" target-id="` + item.id + `" data-bs-toggle="modal" data-bs-target="#modal-info-view">
+                                                edit
+                                            </a>
+                                            <a class="dropdown-item text-red delete-btn" target-id="` + item.id + `" >
+                                                delete
+                                            </a>
+                                            <a class="dropdown-item restore-btn" target-id="` + item.id + `">
+                                                restore
+                                            </a>
+                                            <a class="dropdown-item move-btn" target-id="` + item.id + `">
+                                                search similar
+                                            </a>
+                                        </div>
                                     </div>
-                                  </div>
                                 </div>
                                 <div class="col-xs-1 col-sm-1 col-md-1">
                                 </div>
                                 <div class="col-xs-1 col-sm-6 col-md-6">
-                                  <div class="mb-3"> 
-                                    <input type="text" class="form-control" name="example-disabled-input" placeholder="Readonly..." value="` + (item.realName) + `" readonly="">
-                                  </div>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" name="example-disabled-input" placeholder="Readonly..." value="` + (item.realName) + `" readonly="">
+                                    </div>
                                 </div>
-                                <div class="col-xs-3 col-md-3 col-lg-3"> 
+                                <div class="col-xs-3 col-md-3 col-lg-3">
                                     <input type="text" class="form-control-plaintext" name="example-disabled-input" placeholder="Readonly..." value="` + ((item.size / 1024.0 / 1024.0).toFixed(1)) + `MB" readonly="" disabled>
-                                </div> 
- 
-                              </div>
+                                </div>
+
                             </div>
-                            <div class="card-body"  >
-                              <div class="row row-cards"   >
-                                <div class="col-xs-2 col-sm-2 col-md-2"> 
+                        </div>
+                        <div class="card-body"  >
+                            <div class="row row-cards"   >
+                                <div class="col-xs-2 col-sm-2 col-md-2">
                                 </div>
                                 <div class="col-xs-1 col-sm-1 col-md-1">
                                 </div>
                                 <div class="col-xs-1 col-sm-7 col-md-7">
-                                  <div class="mb-3">
-                                    <input type="text" class="form-control-plaintext" name="example-disabled-input"  value="` + (item.createTime) + `" disabled>
-                                  </div>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control-plaintext" name="example-disabled-input" value="` + (item.createTime) + `" disabled>
+                                    </div>
                                 </div>
                                 <div class="col-xs-1 col-md-2 col-lg-2"></div>
 
-                              </div>
                             </div>
+                        </div>
+                    </div>
                 </div>`
-        } // <div class="col-xs-4 col-md-2 col-lg-2"><a href="` + url + `" class="btn btn-primary  ms-auto">Go Detail</a></div>
+        }  
 
         function delete_btn_build() {
             var delete_btn_list = document.getElementsByClassName("delete-btn");
             for (let el of delete_btn_list) {
                 el.addEventListener('click', function (evt) {
-                    console.log(el.getAttribute("target-id"))
-                    //document.getElementById("modal-danger-context").textContent = "确认删除？"
-                    //document.getElementById("danger-btn").click();
+                    evt.stopPropagation();
+                    evt.stopImmediatePropagation()
+                    console.log(el.getAttribute("target-id")) 
                     danger_ok_btn.setAttribute("target-id", el.getAttribute("target-id"))
 
                     var id = danger_ok_btn.getAttribute("target-id");
                     console.log(id)
                     var parentElement = el.parentElement.parentElement.parentElement.parentElement;
-                    if (id) {
+                    if (id && parentElement) {
                         parentElement.innerHTML = `
                                     <div class="col-xs-12 col-sm-12 col-md-12"> 
                                         <div class="spinner-border spinner-border-sm text-secondary" role="status"></div>
@@ -832,7 +911,7 @@
                             })
                     }
 
-                })
+                }, true)
             }
         }
 
@@ -840,6 +919,8 @@
             var btn_list = document.getElementsByClassName("edit-btn");
             for (let el of btn_list) {
                 el.addEventListener('click', function (evt) {
+                    evt.stopPropagation();
+                    evt.stopImmediatePropagation()
                     var id = el.getAttribute("target-id");
                     console.log(id)
                     var temp = showLoading('entity-form')
@@ -860,7 +941,7 @@
                         })
                         .finally(() => { 
                         })
-                })
+                }, true)
             }
         }
 
@@ -896,6 +977,8 @@
             var btn_list = document.getElementsByClassName("restore-btn");
             for (let el of btn_list) {
                 el.addEventListener('click', function (evt) {
+                    evt.stopPropagation();
+                    evt.stopImmediatePropagation()
                     console.log(el.getAttribute("target-id")) 
                     danger_ok_btn.setAttribute("target-id", el.getAttribute("target-id"))
 
@@ -1010,19 +1093,22 @@
             }
             axios
                 .post( apiUrl + '/api/rest/v1/file/page', {
-                    ...request,
+                    ...request, 
                     "keyword": keywordInput?.value,
                     "hash": document.getElementById("hash")?.checked ? document.getElementById("hash")?.value : "0",
                     "isDeleted": document.getElementById("isDeleted")?.checked ? document.getElementById("isDeleted")?.value : "0",
+                    "orderField": select_order_field?.value,
+                    "orderDirection": orderDirection?.value,
                     //"type": "image",
                 })
                 .then(response => {
                     var resp = response.data;
                     console.log(resp)
                     var totalInfo = "<text>total = " + resp.total + "</text>";
-                    console.log(totalInfo)
-                    totalInfoDiv.innerHTML = totalInfo;
- 
+                    //console.log(totalInfo)
+                    //totalInfoDiv.innerHTML = totalInfo;
+                    totalInfoTyped.strings = [totalInfo]
+                    totalInfoTyped.reset();
                     pageSizeInputList.forEach(item =>{
                         item.value = resp.pageSize
                     })
@@ -1032,18 +1118,20 @@
                     page_index_build(resp, "page-index-top");
                     page_index_build(resp, "page-index-bottom");
                     contextHtml.innerHTML = ""
-                    var context = ""
                     resp.data.forEach(item => {
-                        var url = resp.prevUrl + item.relativePath;
-                        var div = item.type?.startsWith("text") || item.type?.startsWith("application") ? buildCard(item, url) : buildGallery(item, url);
-                        context += div
-                    })
-                    contextHtml.innerHTML = context
+                           
+                        requestAnimationFrame(()=>{
+                            var url = resp.prevUrl + item.relativePath;
+                            var divHtml = item.type?.startsWith("text") || item.type?.startsWith("application") ? buildCard(item, url) : buildGallery(item, url);
+                            //console.log(divHtml)
+                            const div = document.createElement('div');
+                            div.innerHTML = divHtml; 
+                            //console.log(div.firstChild)
+                            contextHtml.appendChild(div.firstChild) 
 
-                    edit_btn_build()
-                    delete_btn_build()
-                    restore_btn_build()
-                    load_detail()
+                        });
+                         
+                    }) 
                 })
                 .catch(error => {
                     console.log(error)
@@ -1053,6 +1141,7 @@
                 })
 
             document.getElementById("top")?.click()
+            
         }
 
         var page_index_top_list = document.getElementsByClassName("page-index-top");

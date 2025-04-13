@@ -1,5 +1,6 @@
 var server = {
     API_URL: "http://192.168.10.53:8080",
+    // API_URL: "http://localhost:8080",
 }
 
 function showLoading(el, msg){
