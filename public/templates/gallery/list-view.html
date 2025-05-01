@@ -495,7 +495,7 @@
                         </li>
                         <li class="page-item">
                             <input type="text" class="form-control page-size-input"
-                                   name="example-text-input" value="30">
+                                   name="example-text-input" value="15">
                         </li>
                         <li class="page-item">
                             <select   class="form-select page-select ">
@@ -553,7 +553,7 @@
                         </li>
                         <li class="page-item">
                             <input type="text" class="form-control page-size-input"
-                                   name="example-text-input" value="30">
+                                   name="example-text-input" value="15">
                         </li>
                         <li class="page-item">
                             <select  class="form-select page-select ">
@@ -577,6 +577,7 @@
 <script src="/js/fancybox.umd.js" type="text/javascript" charset="utf-8"></script>
 <script src="/js/typed.umd.js" type="text/javascript" charset="utf-8"></script>
 <script src="/js/common/common.js"></script>
+<script src="/js/common/html-element.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         console.log("DOMContentLoaded...")
@@ -712,24 +713,24 @@
                               <div class="row row-cards"   >
                                 <div class="col-xs-8 col-sm-8 col-md-8">
                                   <div class="mb-3">
-                                    <input type="text" class="form-control-plaintext" name="example-disabled-input"  value="` + (item.realName) + `" disabled>
+                                    <input type="text" class="form-control-plaintext" name="example-disabled-input"  value="${item.realName}" disabled>
                                   </div>
                                 </div> 
                                 <div class="col-xs-4 col-sm-4 col-md-4">
                                   <div class="mb-3">
-                                    <input type="text" class="form-control-plaintext" name="example-disabled-input"  value="` + ( (item.width && item.height) ?  (item.width) + ` * ` + (item.height)   : `` )+ `" disabled>
+                                    <input type="text" class="form-control-plaintext" name="example-disabled-input"  value="${(item.width && item.height) ? (item.width) + ` * ` + (item.height) : ``}" disabled>
                                   </div>
                                 </div> 
                               </div>
                             </div>
-                            <a ` + (item.type?.startsWith("video") ? 'data-fancybox="' + item.id + '"' : 'data-fancybox="gallery"') + ` href ="` + apiUrl + url + `" class="d-block card-img-top entity " id="` + item.id + `" target-id="` + item.id + `" data-fslightbox="gallery" ><img
-                                    src="` + apiUrl + (item.type?.startsWith("video") ? url + '.jpg' : url) + `"
-                                    class="card-img-top"  ></a>
+                            <a ${(item.type?.startsWith("video") ? 'data-fancybox="' + item.id + '"' : 'data-fancybox="gallery"')} href ="${apiUrl + url}" class="d-block card-img-top entity " id="${item.id}" target-id="${item.id}" data-fslightbox="gallery" >
+                                <img src="${apiUrl + (item.type?.startsWith("video") ? url + '.jpg' : url)}" class="card-img-top"  >
+                            </a>
                             <div class="card-body base-info-div"  >
                               <div class="row row-cards"   >
                                  <div class="col-xs-2 col-sm-2 col-md-2">
                                   <div class="mb-3">
-                                        <a target-id="` + item.id + `" class="btn btn-link delete-btn">
+                                        <a target-id="${item.id}" class="btn btn-link delete-btn">
                                             delete
                                         </a>
                                   </div>
@@ -738,7 +739,7 @@
                                 </div>
                                 <div class="col-xs-1 col-sm-6 col-md-6">
                                   <div class="mb-3"> 
-                                    <input type="text" class="form-control-plaintext" name="example-disabled-input" placeholder="Readonly..." value="` + (item.createTime) + `" readonly="" disabled>
+                                    <input type="text" class="form-control-plaintext" name="example-disabled-input" placeholder="Readonly..." value="${item.createTime}" readonly="" disabled>
                                   </div>
                                 </div>
                                 <div class="col-xs-2 col-sm-2 col-md-2">
@@ -747,16 +748,16 @@
                                       Action
                                     </button>
                                     <div class="dropdown-menu">
-                                      <a class="dropdown-item edit-btn" target-id="` + item.id + `"  data-bs-toggle="modal" data-bs-target="#modal-info-view">
+                                      <a class="dropdown-item edit-btn" target-id="${item.id}"  data-bs-toggle="modal" data-bs-target="#modal-info-view">
                                         edit
                                       </a> 
-                                      <a class="dropdown-item move-btn" target-id="` + item.id + `">
+                                      <a class="dropdown-item move-btn" target-id="${item.id}">
                                         move
                                       </a>
-                                      <a class="dropdown-item text-red delete-btn" target-id="` + item.id + `" >
+                                      <a class="dropdown-item text-red delete-btn" target-id="${item.id}" >
                                         delete
                                       </a>
-                                      <a class="dropdown-item restore-btn" target-id="` + item.id + `">
+                                      <a class="dropdown-item restore-btn" target-id="${item.id}">
                                         restore
                                       </a>
                                     </div>
@@ -768,12 +769,12 @@
                               <div class="row row-cards" style="display: flex;flex-direction: row;align-items: center;justify-content: space-between;">
                                 <div class="col-sm-3 col-md-6 col-lg-3">
                                     <div class="mb-3">
-                                        <input type="text" class="form-control-plaintext" name="example-disabled-input" placeholder="Readonly..." value="` + (item.type) + `" readonly="" disabled>
+                                        <input type="text" class="form-control-plaintext" name="example-disabled-input" placeholder="Readonly..." value="${item.type}" readonly="" disabled>
                                     </div> 
                                 </div> 
                                 <div class="col-sm-3 col-md-6 col-lg-3"> 
                                     <div class="mb-3">
-                                        <input type="text" class="form-control-plaintext" name="example-disabled-input" placeholder="Readonly..." value="` + ((item.size / 1024.0 / 1024.0).toFixed(1)) + `MB" readonly="" disabled>
+                                        <input type="text" class="form-control-plaintext" name="example-disabled-input" placeholder="Readonly..." value="${(item.size / 1024.0 / 1024.0).toFixed(1)}MB" readonly="" disabled>
                                     </div> 
                                 </div>  
                                 <div class="col-sm-3 col-md-6 col-lg-3" > 
@@ -781,16 +782,16 @@
                                         <a class="text-secondary click-count" disabled>
                                             <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
                                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" /></svg>
-                                            `+(item.clickCount)+`
+                                            ${item.clickCount}
                                         </a> 
                                     </div> 
                                 </div> 
                                 <div class="col-sm-3 col-md-6 col-lg-3">
                                     <div class="mb-3">
-                                        <a class="text-secondary heart-btn" target-id="` + item.id + `" >
+                                        <a class="text-secondary heart-btn" target-id="${item.id}" >
                                         <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon `+((item.heartByCurrentUserCount == 1)? 'icon-filled text-red' : '')+`" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" /></svg>
-                                        `+(item.heartCount)+`
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon ${((item.heartByCurrentUserCount == 1) ? 'icon-filled text-red' : '')}" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" /></svg>
+                                        ${item.heartCount}
                                         </a>
                                     </div> 
                                 </div> 
@@ -806,17 +807,17 @@
             return `<div class="col-sm-8 col-sm-6 col-lg-4" >
                     <div class="card">
                         <div class="card-body">
-                            <h3 class="card-title">` + (item.realName) + `</h3>
+                            <h3 class="card-title">${item.realName}</h3>
                             <p class="text-secondary">file desc.</p>
                         </div>
                         <div class="card-body base-info-div"  >
                             <div class="row row-cards"   >
                                 <div class="col-xs-3 col-md-3 col-lg-3">
-                                    <input type="text" class="form-control-plaintext" name="example-disabled-input" placeholder="Readonly..." value="` + ((item.size / 1024.0 / 1024.0).toFixed(1)) + `MB" readonly="" disabled>
+                                    <input type="text" class="form-control-plaintext" name="example-disabled-input" placeholder="Readonly..." value="${(item.size / 1024.0 / 1024.0).toFixed(1)}MB" readonly="" disabled>
                                 </div> 
                                 <div class="col-xs-6 col-sm-6 col-md-6">
                                     <div class="mb-3">
-                                        <input type="text" class="form-control" name="example-disabled-input" placeholder="Readonly..." value="` + (item.realName) + `" readonly="">
+                                        <input type="text" class="form-control" name="example-disabled-input" placeholder="Readonly..." value="${item.realName}" readonly="">
                                     </div>
                                 </div>
                                 
@@ -826,19 +827,19 @@
                                             Action
                                         </button>
                                         <div class="dropdown-menu">
-                                            <a class="dropdown-item detail-btn" target-id="` + item.id + `" href="` + apiUrl + url + `" target="_blank">
+                                            <a class="dropdown-item detail-btn" target-id="${item.id}" href="${apiUrl + url}" target="_blank">
                                                 detail
                                             </a>
-                                            <a class="dropdown-item edit-btn" target-id="` + item.id + `" data-bs-toggle="modal" data-bs-target="#modal-info-view">
+                                            <a class="dropdown-item edit-btn" target-id="${item.id}" data-bs-toggle="modal" data-bs-target="#modal-info-view">
                                                 edit
                                             </a>
-                                            <a class="dropdown-item text-red delete-btn" target-id="` + item.id + `" >
+                                            <a class="dropdown-item text-red delete-btn" target-id="${item.id}" >
                                                 delete
                                             </a>
-                                            <a class="dropdown-item restore-btn" target-id="` + item.id + `">
+                                            <a class="dropdown-item restore-btn" target-id="${item.id}">
                                                 restore
                                             </a>
-                                            <a class="dropdown-item move-btn" target-id="` + item.id + `">
+                                            <a class="dropdown-item move-btn" target-id="${item.id}">
                                                 search similar
                                             </a>
                                         </div>
@@ -854,7 +855,7 @@
                                 </div>
                                 <div class="col-xs-1 col-sm-7 col-md-7">
                                     <div class="mb-3">
-                                        <input type="text" class="form-control-plaintext" name="example-disabled-input" value="` + (item.createTime) + `" disabled>
+                                        <input type="text" class="form-control-plaintext" name="example-disabled-input" value="${item.createTime}" disabled>
                                     </div>
                                 </div>
                                 <div class="col-xs-1 col-md-2 col-lg-2"></div>

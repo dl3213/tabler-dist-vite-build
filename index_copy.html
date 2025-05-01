@@ -1,13 +1,110 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite App</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
-  </body>
-</html>
+<div class="col-sm-8 col-sm-6 col-lg-4 gallery" id="">
+  <div class="card card-sm">
+    <div class="card-body">
+      <div class="row row-cards">
+        <div class="col-xs-8 col-sm-8 col-md-8">
+          <div class="mb-3">
+            <input type="text" class="form-control-plaintext" name="example-disabled-input"  value=  disabled>
+          </div>
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4">
+          <div class="mb-3">
+            <input type="text" class="form-control-plaintext" name="example-disabled-input" value disabled>
+          </div>
+        </div>
+      </div>
+    </div>
+    <a data-fancybox href class="d-block card-img-top entity " id target-id=data-fslightbox="gallery"><img src
+        class="card-img-top"></a>
+    <div class="card-body base-info-div">
+      <div class="row row-cards">
+        <div class="col-xs-2 col-sm-2 col-md-2">
+          <div class="mb-3">
+            <a target-id="` + item.id + `" class="btn btn-link delete-btn">
+              delete
+            </a>
+          </div>
+        </div>
+        <div class="col-xs-1 col-sm-1 col-md-1">
+        </div>
+        <div class="col-xs-1 col-sm-6 col-md-6">
+          <div class="mb-3">
+            <input type="text" class="form-control-plaintext" name="example-disabled-input"
+              placeholder="Readonly..." value="` + (item.createTime) + `" readonly="" disabled>
+          </div>
+        </div>
+        <div class="col-xs-2 col-sm-2 col-md-2">
+          <div class="mb-3">
+            <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true"
+              aria-expanded="false">
+              Action
+            </button>
+            <div class="dropdown-menu">
+              <a class="dropdown-item edit-btn" target-id="` + item.id + `" data-bs-toggle="modal"
+                data-bs-target="#modal-info-view">
+                edit
+              </a>
+              <a class="dropdown-item move-btn" target-id="` + item.id + `">
+                move
+              </a>
+              <a class="dropdown-item text-red delete-btn" target-id="` + item.id + `">
+                delete
+              </a>
+              <a class="dropdown-item restore-btn" target-id="` + item.id + `">
+                restore
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="row row-cards"
+        style="display: flex;flex-direction: row;align-items: center;justify-content: space-between;">
+        <div class="col-sm-3 col-md-6 col-lg-3">
+          <div class="mb-3">
+            <input type="text" class="form-control-plaintext" name="example-disabled-input"
+              placeholder="Readonly..." value="` + (item.type) + `" readonly="" disabled>
+          </div>
+        </div>
+        <div class="col-sm-3 col-md-6 col-lg-3">
+          <div class="mb-3">
+            <input type="text" class="form-control-plaintext" name="example-disabled-input"
+              placeholder="Readonly..." value="` + ((item.size / 1024.0 / 1024.0).toFixed(1)) + `MB" readonly=""
+              disabled>
+          </div>
+        </div>
+        <div class="col-sm-3 col-md-6 col-lg-3">
+          <div class="mb-3">
+            <a class="text-secondary click-count" disabled>
+              <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                <path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+              </svg>
+              0
+            </a>
+          </div>
+        </div>
+        <div class="col-sm-3 col-md-6 col-lg-3">
+          <div class="mb-3">
+            <a class="text-secondary heart-btn" target-id="` + item.id + `">
+              <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
+              <svg xmlns="http://www.w3.org/2000/svg"
+                class="icon `+((item.heartByCurrentUserCount == 1)? 'icon-filled text-red' : '')+`" width="24"
+                height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                <path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" />
+              </svg>
+              0
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
