@@ -350,7 +350,13 @@
                                 <h2 class="page-title">
                                     Gallery
                                 </h2>
-                                <div class="text-secondary mt-1" id="totalInfo"></div>
+                                <div class="text-secondary mt-1">
+                                    <text>total:&nbsp;<text id="totalInfo"></text></text>
+                                    <br>
+                                    <text>window:&nbsp;<text id="windowInfo"></text></text>
+                                    <br>
+                                    <text>screen:&nbsp;<text id="screenInfo"></text></text>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -429,31 +435,6 @@
                 </div>
             </div>
         </div>
-        <!-- Page body -->
-        <!-- <div class="page-body">
-            <div class="container-xl">
-                <div class="row row-cards">
-
-                    <div class="col-md-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h3 class="card-title">Custom Dropzone</h3>
-                                <form class="dropzone" id="dropzone-custom" action="/file/upload" autocomplete="off"
-                                      novalidate>
-                                    <div class="fallback">
-                                        <input name="file" type="file"/>
-                                    </div>
-                                    <div class="dz-message">
-                                        <h3 class="dropzone-msg-title" id="dropzone-msg-title">Your text here</h3>
-                                        <span class="dropzone-msg-desc" id="dropzone-msg-desc">Your custom description here</span>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
         <div class="page-body">
             <div class="container-xl">
                 <div class="progress">
@@ -494,7 +475,7 @@
                         </li>
                         <li class="page-item">
                             <input type="text" class="form-control page-size-input"
-                                   name="example-text-input" value="15">
+                                   name="example-text-input" value="30">
                         </li>
                         <li class="page-item">
                             <select   class="form-select page-select ">
@@ -540,7 +521,7 @@
                         </li>
                         <li class="page-item">
                             <input type="text" class="form-control page-size-input"
-                                   name="example-text-input" value="15">
+                                   name="example-text-input" value="30">
                         </li>
                         <li class="page-item">
                             <select  class="form-select page-select ">
@@ -629,13 +610,40 @@
 
         //https://github.com/mattboldt/typed.js
         var totalInfoTyped = new Typed('#totalInfo', {
-            strings: ['1-12 of 241 photos'], 
+            strings: ['0'], 
             typeSpeed: 10,
             backSpeed: 10,
             backDelay: 500,
             startDelay: 10,
             loop: false,
             showCursor: false,
+        });
+        var windowInfoTyped = new Typed('#windowInfo', {
+            strings: [`${window.innerWidth}*${window.innerHeight}`], 
+            typeSpeed: 10,
+            backSpeed: 10,
+            backDelay: 500,
+            startDelay: 10,
+            loop: false,
+            showCursor: false,
+        });
+        var screenInfoTyped = new Typed('#screenInfo', {
+            strings: [`${screen.width}*${screen.height}`], 
+            typeSpeed: 10,
+            backSpeed: 10,
+            backDelay: 500,
+            startDelay: 10,
+            loop: false,
+            showCursor: false,
+        });
+        window.addEventListener('resize', function (event) {
+            // 在这里编写你的代码来处理窗口大小变化
+            requestAnimationFrame(() => {
+                windowInfoTyped.strings = [`${window.innerWidth}*${window.innerHeight}`]
+                windowInfoTyped.reset(); 
+                screenInfoTyped.strings = [`${screen.width}*${screen.height}`]
+                screenInfoTyped.reset();
+            })
         });
  
 
@@ -1184,11 +1192,9 @@
                 .then(response => { 
                     var resp = response.data;
                     console.log(resp)
-                    var totalInfo = `<text>${resp.total} - ${checkBreakpoint()}<br>window:${window.innerWidth}-${window.innerHeight}<br>screen:${screen.width}-${screen.height}</text>`;
-                    //console.log(totalInfo)
-                    //totalInfoDiv.innerHTML = totalInfo;
-                    totalInfoTyped.strings = [totalInfo]
-                    totalInfoTyped.reset();
+                    totalInfoTyped.strings = [`${resp.total}`]
+                    totalInfoTyped.reset();  
+
                     pageSizeInputList.forEach(item =>{
                         item.value = resp.pageSize
                     })
@@ -1319,8 +1325,7 @@
                 load_data(request,1)
             })
         })
-
-
+  
     });
 </script>
 </body>
