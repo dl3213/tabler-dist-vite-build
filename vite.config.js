@@ -2,6 +2,7 @@ import { defineConfig } from 'vite'
 import { resolve } from 'path' 
 
 export default defineConfig({
+  // base: '/public/templates/index/layout-horizontal.html',
   base: './',
   alias: {
     // 配置目录别名
@@ -15,7 +16,7 @@ export default defineConfig({
     hmr: true,
     host: true,
     open: false,
-    port: 3000,
+    port: 4000,
   },
 
   // 构建输出配置

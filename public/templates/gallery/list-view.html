@@ -9,20 +9,17 @@
 -->
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title th:text="${title}">Gallery - Tabler - Premium and Open Source dashboard template with responsive and high
-        quality UI.</title>
-    <!-- CSS files -->
-    <link href="/css/tabler.min.css?1692870487" rel="stylesheet"/>
-    <link href="/css/tabler-flags.min.css?1692870487" rel="stylesheet"/>
-    <link href="/css/tabler-payments.min.css?1692870487" rel="stylesheet"/>
-    <link href="/css/tabler-vendors.min.css?1692870487" rel="stylesheet"/>
-    <link href="/css/demo.min.css?1692870487" rel="stylesheet"/>
-    <link href="/css/fancybox.css?1692870487" rel="stylesheet"/>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>kotlin-runner</title>
+
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.ico" />
+    <link href="/tabler/tabler.css?1746260450" rel="stylesheet" />
+    <link href="/tabler/tabler-theme.css?1746260450" rel="stylesheet" />
+    <link href="/css/fancybox.css?1692870487" rel="stylesheet" />
     <style>
-        @import url('/css/inter.css');
+        @import url('https://rsms.me/inter/inter.css');
 
         :root {
             --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
@@ -31,13 +28,10 @@
         body {
             font-feature-settings: "cv03", "cv04", "cv11";
         }
-        .row-cards .card-body{
-            padding-bottom: 0px;
-        }
     </style>
 </head>
 <body>  
-<script src="/js/demo-theme.min.js?1692870487"></script>
+<script src="/tabler/tabler-theme.js?1692870487" defer></script>
 <div class="page">
     <div class="page-wrapper">
         <!-- Page header -->
@@ -253,7 +247,6 @@
                 </div>
             </div>
 
- 
             <div class="modal modal-blur fade" id="modal-info-view" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
@@ -437,9 +430,7 @@
         </div>
         <div class="page-body">
             <div class="container-xl">
-                <div class="progress">
-                    <div class="progress-bar progress-bar-indeterminate bg-blue"></div>
-                </div>
+                
                 <div class="d-flex">
 
                     <ul class="pagination ms-auto align-items-center">
@@ -534,13 +525,8 @@
     </div>
 </div>
 <!-- Libs JS -->
-<!-- Tabler Core -->
-<script src="/js/nouislider.min.js?1692870487" defer></script>
-<script src="/js/litepicker.js?1692870487" defer></script>
-<script src="/js/tom-select.base.min.js?1692870487" defer></script>
-<script src="/js/dropzone-min.js?1692870487" defer></script> 
-<script src="/js/tabler.min.js?1692870487" defer></script>
-<script src="/js/demo.min.js?1692870487" defer></script> 
+<!-- Tabler Core -->   
+ <script src="/tabler/tabler.js?1692870487" defer></script> 
 <script src="/js/axios.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="/js/fancybox.umd.js" type="text/javascript" charset="utf-8"></script>
 <script src="/js/typed.umd.js" type="text/javascript" charset="utf-8"></script>
@@ -1120,7 +1106,8 @@
             if (data.pageNumber > (3)) {
 
             }
-            var start = data.pageNumber == 1 && data.pageNumber < 2 ? 1 : data.pageNumber - 2;
+            var start = data.pageNumber == 1 || data.pageNumber <= 2 ? 1 : data.pageNumber - 2;
+            console.log(start)
             for (let el of page_index_list) {
                 el.innerText = start
                 start = numberAdd(start, 1)
@@ -1249,7 +1236,6 @@
                     })
 
                     page_select_build(resp)
-
                     page_index_build(resp, "page-index-top");
                     page_index_build(resp, "page-index-bottom");
                     contextHtml.innerHTML = ""
