@@ -20,6 +20,13 @@ function menu_build(apiUrl) {
                 item.parentElement.classList.add("active");
             }
 
+            let layout_link = item.getAttribute("layout-link")
+            if (layout_link) {
+                console.log(layout_link)
+                layout_link = layout_link.includes("templates") ? layout_link : "/templates/index/" + layout_link
+                window.location.href = layout_link;
+            }
+
             //dropdown-menu
             var menus = document.querySelectorAll('.dropdown-menu');
             if (menus) {
@@ -122,3 +129,6 @@ function load_menu_base(apiUrl) {
         })
 }
 
+function load_menu_sys(apiUrl){
+
+}

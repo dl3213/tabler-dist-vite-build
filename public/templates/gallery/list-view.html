@@ -393,13 +393,7 @@
                         <div class="row">
                             <div class="col">
                                 <a href="#" class="btn btn-primary" id="upload-btn" type="file" style="width: 100%;">
-                                    <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                                        <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
-                                        <path d="M21 21l-6 -6" />
-                                    </svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-upload"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" /><path d="M7 9l5 -5l5 5" /><path d="M12 4l0 12" /></svg>
                                     Upload
                                 </a>
                             </div>
@@ -434,7 +428,7 @@
                 <div class="d-flex">
 
                     <ul class="pagination ms-auto align-items-center">
-                        <li class="page-item">
+                        <li class="page-item ">
                             <a class="page-link top-btn" href="#" tabindex="-1" aria-disabled="true">
                                 top
                             </a>
@@ -444,21 +438,21 @@
                                 first
                             </a>
                         </li>
-                        <li class="page-item   page-prev-btn">
+                        <!-- <li class="page-item   page-prev-btn">
                             <a class="page-link" href="#"  >
                                 prev
                             </a>
-                        </li>
+                        </li> -->
                         <li class="page-item"><a class="page-link page-index-top" href="#">1</a></li>
                         <li class="page-item active"><a class="page-link page-index-top" href="#">2</a></li>
                         <li class="page-item"><a class="page-link page-index-top" href="#">3</a></li>
                         <li class="page-item"><a class="page-link page-index-top" href="#">4</a></li>
                         <li class="page-item"><a class="page-link page-index-top" href="#">5</a></li>
-                        <li class="page-item page-next-btn">
+                        <!-- <li class="page-item page-next-btn">
                             <a class="page-link" href="#">
                                 next
                             </a>
-                        </li>
+                        </li> -->
                         <li class="page-item">
                             <a class="page-link last-btn" href="#" tabindex="-1" aria-disabled="true">
                                 last
@@ -480,7 +474,7 @@
                 <div class="d-flex">
 
                     <ul class="pagination ms-auto align-items-center">
-                        <li class="page-item">
+                        <li class="page-item fade" >
                             <a class="page-link top-btn" href="#" tabindex="-1" aria-disabled="true">
                                 top
                             </a>
@@ -490,21 +484,21 @@
                                 first
                             </a>
                         </li>
-                        <li class="page-item page-prev-btn">
+                        <!-- <li class="page-item page-prev-btn">
                             <a class="page-link" href="#" >
                                 prev
                             </a>
-                        </li>
+                        </li> -->
                         <li class="page-item"><a class="page-link page-index-bottom" href="#">1</a></li>
                         <li class="page-item active"><a class="page-link page-index-bottom" href="#">2</a></li>
                         <li class="page-item"><a class="page-link page-index-bottom" href="#">3</a></li>
                         <li class="page-item"><a class="page-link page-index-bottom" href="#">4</a></li>
                         <li class="page-item"><a class="page-link page-index-bottom" href="#">5</a></li>
-                        <li class="page-item page-next-btn">
+                        <!-- <li class="page-item page-next-btn">
                             <a class="page-link" href="#">
                                 next
                             </a>
-                        </li>
+                        </li> -->
                         <li class="page-item">
                             <a class="page-link last-btn" href="#" tabindex="-1" aria-disabled="true">
                                 last
@@ -560,12 +554,9 @@
         Fancybox.bind("[data-fancybox]", {
             // Custom options for all galleries
         });
-
-        //document.getElementById('dropzone-custom').action = apiUrl + '/api/rest/v1/file/upload';
-        // new Dropzone("#dropzone-custom", config)
-
-        document.getElementById('upload-btn').addEventListener('click', (evt)=>{
-            console.log('upload-btn click ......')
+ 
+        var upload_btn = document.getElementById('upload-btn')
+        upload_btn?.addEventListener('click', (evt)=>{ 
             var input = document.createElement('input')
             input.type = 'file';
             input.setAttribute('multiple', '');
@@ -576,20 +567,57 @@
             input.addEventListener('change', (evt1)=>{
                 console.log('inpput change ......')
                 var files = input.files;
+                console.log(files)
+                var parent = upload_btn.parentElement;
+                console.log(parent)
+                var upload_btn_html = parent.innerHTML;
+                var uploadedCount = 0
+                var uploadedCountPercent = uploadedCount / files.length * 100
+ 
+                reloadParentHtml(parent, uploadedCount, files.length, uploadedCountPercent, upload_btn_html)
 
-                for (let item of files) {
-                    console.log(item.name); // 输出文件名
+                const processItem = async (item) => {
+                    console.log(item);
                     // 在这里处理每个文件
                     const form = new FormData();
                     form.append('file', item);
-                    axios.post(apiUrl + '/api/rest/v1/file/upload', form)
+
+                    await axios.post(apiUrl + '/api/rest/v1/file/upload', form)
                         .then(response => {
                             console.log('File uploaded successfully:', response.data);
                         })
                         .catch(error => {
                             console.error('Error uploading file:', error);
-                        });
-                } 
+                        })
+                        .finally(() => {
+                            uploadedCount += 1
+                            reloadParentHtml(parent, uploadedCount, files.length, (uploadedCount / files.length * 100), upload_btn_html)
+                        })
+
+                };
+                const processItemsInOrder = async () => {
+                    for (const item of files) {
+                        await processItem(item);
+                    }
+                    console.log('所有项按顺序处理完成');
+                };
+                processItemsInOrder();
+                function reloadParentHtml(parent, uploadedCount, total, uploadedCountPercent, upload_btn_html) {
+                    //console.log('reloadParentHtml -> ', uploadedCount)
+                    if (uploadedCount != total) {
+                        parent.innerHTML = `
+                    <div class="progress mb-2" id="">
+                        <div class="progress-bar" style="width: ${uploadedCountPercent}%" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="${total}" aria-label="${uploadedCountPercent}% Complete">
+                            <span class="visually-hidden">${uploadedCountPercent}% Complete</span>
+                        </div>
+                    </div>
+                `
+                    } else {
+                        parent.innerHTML = ``
+                        parent.appendChild(upload_btn)
+                    }
+
+                }
             })
             input.click();
         })
@@ -660,7 +688,7 @@
 
         var request = {
             pageNumber: 1,
-            pageSize: pageSizeInputList[0].value,
+            pageSize: 30,
             lastPageNumber: 1,
         }
         load_data(request, 1)

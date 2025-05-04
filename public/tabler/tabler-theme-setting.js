@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (name === key) {
           document.documentElement.setAttribute("data-bs-" + key, value);
           document.getElementById('index-main-iframe')?.contentWindow.document.documentElement.setAttribute("data-bs-" + key, value);
-          document.getElementById('head-process')?.classList.add('bg-'+"value")
+          document.getElementById('head-progress')?.classList.add('bg-'+"value")
           window.localStorage.setItem("tabler-" + key, value);
           url.searchParams.set(key, value);
  

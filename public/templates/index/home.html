@@ -1964,6 +1964,7 @@
     <script src="/libs/jsvectormap/dist/js/jsvectormap.min.js?1692870487" defer></script>
     <script src="/libs/jsvectormap/dist/maps/world.js?1692870487" defer></script>
     <script src="/libs/jsvectormap/dist/maps/world-merc.js?1692870487" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/animejs/lib/anime.iife.min.js"></script>
     <!-- Tabler Core -->
     <script src="/js/tabler.min.js?1692870487" defer></script>
     <script src="/js/demo.min.js?1692870487" defer></script> 
@@ -2129,10 +2130,10 @@
                         stroke: tabler.getColor('border-color'),
                         strokeWidth: 2,
                     }
-                },
-                zoomOnScroll: true,
-                zoomButtons: true,
+                }, 
                 // -------- Series --------
+                zoomOnScroll: true,
+                zoomButtons: false,
                 visualizeData: {
                     scale: [tabler.getColor('bg-surface'), tabler.getColor('primary')],
                     values: {
@@ -2639,18 +2640,7 @@
         });
         // @formatter:on
     </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
 
-
-        });
-    </script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-
-
-        });
-    </script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             console.log("home ready...")
