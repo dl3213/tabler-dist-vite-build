@@ -360,6 +360,8 @@
                                     <option value="updateTime">updateTime</option>
                                     <option value="realName">realName</option>
                                     <option value="size">size</option>
+                                    <option value="clickCount">clickCount</option>
+
                                 </select>
                             </div>
                             <div class="col">
@@ -460,7 +462,7 @@
                         </li>
                         <li class="page-item">
                             <input type="text" class="form-control page-size-input"
-                                   name="example-text-input" value="30">
+                                   name="example-text-input" value="15">
                         </li>
                         <li class="page-item">
                             <select   class="form-select page-select ">
@@ -474,7 +476,7 @@
                 <div class="d-flex">
 
                     <ul class="pagination ms-auto align-items-center">
-                        <li class="page-item fade" >
+                        <li class="page-item  " >
                             <a class="page-link top-btn" href="#" tabindex="-1" aria-disabled="true">
                                 top
                             </a>
@@ -506,7 +508,7 @@
                         </li>
                         <li class="page-item">
                             <input type="text" class="form-control page-size-input"
-                                   name="example-text-input" value="30">
+                                   name="example-text-input" value="15">
                         </li>
                         <li class="page-item">
                             <select  class="form-select page-select ">
@@ -672,6 +674,7 @@
                     load_detail()
                     click_count()
                     heart_btn_build()
+                    convert_format_btn_build()
                 }
 
             });
@@ -688,7 +691,7 @@
 
         var request = {
             pageNumber: 1,
-            pageSize: 30,
+            pageSize: pageSizeInputList[0].value,
             lastPageNumber: 1,
         }
         load_data(request, 1)
@@ -799,6 +802,16 @@
                                       <a class="dropdown-item restore-btn" target-id="${item.id}">
                                         restore
                                       </a>
+                                      ${item.type.startsWith("video") ? `
+                                      <a class="dropdown-item convert-format-btn" target-id="${item.id}">
+                                        convert format
+                                      </a>
+                                      `:``}
+                                      ${item.type.startsWith("image") ? `
+                                      <a class="dropdown-item find-similar-btn" target-id="${item.id}">
+                                        find similar
+                                      </a>
+                                      `:``}
                                     </div>
                                   </div>
                                 </div>
@@ -1040,6 +1053,28 @@
                         .finally(() => { 
 
                         })
+            }
+        }
+
+        function convert_format_btn_build() {
+            var btn_list = document.getElementsByClassName("convert-format-btn");
+            for (let element of btn_list) {
+                element.onclick = (evt)=>{
+                    var currentTarget = evt.currentTarget;
+                    var id = currentTarget.getAttribute("target-id");
+                    axios
+                        .post(apiUrl + '/api/rest/v1/file/convert-format/' + id)
+                        .then(response => {
+                            response = response.data
+
+                        })
+                        .catch(error => {
+                            console.log(error)
+                        })
+                        .finally(() => {
+
+                        })
+                };
             }
         }
 

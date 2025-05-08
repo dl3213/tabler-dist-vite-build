@@ -2785,6 +2785,8 @@
                         //console.log(window.localStorage.getItem('tabler-theme-primary'))
                         if (ret.code == 200) {
                             document.getElementById("os-mem-total").innerText = ret.data.total.toFixed(2) + "GB"
+                            console.log(osMemArr)
+                            console.log(timeArr)
                             if (osMemArr.length < 10) {
                                 osMemArr.push(ret.data.used.toFixed(2))
                                 timeArr.push(ret.data.time)
