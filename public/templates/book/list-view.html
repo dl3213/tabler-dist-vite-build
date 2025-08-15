@@ -9,16 +9,17 @@
 -->
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
- 
-    <!-- CSS files -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>kotlin-runner</title>
+
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.ico" />
     <link href="/tabler/tabler.css?1746260450" rel="stylesheet" />
     <link href="/tabler/tabler-theme.css?1746260450" rel="stylesheet" />
-    <link href="/css/fancybox.css?1692870487" rel="stylesheet"/>
+    <link href="/css/fancybox.css?1692870487" rel="stylesheet" />
     <style>
-        @import url('/css/inter.css');
+        @import url('https://rsms.me/inter/inter.css');
 
         :root {
             --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
@@ -27,428 +28,477 @@
         body {
             font-feature-settings: "cv03", "cv04", "cv11";
         }
+        .fancybox__container{
+            z-index: 9999;
+        }
     </style>
 </head>
-<body>
-    <script src="/tabler/tabler-theme.js?1692870487" defer></script>
+<body>  
+<script src="/tabler/tabler-theme.js?1692870487" defer></script>
 <div class="page">
-    <div class="page-wrapper">
-        <!-- Page header -->
-        <div class="page-header d-print-none">
-            <div hidden="hidden">
-                <input id="success-btn" class="btn" data-bs-toggle="modal" data-bs-target="#modal-success">
-                <input id="danger-btn" class="btn" data-bs-toggle="modal" data-bs-target="#modal-danger">
+
+
+    <div hidden="hidden">
+        <input id="success-btn" class="btn" data-bs-toggle="modal" data-bs-target="#modal-success">
+        <input id="danger-btn" class="btn" data-bs-toggle="modal" data-bs-target="#modal-danger">
+
+
+        <div class="container-xl">
+        
+            <div id="custom-menu" class="dropdown-menu">
+                <a class="dropdown-item" event="delete" href="#">
+                    delete
+                </a>
+                <a class="dropdown-item" event="move" href="#">
+                    move
+                </a>
+                <a class="dropdown-item" event="success" href="#">
+                    success
+                </a>
+                <a class="dropdown-item" event="danger" href="#">
+                    danger
+                </a>
+                <a class="dropdown-item" event="?" href="#">
+                    ?
+                </a>
             </div>
-
-
-            <div class="container-xl">
-
-                <div id="custom-menu" class="dropdown-menu">
-                    <a class="dropdown-item" event="delete" href="#">
-                        delete
-                    </a>
-                    <a class="dropdown-item" event="move" href="#">
-                        move
-                    </a>
-                    <a class="dropdown-item" event="success" href="#">
-                        success
-                    </a>
-                    <a class="dropdown-item" event="danger" href="#">
-                        danger
-                    </a>
-                    <a class="dropdown-item" event="?" href="#">
-                        ?
-                    </a>
-                </div>
-                <div class="modal modal-blur fade" id="modal-success" tabindex="-1" role="dialog" aria-hidden="true">
-                    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            <div class="modal-status bg-success"></div>
-                            <div class="modal-body text-center py-4">
-                                <!-- Download SVG icon from http://tabler-icons.io/i/circle-check -->
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-green icon-lg" width="24"
-                                     height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                     stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
-                                    <path d="M9 12l2 2l4 -4"/>
-                                </svg>
-                                <h3>Succedeed</h3>
-                                <div class="text-secondary" id="modal-success-context">success</div>
-                            </div>
-                            <div class="modal-footer">
-                                <div class="w-100">
-                                    <div class="row">
-                                        <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">
+            <div class="modal modal-blur fade" id="modal-success" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div class="modal-status bg-success"></div>
+                        <div class="modal-body text-center py-4">
+                            <!-- Download SVG icon from http://tabler-icons.io/i/circle-check -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-green icon-lg" width="24" height="24"
+                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+                                <path d="M9 12l2 2l4 -4" />
+                            </svg>
+                            <h3>Succedeed</h3>
+                            <div class="text-secondary" id="modal-success-context">success</div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="w-100">
+                                <div class="row">
+                                    <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">
                                             Cancel
                                         </a></div>
-                                        <div class="col"><a href="#" class="btn btn-success w-100"
-                                                            data-bs-dismiss="modal">
+                                    <div class="col"><a href="#" class="btn btn-success w-100" data-bs-dismiss="modal">
                                             Ok
                                         </a></div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="modal modal-blur fade" id="modal-danger" tabindex="-1" role="dialog" aria-hidden="true">
-                    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
-                        <div class="modal-content">
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            <div class="modal-status bg-danger"></div>
-                            <div class="modal-body text-center py-4">
-                                <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24"
-                                     height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                     stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                    <path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z"/>
-                                    <path d="M12 9v4"/>
-                                    <path d="M12 17h.01"/>
-                                </svg>
-                                <!--<h3>Are you sure?</h3>-->
-                                <div class="text-secondary" id="modal-danger-context">Do you really want to remove this
-                                    file? What you've done cannot be undone.
-                                </div>
+            </div>
+            <div class="modal modal-blur fade" id="modal-danger" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div class="modal-status bg-danger"></div>
+                        <div class="modal-body text-center py-4">
+                            <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24"
+                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path
+                                    d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
+                                <path d="M12 9v4" />
+                                <path d="M12 17h.01" />
+                            </svg>
+                            <!--<h3>Are you sure?</h3>-->
+                            <div class="text-secondary" id="modal-danger-context">Do you really want to remove this
+                                file? What you've done cannot be undone.
                             </div>
-                            <div class="modal-footer">
-                                <div class="w-100">
-                                    <div class="row">
-                                        <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">
+                        </div>
+                        <div class="modal-footer">
+                            <div class="w-100">
+                                <div class="row">
+                                    <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">
                                             Cancel
                                         </a></div>
-                                        <div class="col"><a href="#" id="danger_ok" class="btn btn-danger w-100"
-                                                            data-bs-dismiss="modal"> Ok </a></div>
-                                    </div>
+                                    <div class="col"><a href="#" id="danger_ok" class="btn btn-danger w-100"
+                                            data-bs-dismiss="modal"> Ok </a></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="alert alert-success alert-dismissible" id="alert-success" hidden="true" role="alert">
-                    <div class="d-flex">
-                        <div>
-                            <!-- Download SVG icon from http://tabler-icons.io/i/check -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24"
-                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                 stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                <path d="M5 12l5 5l10 -10"/>
-                            </svg>
-                        </div>
-                        <div id="alert-success-context">
-                            Wow! Everything worked!
-                        </div>
-                    </div>
-                    <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
-                </div>
-                <div class="alert alert-warning alert-dismissible" id="alert-warning" hidden="true" role="alert">
-                    <div class="d-flex">
-                        <div>
-                            <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24"
-                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                 stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                <path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z"/>
-                                <path d="M12 9v4"/>
-                                <path d="M12 17h.01"/>
-                            </svg>
-                        </div>
-                        <div id="alert-warning-context">
-                            Uh oh, something went wrong
-                        </div>
-                    </div>
-                    <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
-                </div>
-                <div class="alert alert-danger alert-dismissible" id="alert-danger" hidden="true" role="alert">
-                    <div class="d-flex">
-                        <div>
-                            <!-- Download SVG icon from http://tabler-icons.io/i/alert-circle -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24"
-                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                 stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"/>
-                                <path d="M12 8v4"/>
-                                <path d="M12 16h.01"/>
-                            </svg>
-                        </div>
-                        <div id="alert-danger-context">
-                            I'm so sorry…
-                        </div>
-                    </div>
-                    <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
-                </div>
-                <div class="alert alert-info alert-dismissible" id="alert-info" hidden="true" role="alert">
-                    <div class="d-flex">
-                        <div>
-                            <!-- Download SVG icon from http://tabler-icons.io/i/info-circle -->
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24"
-                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                 stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0"/>
-                                <path d="M12 9h.01"/>
-                                <path d="M11 12h1v4h1"/>
-                            </svg>
-                        </div>
-                        <div id="alert-info-context">
-                            Did you know?
-                        </div>
-                    </div>
-                    <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
-                </div>
-
-
-                <div class="modal modal-blur fade">
-                    <a href="#" id="entity-detail-btn" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal"
-                       data-bs-target="#detail-div">
-                        <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                             stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                            <path d="M12 5l0 14"/>
-                            <path d="M5 12l14 0"/>
-                        </svg>
-                        New+
-                    </a>
-                </div>
-                <div class="modal modal-blur fade " id="detail-div" tabindex="-1" role="dialog" aria-hidden="true" style="height: 100%">
-                    <div class="modal-dialog modal-fullscreen modal-fullscreen-md-down" role="document">
-                        <div class="modal-content">
-                            <iframe id="entity-detail-iframe" class="modal-body card"  >
-        
-                            </iframe>
-                            <div class="modal-footer">
-                                <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
-                                    Cancel
-                                </a>
-                                <a href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
-                                    <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                         viewBox="0 0 24 24"
-                                         stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                         stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                        <path d="M12 5l0 14"/>
-                                        <path d="M5 12l14 0"/>
-                                    </svg>
-                                    New+
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
- 
             </div>
-
+        
+            <div class="alert alert-success alert-dismissible" id="alert-success" hidden="true" role="alert">
+                <div class="d-flex">
+                    <div>
+                        <!-- Download SVG icon from http://tabler-icons.io/i/check -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24"
+                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M5 12l5 5l10 -10" />
+                        </svg>
+                    </div>
+                    <div id="alert-success-context">
+                        Wow! Everything worked!
+                    </div>
+                </div>
+                <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+            </div>
+            <div class="alert alert-warning alert-dismissible" id="alert-warning" hidden="true" role="alert">
+                <div class="d-flex">
+                    <div>
+                        <!-- Download SVG icon from http://tabler-icons.io/i/alert-triangle -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24"
+                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path
+                                d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z" />
+                            <path d="M12 9v4" />
+                            <path d="M12 17h.01" />
+                        </svg>
+                    </div>
+                    <div id="alert-warning-context">
+                        Uh oh, something went wrong
+                    </div>
+                </div>
+                <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+            </div>
+            <div class="alert alert-danger alert-dismissible" id="alert-danger" hidden="true" role="alert">
+                <div class="d-flex">
+                    <div>
+                        <!-- Download SVG icon from http://tabler-icons.io/i/alert-circle -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24"
+                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+                            <path d="M12 8v4" />
+                            <path d="M12 16h.01" />
+                        </svg>
+                    </div>
+                    <div id="alert-danger-context">
+                        I'm so sorry…
+                    </div>
+                </div>
+                <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+            </div>
+            <div class="alert alert-info alert-dismissible" id="alert-info" hidden="true" role="alert">
+                <div class="d-flex">
+                    <div>
+                        <!-- Download SVG icon from http://tabler-icons.io/i/info-circle -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24"
+                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                            stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                            <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+                            <path d="M12 9h.01" />
+                            <path d="M11 12h1v4h1" />
+                        </svg>
+                    </div>
+                    <div id="alert-info-context">
+                        Did you know?
+                    </div>
+                </div>
+                <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
+            </div>
+        
+        
             <div class="modal modal-blur fade">
-                <a href="#" id="book-detail-btn" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal"
-                   data-bs-target="#book-detail">
+                <a href="#" id="entity-detail-btn" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal"
+                    data-bs-target="#detail-div">
                     <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                         stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                        <path d="M12 5l0 14"/>
-                        <path d="M5 12l14 0"/>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                        <path d="M12 5l0 14" />
+                        <path d="M5 12l14 0" />
                     </svg>
                     New+
                 </a>
             </div>
-            <div class="modal modal-blur fade " id="book-detail" tabindex="-1" role="dialog" aria-hidden="true" style="height: 100%">
+            <div class="modal modal-blur fade " id="detail-div" tabindex="-1" role="dialog" aria-hidden="true"
+                style="height: 100%">
                 <div class="modal-dialog modal-fullscreen modal-fullscreen-md-down" role="document">
                     <div class="modal-content">
-                        <iframe id="book-detail-iframe" class="modal-body card" src="/api/rest/v1/book/detail/view.html?id=">
-    
+                        <iframe id="entity-detail-iframe" class="modal-body card">
+        
                         </iframe>
                         <div class="modal-footer">
                             <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
                                 Cancel
                             </a>
                             <a href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
-                                Confirm
+                                <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                                    stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M12 5l0 14" />
+                                    <path d="M5 12l14 0" />
+                                </svg>
+                                New+
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <div class="modal modal-blur fade" id="modal-report" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">New+</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-btn"></button>
+    </div>
+    
+    <div class="modal modal-blur fade" id="modal-info-view" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Info</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form class="card" id="entity-form">
+                    <input hidden name="id" value="" readonly />
+                    <input hidden name="fileName" value="" readonly />
+                    <input hidden name="suffix" value="" readonly />
+                    <input hidden name="serialNumber" value="" readonly />
+                    <input hidden name="code" value="" readonly />
+                    <input hidden name="width" value="" readonly />
+                    <input hidden name="height" value="" readonly />
+                    <input hidden name="thumbnail" value="" readonly />
+                    <input hidden name="isDeleted" value="" readonly />
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">realName</label>
+                            <input type="text" class="form-control" name="realName" placeholder="realName">
                         </div>
-                        <form class="card" id="entity-form">
-                            <input hidden name="id" value="" readonly /> 
- 
-                            <input hidden name="isDeleted" value="" readonly />  
-                            <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">type</label>
+                            <input type="text" class="form-control" name="type" placeholder="type" readonly>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-lg-6">
                                 <div class="mb-3">
-                                    <label class="form-label">Name</label>
-                                    <input type="text" class="form-control" name="name"
-                                           placeholder="name">
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">type</label>
-                                    <input type="text" class="form-control" name="type"
-                                           placeholder="type">
+                                    <label class="form-label">absolutePath</label>
+                                    <input type="text" class="form-control" name="absolutePath" readonly>
                                 </div>
                             </div>
-                            <div class="modal-body">
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">absolutePath</label>
-                                            <input type="text" class="form-control" name="absolutePath" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">relativePath</label>
-                                            <input type="text" class="form-control" name="relativePath" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">createId</label>
-                                            <input type="text" class="form-control" name="createId" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">updateId</label>
-                                            <input type="text" class="form-control" name="updateId" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">createTime</label>
-                                            <input type="date-time" class="form-control" name="createTime"   >
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">updateTime</label>
-                                            <input type="date-time" class="form-control" name="updateTime"  >
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div>
-                                            <label class="form-label">description</label>
-                                            <textarea class="form-control" rows="3" name="description"></textarea>
-                                        </div>
-                                    </div>
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label class="form-label">relativePath</label>
+                                    <input type="text" class="form-control" name="relativePath" readonly>
                                 </div>
                             </div>
-                        </form>
-                        <div class="modal-footer">
-                            <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
-                                Cancel
-                            </a>
-                            <a href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal" id="add-submit">
-                                Put
-                            </a>
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label class="form-label">size</label>
+                                    <input type="text" class="form-control" name="size" readonly>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label class="form-label">sha256</label>
+                                    <input type="text" class="form-control" name="sha256" readonly>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label class="form-label">createTime</label>
+                                    <input type="date-time" class="form-control" name="createTime">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="mb-3">
+                                    <label class="form-label">updateTime</label>
+                                    <input type="date-time" class="form-control" name="updateTime">
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div>
+                                    <label class="form-label">description</label>
+                                    <textarea class="form-control" rows="3" name="description"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                        Cancel
+                    </a>
+                    <a class="btn btn-primary ms-auto" data-bs-dismiss="modal" id="edit-submit">
+                        Edit
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal modal-blur fade" id="book-detail-view" tabindex="-10" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Info</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="page-wrapper">
+                    <div class="page-body">
+                        <div class="container-xl">
+                            <div class="d-flex">
+                                <ul class="pagination ms-auto align-items-center">
+                                     
+                                    <li class="page-item">
+                                        <a class="page-link detail-prev-btn" tabindex="-1" aria-disabled="true">
+                                            prev
+                                        </a>
+                                    </li>  
+                                     
+                                    <li class="page-item">
+                                        <a class="page-link detail-next-btn" tabindex="-1" aria-disabled="true">
+                                            next
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <input type="text" class="form-control detail-page-size-input" name="example-text-input"
+                                            value="30">
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="row row-cards" id="detail-context"
+                                style="will-change: transform; backface-visibility: hidden;">
+                            </div>
+                            <div class="d-flex">
+                                <ul class="pagination ms-auto align-items-center">
+                                     
+                                    <li class="page-item">
+                                        <a class="page-link detail-prev-btn" tabindex="-1" aria-disabled="true">
+                                            prev
+                                        </a>
+                                    </li>  
+                                     
+                                    <li class="page-item">
+                                        <a class="page-link detail-next-btn" tabindex="-1" aria-disabled="true">
+                                            next
+                                        </a>
+                                    </li>
+                                    <li class="page-item">
+                                        <input type="text" class="form-control detail-page-size-input" name="example-text-input"
+                                            value="30">
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                        Cancel
+                    </a>
+                    <a class="btn btn-primary ms-auto" data-bs-dismiss="modal" id="edit-submit">
+                        Edit
+                    </a>
+                </div>
             </div>
+        </div>
+    </div>
 
-            <div class="container-xl"> 
+
+    <div class="page-wrapper">
+        <!-- Page header -->
+        <div class="page-header d-print-none">
+             
+            <div class="container-xl">
                 <div class="card-body">
-                    <div class="row row-cards">
-                        <div class="col-xs-4 col-md-4 col-lg-4">
+                    <div class="row row-cards" >
+                        <div class="col-12">
                             <div class="col">
                                 <h2 class="page-title">
                                     Book
                                 </h2>
-                                <div class="text-secondary mt-1" id="totalInfo">1-12 of 241 photos</div>
+                                <div class="text-secondary mt-1">
+                                    <text>total:&nbsp;<text id="totalInfo"></text></text>
+                                    <br>
+                                    <text>window:&nbsp;<text id="windowInfo"></text></text>
+                                    <br>
+                                    <text>screen:&nbsp;<text id="screenInfo"></text></text>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-xs-2 col-md-2 col-lg-2">
-                            
-                        </div>
-                        <div class="col-xs-2 col-sm-2 col-md-2">
-                            <div class="d-flex" style="justify-content: center;align-items: center">
+                        <div class="row">
+                            <div class="col">
+                                <label class="form-label">order by</label>
+                                <select type="text" class="form-select" id="select-order-field" value="">
+                                    <option value="createTime">createTime</option>
+                                    <option value="updateTime">updateTime</option>
+                                    <option value="name">name</option>
+                                    <option value="size">size</option>
+                                    <option value="clickCount">clickCount</option>
+
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label class="form-label">order direction</label>
+                                <select type="text" class="form-select" id="orderDirection" value="">
+                                    <option value="asc">asc</option>
+                                    <option value="desc">desc</option>
+                                </select>
+                            </div>
+                            <div class="col" >
                                 <div class="me-3">
                                     <label class="form-check form-check-inline">
                                         <input class="form-check-input" type="checkbox" id="isDeleted" value="1">
                                         <span class="form-check-label">isDeleted</span>
                                     </label>
-                                </div>
+                                </div> 
                                 <div class="me-3">
                                     <label class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="hash" value="1">
-                                        <span class="form-check-label">hash</span>
+                                        <input class="form-check-input" type="checkbox" id="heart" value="1">
+                                        <span class="form-check-label">heart</span>
                                     </label>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-4 col-md-4 col-lg-4">
-                            <div class="d-flex" style="justify-content: center;align-items: center">
-                                <div class="me-3">
-                
-                                    <div class="input-icon">
-                                        <input type="text" value="" id="keyword" class="form-control" placeholder="Search…">
-                                        <span class="input-icon-addon" id="search">
-                                        </span>
-                                    </div>
+                        <div class="row">
+                            <div class="col">
+                                <a href="#" class="btn btn-primary" id="upload-btn" type="file" style="width: 100%;">
+                                    <svg xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-upload"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" /><path d="M7 9l5 -5l5 5" /><path d="M12 4l0 12" /></svg>
+                                    Upload
+                                </a>
+                            </div>
+                            <div class="col">
+                                <div class="input-icon">
+                                    <input type="text" value="" id="keyword" class="form-control" placeholder="Search…">
+                                    <span class="input-icon-addon" id="search">
+                                    </span>
                                 </div>
+                            </div>
+                            <div class="col">
                                 <a href="#" class="btn btn-primary" id="search-btn">
                                     <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                        stroke-linejoin="round">
+                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                         <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
                                         <path d="M21 21l-6 -6" />
                                     </svg>
                                     Search
                                 </a>
-                                <div class="me-3">
-                                    <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal"
-                                       data-bs-target="#modal-report">
-                                        <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                             stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                            <path d="M12 5l0 14"/>
-                                            <path d="M5 12l14 0"/>
-                                        </svg>
-                                        New+
-                                    </a>
-                                    <a href="#" class="btn btn-primary d-sm-none btn-icon" data-bs-toggle="modal"
-                                       data-bs-target="#modal-report" aria-label="Create new report">
-                                        <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                             stroke-linecap="round" stroke-linejoin="round">
-                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                            <path d="M12 5l0 14"/>
-                                            <path d="M5 12l14 0"/>
-                                        </svg>
-                                    </a>
-                                </div>
                             </div>
+                           
                         </div>
                     </div>
-                </div> 
+                </div>
             </div>
-        </div> 
+
+        </div>
         <div class="page-body">
             <div class="container-xl">
+                
                 <div class="d-flex">
 
                     <ul class="pagination ms-auto align-items-center">
-                        <li class="page-item">
+                        <li class="page-item ">
                             <a class="page-link top-btn" href="#" tabindex="-1" aria-disabled="true">
                                 top
                             </a>
@@ -458,33 +508,21 @@
                                 first
                             </a>
                         </li>
-                        <li class="page-item   page-prev-btn">
+                        <!-- <li class="page-item   page-prev-btn">
                             <a class="page-link" href="#"  >
-                                <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                     stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                    <path d="M15 6l-6 6l6 6"/>
-                                </svg>
+                                prev
                             </a>
-                        </li>
+                        </li> -->
                         <li class="page-item"><a class="page-link page-index-top" href="#">1</a></li>
                         <li class="page-item active"><a class="page-link page-index-top" href="#">2</a></li>
                         <li class="page-item"><a class="page-link page-index-top" href="#">3</a></li>
                         <li class="page-item"><a class="page-link page-index-top" href="#">4</a></li>
                         <li class="page-item"><a class="page-link page-index-top" href="#">5</a></li>
-                        <li class="page-item page-next-btn">
+                        <!-- <li class="page-item page-next-btn">
                             <a class="page-link" href="#">
-                                <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                     stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                    <path d="M9 6l6 6l-6 6"/>
-                                </svg>
+                                next
                             </a>
-                        </li>
+                        </li> -->
                         <li class="page-item">
                             <a class="page-link last-btn" href="#" tabindex="-1" aria-disabled="true">
                                 last
@@ -500,13 +538,12 @@
                         </li>
                     </ul>
                 </div>
-                <div class="row row-cards" id="gallery-context">
+                <div class="row row-cards" id="main-context" style="will-change: transform; backface-visibility: hidden;">
                 </div>
                 
-                <div class="d-flex">
-
+                <div class="d-flex"> 
                     <ul class="pagination ms-auto align-items-center">
-                        <li class="page-item">
+                        <li class="page-item  " >
                             <a class="page-link top-btn" href="#" tabindex="-1" aria-disabled="true">
                                 top
                             </a>
@@ -516,33 +553,21 @@
                                 first
                             </a>
                         </li>
-                        <li class="page-item page-prev-btn">
+                        <!-- <li class="page-item page-prev-btn">
                             <a class="page-link" href="#" >
-                                <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                     stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                    <path d="M15 6l-6 6l6 6"/>
-                                </svg>
+                                prev
                             </a>
-                        </li>
+                        </li> -->
                         <li class="page-item"><a class="page-link page-index-bottom" href="#">1</a></li>
                         <li class="page-item active"><a class="page-link page-index-bottom" href="#">2</a></li>
                         <li class="page-item"><a class="page-link page-index-bottom" href="#">3</a></li>
                         <li class="page-item"><a class="page-link page-index-bottom" href="#">4</a></li>
                         <li class="page-item"><a class="page-link page-index-bottom" href="#">5</a></li>
-                        <li class="page-item page-next-btn">
+                        <!-- <li class="page-item page-next-btn">
                             <a class="page-link" href="#">
-                                <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
-                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                     stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-                                    <path d="M9 6l6 6l-6 6"/>
-                                </svg>
+                                next
                             </a>
-                        </li>
+                        </li> -->
                         <li class="page-item">
                             <a class="page-link last-btn" href="#" tabindex="-1" aria-disabled="true">
                                 last
@@ -563,37 +588,193 @@
     </div>
 </div>
 <!-- Libs JS -->
-<!-- Tabler Core -->
-<script src="/js/nouislider.min.js?1692870487" defer></script>
-<script src="/js/litepicker.js?1692870487" defer></script>
-<script src="/js/tom-select.base.min.js?1692870487" defer></script>
-<script src="/js/dropzone-min.js?1692870487" defer></script> 
-<script src="/js/tabler.min.js?1692870487" defer></script>
-<script src="/js/demo.min.js?1692870487" defer></script> 
+<!-- Tabler Core -->   
+ <script src="/tabler/tabler.js?1692870487" defer></script> 
 <script src="/js/axios.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="/js/fancybox.umd.js" type="text/javascript" charset="utf-8"></script>
+<script src="/js/fslightbox.js" type="text/javascript" charset="utf-8"></script>
+
+<script src="/js/typed.umd.js" type="text/javascript" charset="utf-8"></script>
 <script src="/js/common/common.js"></script>
+<script src="/js/common/html-element.js"></script>
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        console.log("DOMContentLoaded...")
-        const apiUrl = server.API_URL 
+    document.addEventListener("DOMContentLoaded", function () { 
+        const apiUrl = server.API_URL
+
+        var entityUrl = {
+            "page": '/api/rest/v1/book/sql/page', 
+            "delete": '/api/rest/v1/book/delete/',
+            "detail": '/api/rest/v1/book/detail/',
+            "click" : '/api/rest/v1/book/click/',
+            'heart': '/api/rest/v1/book/heart/',
+            "restore": '/api/rest/v1/book/restore/',
+            'update': '/api/rest/v1/book/update',
+        }
+       
         var danger_ok_btn = document.getElementById("danger_ok");
         var pageSizeInputList = Array.from(document.getElementsByClassName("page-size-input")); 
         var keywordInput = document.getElementById("keyword");
         var totalInfoDiv = document.getElementById("totalInfo");
         var page_select_list = Array.from(document.getElementsByClassName("page-select"));
-
-        var pagePrevBtnList = Array.from(document.getElementsByClassName("page-prev-btn"));
-        var pageNextBtnList = Array.from(document.getElementsByClassName("page-next-btn"));
-
-        var contextHtml = document.getElementById('gallery-context');
  
+        var pagePrevBtnList = Array.from(document.getElementsByClassName("detail-prev-btn"));
+        var pageNextBtnList = Array.from(document.getElementsByClassName("detail-next-btn"));
+
+        var select_order_field = document.getElementById('select-order-field');
+        var orderDirection = document.getElementById('orderDirection');
+
+        var contextHtml = document.getElementById('main-context'); 
+  
+       
+ 
+        upload_build()
+        function upload_build() {
+            var upload_btn = document.getElementById('upload-btn')
+            upload_btn?.addEventListener('click', (evt) => {
+                var input = document.createElement('input')
+                input.type = 'file';
+                input.setAttribute('multiple', '');
+                input.addEventListener('click', (evt1) => {
+                    console.log('inpput click ......')
+                    console.log(input.files)
+                })
+                input.addEventListener('change', (evt1) => {
+                    console.log('inpput change ......')
+                    var files = input.files;
+                    console.log(files)
+                    var parent = upload_btn.parentElement;
+                    console.log(parent)
+                    var upload_btn_html = parent.innerHTML;
+                    var uploadedCount = 0
+                    var uploadedCountPercent = uploadedCount / files.length * 100
+
+                    reloadParentHtml(parent, uploadedCount, files.length, uploadedCountPercent, upload_btn_html)
+
+                    const processItem = async (item) => {
+                        console.log(item);
+                        // 在这里处理每个文件
+                        const form = new FormData();
+                        form.append('file', item);
+
+                        await axios.post(apiUrl + entityUrl.upload, form)
+                            .then(response => {
+                                console.log('File uploaded successfully:', response.data);
+                            })
+                            .catch(error => {
+                                console.error('Error uploading file:', error);
+                            })
+                            .finally(() => {
+                                uploadedCount += 1
+                                reloadParentHtml(parent, uploadedCount, files.length, (uploadedCount / files.length * 100), upload_btn_html)
+                            })
+
+                    };
+                    const processItemsInOrder = async () => {
+                        for (const item of files) {
+                            await processItem(item);
+                        }
+                        console.log('所有项按顺序处理完成');
+                    };
+                    processItemsInOrder();
+                    function reloadParentHtml(parent, uploadedCount, total, uploadedCountPercent, upload_btn_html) {
+                        //console.log('reloadParentHtml -> ', uploadedCount)
+                        if (uploadedCount != total) {
+                            parent.innerHTML = `
+                    <div class="progress mb-2" id="">
+                        <div class="progress-bar" style="width: ${uploadedCountPercent}%" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="${total}" aria-label="${uploadedCountPercent}% Complete">
+                            <span class="visually-hidden">${uploadedCountPercent}% Complete</span>
+                        </div>
+                    </div>
+                `
+                        } else {
+                            parent.innerHTML = ``
+                            parent.appendChild(upload_btn)
+                        }
+
+                    }
+                })
+                input.click();
+            })
+
+        }
+
+         //https://github.com/mattboldt/typed.js
+        var totalInfoTyped = new Typed('#totalInfo', {
+            strings: ['0'],
+            typeSpeed: 10,
+            backSpeed: 10,
+            backDelay: 500,
+            startDelay: 10,
+            loop: false,
+            showCursor: false,
+        });
+        var windowInfoTyped = new Typed('#windowInfo', {
+            strings: [`${window.innerWidth}*${window.innerHeight}`],
+            typeSpeed: 10,
+            backSpeed: 10,
+            backDelay: 500,
+            startDelay: 10,
+            loop: false,
+            showCursor: false,
+        });
+        var screenInfoTyped = new Typed('#screenInfo', {
+            strings: [`${screen.width}*${screen.height}`],
+            typeSpeed: 10,
+            backSpeed: 10,
+            backDelay: 500,
+            startDelay: 10,
+            loop: false,
+            showCursor: false,
+        });
+        window.addEventListener('resize', function (event) {
+            // 在这里编写你的代码来处理窗口大小变化
+            requestAnimationFrame(() => {
+                windowInfoTyped.strings = [`${window.innerWidth}*${window.innerHeight}`]
+                windowInfoTyped.reset();
+                screenInfoTyped.strings = [`${screen.width}*${screen.height}`]
+                screenInfoTyped.reset();
+            })
+        }); 
+ 
+        //MutationObserver+IntersectionObserver+ResizeObserver
+        var observer = new MutationObserver(function (mutations) {
+            mutations.forEach(function (mutation) { 
+                if ('childList' === mutation.type) { 
+                    edit_btn_build()
+                    delete_btn_build()
+                    restore_btn_build() 
+                    click_count()
+                    heart_btn_build() 
+                }
+
+            });
+        });
+        // 开始观察目标节点
+        observer.observe(contextHtml, {
+            childList: true,        // 子节点的增减
+            attributes: false,       // 属性的变动
+            characterData: false,    // 节点内容或节点文本的变动
+            subtree: false,          // 是否将观察器应用于该节点的所有后代节点
+            attributeOldValue: false, // 记录变动前的属性值（attributes变动时）
+            characterDataOldValue: false, // 记录变动前的数据（characterData变动时）
+        });
+
         var request = {
             pageNumber: 1,
             pageSize: pageSizeInputList[0].value,
             lastPageNumber: 1,
         }
+        var detailRequest = {
+            pageNumber: 1,
+            pageSize: Array.from(document.getElementsByClassName("detail-page-size-input"))[0].value,
+            lastPageNumber: 1,
+            id: null,
+        }
         load_data(request, 1)
+  
+        Fancybox.bind(document.getElementById("detail-context"), "[data-fancybox='detail-gallery']", {
+             
+        });
 
         pageSizeInputList.forEach(pageSizeInput => {
             pageSizeInput.addEventListener("change", function (evt) {
@@ -605,7 +786,6 @@
             })
         })
         
-
 
         page_select_list.forEach(element => {
             element.addEventListener("change", function (event) {
@@ -621,46 +801,68 @@
             load_data(request , 1)
         })
  
-        function buildGallery(item, url) {
-            return `<div class="col-sm-8 col-sm-6 col-lg-4" id="">
-                        <div class="card card-sm">
-                            <a href123 ="` + apiUrl + ('/api/rest/v1/book/detail/first/' + item.id) + `" class="d-block card-img-top entity" id="` + item.id + `"  data-fslightbox="gallery" ><img
-                                    src="` + apiUrl + ('/api/rest/v1/book/detail/first/' + item.id) + `"
-                                    class="card-img-top"  ></a>
-                            <div class="card-body base-info-div"  >
+        function buildGallery(item, url, isClick) {
+            return `<div class="col-md-4 col-sm-12" id="">
+                        <div class="card">
+                            <div class="card-body"  >
                               <div class="row row-cards"   >
-                                 <div class="col-xs-2 col-sm-2 col-md-2">
+                                <div class="col-9">
                                   <div class="mb-3">
-                                        <a target-id="` + item.id + `" class="btn btn-link delete-btn">
+                                    <input type="text" class="form-control-plaintext" name="example-disabled-input"  value="${item.name}" disabled>
+                                  </div>
+                                </div> 
+                                <div class="col">
+                                  <div class="mb-3">
+                                    <input type="text" class="form-control-plaintext" name="example-disabled-input"  value="${(item.width && item.height) ? (item.width) + ` * ` + (item.height) : ``}" disabled>
+                                  </div>
+                                </div> 
+                              </div>
+                            </div>
+                            <a data-fancybox="gallery" href="${url}" class="d-block card-img-top entity " id="${item.id}" target-id="${item.id}" data-fslightbox="gallery" ${isClick ? 'data-bs-toggle="modal" data-bs-target="#book-detail-view"' : ''} >
+                                <img src="${url}" class="card-img-top"   >
+                            </a>
+                            <div class="card-body container base-info-div"  >
+                              <div class="row row-cards"   >
+                                 <div class="col">
+                                  <div class="mb-3">
+                                        <a class="btn btn-link delete-btn" target-id="${item.id}">
                                             delete
                                         </a>
                                   </div>
-                                </div>
-                                <div class="col-xs-1 col-sm-1 col-md-1">
-                                </div>
-                                <div class="col-xs-1 col-sm-6 col-md-6">
+                                </div> 
+                                <div class="col-6">
                                   <div class="mb-3"> 
-                                    <input type="text" class="form-control" name="example-disabled-input" placeholder="Readonly..." value="` + (item.name) + `" readonly="">
+                                    <input type="text" class="form-control-plaintext" name="example-disabled-input" placeholder="Readonly..." value="${item.createTime}" readonly="" disabled>
                                   </div>
                                 </div>
-                                <div class="col-xs-2 col-sm-2 col-md-2">
+                                <div class="col">
                                   <div class="mb-3">
                                     <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                       Action
                                     </button>
                                     <div class="dropdown-menu">
-                                      <a class="dropdown-item edit-btn" target-id="` + item.id + `"  data-bs-toggle="modal" data-bs-target="#modal-report">
+                                      <a class="dropdown-item edit-btn" target-id="${item.id}"  data-bs-toggle="modal" data-bs-target="#modal-info-view">
                                         edit
                                       </a> 
-                                      <a class="dropdown-item move-btn" target-id="` + item.id + `">
+                                      <a class="dropdown-item move-btn" target-id="${item.id}">
                                         move
                                       </a>
-                                      <a class="dropdown-item text-red delete-btn" target-id="` + item.id + `" >
+                                      <a class="dropdown-item text-red delete-btn" target-id="${item.id}" >
                                         delete
                                       </a>
-                                      <a class="dropdown-item restore-btn" target-id="` + item.id + `">
+                                      <a class="dropdown-item restore-btn" target-id="${item.id}">
                                         restore
                                       </a>
+                                      ${item.type?.startsWith("video") ? `
+                                      <a class="dropdown-item convert-format-btn" target-id="${item.id}">
+                                        convert format
+                                      </a>
+                                      `:``}
+                                      ${item.type?.startsWith("image") ? `
+                                      <a class="dropdown-item find-similar-btn" target-id="${item.id}">
+                                        find similar
+                                      </a>
+                                      `:``}
                                     </div>
                                   </div>
                                 </div>
@@ -669,26 +871,39 @@
                         </div>
                     </div>`
         }
+  
 
- 
+        function buildDetailGallery(item, url, isClick) {
+            return `<div class="col-md-4 col-sm-12" id="">
+                        <div class="card"> 
+                            <a data-fancybox="detail-gallery" href="${url}" class="d-block card-img-top "  data-fslightbox="detail-gallery" >
+                                <img src="${url}" class="card-img-top"   >
+                            </a> 
+                        </div>
+                    </div>`
+        }
+  
+
         function delete_btn_build() {
             var delete_btn_list = document.getElementsByClassName("delete-btn");
             for (let el of delete_btn_list) {
                 el.addEventListener('click', function (evt) {
+                    evt.stopPropagation();
+                    evt.stopImmediatePropagation()
                     console.log(el.getAttribute("target-id")) 
                     danger_ok_btn.setAttribute("target-id", el.getAttribute("target-id"))
 
                     var id = danger_ok_btn.getAttribute("target-id");
                     console.log(id)
                     var parentElement = el.parentElement.parentElement.parentElement.parentElement;
-                    if (id) {
+                    if (id && parentElement) {
                         parentElement.innerHTML = `
                                     <div class="col-xs-12 col-sm-12 col-md-12"> 
                                         <div class="spinner-border spinner-border-sm text-secondary" role="status"></div>
                                     </div> 
                                     `
                         axios
-                            .delete(apiUrl + '/api/rest/v1/book/delete/' + id)
+                            .delete(apiUrl + entityUrl.delete + id)
                             .then(response => {
                                 console.log(response)
                                 //alert(response.data.msg)
@@ -725,7 +940,7 @@
                             })
                     }
 
-                })
+                }, true)
             }
         }
 
@@ -733,11 +948,13 @@
             var btn_list = document.getElementsByClassName("edit-btn");
             for (let el of btn_list) {
                 el.addEventListener('click', function (evt) {
+                    evt.stopPropagation();
+                    evt.stopImmediatePropagation()
                     var id = el.getAttribute("target-id");
                     console.log(id)
                     var temp = showLoading('entity-form')
                     axios
-                        .get(apiUrl + '/api/rest/v1/book/detail/' + id)
+                        .get(apiUrl + entityUrl.detail + id)
                         .then(response => {
                             response = response.data
                             console.log(response)
@@ -753,11 +970,103 @@
                         })
                         .finally(() => { 
                         })
-                })
+                }, true)
             }
         }
 
-        var update = document.getElementById('add-submit');
+        function click_count() {
+            console.log('click_count...')
+            var btn_list = document.getElementsByClassName("entity");
+            for (let element of btn_list) {
+                element.onclick = handler;
+            }
+
+            function handler(evt) { 
+                console.log('click_count handler...')
+                var currentTarget = evt.currentTarget;
+                var id = currentTarget.getAttribute("target-id");
+                detailRequest.id = id
+                detailRequest.pageNumber = 1
+                loadDetailData()
+                
+            }
+        }
+
+
+        function loadDetailData() {
+            const start = new Date().getTime();
+            var contextElementId = "detail-context"
+            var detailContext = document.getElementById(contextElementId);
+            console.log(detailRequest)
+            new Promise((resolve, reject) => {
+                var temp = showLoading(contextElementId)
+                resolve(temp)
+            })
+                .then(function (temp) {
+                    return axios.post(apiUrl + "/api/rest/v1/book/detail/page/" + detailRequest.id, {
+                        ...detailRequest,
+                        pageSize: Array.from(document.getElementsByClassName("detail-page-size-input"))[0].value,
+                    })
+                })
+                .then(response => {
+                    var resp = response.data;
+                    console.log(resp)
+                    detailContext.innerHTML = ""
+                    resp.data.forEach(item => {
+                        requestAnimationFrame(() => {
+                            var url = apiUrl + "/static-file/" + item.relativePath;
+                            var divHtml = buildDetailGallery(item, url, false)
+                            const div = document.createElement('div');
+                            div.innerHTML = divHtml;
+                            detailContext.appendChild(div.firstChild)
+                        });
+                    })
+
+                    //resolve(resp)
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+                .finally(() => {
+                    console.log('load_data cost = ' + (new Date().getTime() - start))
+                })
+
+        }
+
+        function heart_btn_build(){
+            var btn_list = document.getElementsByClassName("heart-btn"); 
+            for (let element of btn_list) {  
+                element.onclick = handler; 
+            }
+
+            function handler(evt) {
+                var currentTarget = evt.currentTarget;
+                var id = currentTarget.getAttribute("target-id");
+                    axios
+                        .post(apiUrl + entityUrl.heart + id)
+                        .then(response => {
+                            response = response.data
+                            if(response.code == 200){ 
+                                currentTarget.parentElement.querySelector('.heart-btn').innerHTML =
+                                `
+                                <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon `+((response.data.t1.isDeleted == '0')? 'icon-filled text-red' : '')+`" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" /></svg>
+                                `+ response.data.t2 + ''
+                            }else{
+
+                            }
+                        })
+                        .catch(error => {
+                            console.log(error) 
+                        })
+                        .finally(() => { 
+
+                        })
+            }
+        }
+
+   
+        var update = document.getElementById('edit-submit');
         update.addEventListener('click', (e) => {
             console.log("submit onclick...")
             const form = document.querySelector('#entity-form');
@@ -768,12 +1077,15 @@
             const formJson = JSON.stringify(addForm);
             console.log(formJson)
             axios
-                .put(apiUrl + '/api/rest/v1/book/put', addForm)
+                .post(apiUrl + entityUrl.update, addForm)
                 .then(response => {
                     console.log(response)
-                    if (response.data.code == 200) {
-                        console.log(form.reset())
+                    response = response.data
+                    if(response.code == 200){
                         load_data(request)
+                    }else{
+                        document.getElementById("modal-danger-context").textContent = response.msg
+                        document.getElementById("danger-btn").click();
                     }
                 })
                 .catch(error => {
@@ -781,17 +1093,12 @@
                 })
         })
 
-
-        document.getElementById('close-btn').addEventListener('click', (e) => {
-            console.log("close-btn onclick...")
-            const form = document.querySelector('#entity-form');
-            form.reset()
-        })
-
         function restore_btn_build() {
             var btn_list = document.getElementsByClassName("restore-btn");
             for (let el of btn_list) {
                 el.addEventListener('click', function (evt) {
+                    evt.stopPropagation();
+                    evt.stopImmediatePropagation()
                     console.log(el.getAttribute("target-id")) 
                     danger_ok_btn.setAttribute("target-id", el.getAttribute("target-id"))
 
@@ -806,7 +1113,7 @@
                                     
                                     `
                         axios
-                            .post(apiUrl + '/api/rest/v1/book/restore/' + id)
+                            .post(apiUrl + entityUrl.restore + id)
                             .then(response => {
                                 console.log(response) 
                                 if (response.data.code == 200) { 
@@ -850,7 +1157,8 @@
             if (data.pageNumber > (3)) {
 
             }
-            var start = data.pageNumber == 1 && data.pageNumber < 2 ? 1 : data.pageNumber - 2;
+            var start = data.pageNumber == 1 || data.pageNumber <= 2 ? 1 : data.pageNumber - 2;
+            console.log(start)
             for (let el of page_index_list) {
                 el.innerText = start
                 start = numberAdd(start, 1)
@@ -867,85 +1175,77 @@
         }
 
         function page_select_build(data) {
-            
+
             var pageIndex_size = (data.total / data.pageSize)
             request.lastPageNumber = pageIndex_size + 1
             page_select_list.forEach(el => el.innerHTML = '')
             pageIndex_size = pageIndex_size == 0 ? 1 : pageIndex_size;
+            var selectHtml = ""
             for (let i = 1; i <= (pageIndex_size + 1); i++) {
-                if (i == data.pageNumber) {
-                    page_select_list.forEach(el => el.innerHTML += `<option selected value="` + i + `" >` + i + `</option>`)
-                } else {
-                    page_select_list.forEach(el => el.innerHTML += `<option value="` + i + `" >` + i + `</option>`)
-                }
+                selectHtml += `<option ${i == data.pageNumber ? 'selected' : ''} value="` + i + `" >` + i + `</option>`
             }
+            page_select_list.forEach(el => {
+                el.innerHTML = selectHtml
+            })
         }
 
-        function load_detail() {
-            var items = document.querySelectorAll('#gallery-context .entity');
-            items.forEach(function (item) {
-                item.addEventListener('click', function (evt) {
-                    evt.preventDefault()
-                    evt.stopImmediatePropagation()
-                    evt.stopPropagation()
-                    document.getElementById("book-detail-btn").click()
-                    var detail_iframe = document.getElementById("book-detail-iframe");
-                    detail_iframe.src = "/templates/book/detail-view.html?id=" + evt.currentTarget.id;
-                });
-            });
-
-        }
-
+       
         function load_data(request, show) {
             const start = new Date().getTime();
  
-            if(show){
-                var temp = showLoading('gallery-context')
-            }
-            axios
-                .post( apiUrl + '/api/rest/v1/book/page', {
-                    ...request,
-                    "keyword": keywordInput?.value, 
-                    "isDeleted": document.getElementById("isDeleted")?.checked ? document.getElementById("isDeleted")?.value : "0",
-                    //"type": "image",
+
+            new Promise((resolve, reject) => {
+                var temp = showLoading('main-context')
+                resolve(temp)
+            })
+                .then(function (temp) {
+                    return axios
+                        .post(apiUrl + entityUrl.page, {
+                            ...request,
+                            "keyword": keywordInput?.value,
+                            "hash": document.getElementById("hash")?.checked ? document.getElementById("hash")?.value : "0",
+                            "isDeleted": document.getElementById("isDeleted")?.checked ? document.getElementById("isDeleted")?.value : "0",
+                            "heart": document.getElementById("heart")?.checked ? document.getElementById("heart")?.value : "0",
+                            "orderField": select_order_field?.value,
+                            "orderDirection": orderDirection?.value,
+                            //"type": "image",
+                        })
                 })
-                .then(response => {
+                .then(response => { 
                     var resp = response.data;
                     console.log(resp)
-                    var totalInfo = "<text>total = " + resp.total + "</text>";
-                    console.log(totalInfo)
-                    totalInfoDiv.innerHTML = totalInfo;
- 
+                    totalInfoTyped.strings = [`${resp.total}`]
+                    totalInfoTyped.reset();  
+
                     pageSizeInputList.forEach(item =>{
                         item.value = resp.pageSize
                     })
-
                     page_select_build(resp)
-
                     page_index_build(resp, "page-index-top");
                     page_index_build(resp, "page-index-bottom");
                     contextHtml.innerHTML = ""
-                    var context = ""
                     resp.data.forEach(item => {
-                        var url = resp.prevUrl + item.relativePath;
-                        var div =  buildGallery(item, url);
-                        context += div
-                    })
-                    contextHtml.innerHTML = context
+                        requestAnimationFrame(()=>{ 
+                            var url = apiUrl + ('/api/rest/v1/book/detail/first/' + item.id)
+                            var divHtml = buildGallery(item, url, true)
+                            const div = document.createElement('div');
+                            div.innerHTML = divHtml; 
+                            contextHtml.appendChild(div.firstChild) 
+                        });
+                    }) 
 
-                    edit_btn_build()
-                    delete_btn_build()
-                    restore_btn_build()
-                    load_detail()
+                    //resolve(resp)
                 })
                 .catch(error => {
                     console.log(error)
                 })
-                .finally(()=>{
+                .finally(() => {
                     console.log('load_data cost = ' + (new Date().getTime() - start))
                 })
-
+   
+            return; 
             document.getElementById("top")?.click()
+            
         }
 
         var page_index_top_list = document.getElementsByClassName("page-index-top");
@@ -963,20 +1263,19 @@
             })
         }
  
-
         pagePrevBtnList.forEach(el => {
             el.addEventListener('click', function (evt) {
-                request.pageNumber = numberSub(request.pageNumber, 1)
-                if(request.pageNumber <= 0){
-                    request.pageNumber = 1
-                }
-                load_data(request,1)
+                detailRequest.pageNumber = numberSub(detailRequest.pageNumber, 1)
+                if(detailRequest.pageNumber <= 0){
+                    detailRequest.pageNumber = 1
+                } 
+                loadDetailData()
             })
         })
         pageNextBtnList.forEach(el => {
             el.addEventListener('click', function (evt) {
-                request.pageNumber = numberAdd(request.pageNumber, 1)
-                load_data(request,1)
+                detailRequest.pageNumber = numberAdd(detailRequest.pageNumber, 1) 
+                loadDetailData()
             })
         })
 
@@ -993,8 +1292,7 @@
                 load_data(request,1)
             })
         })
-
-
+  
     });
 </script>
 </body>

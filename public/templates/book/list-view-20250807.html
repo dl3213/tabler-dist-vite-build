@@ -9,17 +9,16 @@
 -->
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>kotlin-runner</title>
-
-    <link rel="icon" type="image/svg+xml" href="/static/favicon.ico" />
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+ 
+    <!-- CSS files -->
     <link href="/tabler/tabler.css?1746260450" rel="stylesheet" />
     <link href="/tabler/tabler-theme.css?1746260450" rel="stylesheet" />
-    <link href="/css/fancybox.css?1692870487" rel="stylesheet" />
+    <link href="/css/fancybox.css?1692870487" rel="stylesheet"/>
     <style>
-        @import url('https://rsms.me/inter/inter.css');
+        @import url('/css/inter.css');
 
         :root {
             --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
@@ -30,8 +29,8 @@
         }
     </style>
 </head>
-<body>  
-<script src="/tabler/tabler-theme.js?1692870487" defer></script>
+<body>
+    <script src="/tabler/tabler-theme.js?1692870487" defer></script>
 <div class="page">
     <div class="page-wrapper">
         <!-- Page header -->
@@ -245,35 +244,62 @@
                         </div>
                     </div>
                 </div>
+ 
             </div>
 
-            <div class="modal modal-blur fade" id="modal-info-view" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal modal-blur fade">
+                <a href="#" id="book-detail-btn" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal"
+                   data-bs-target="#book-detail">
+                    <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                         stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M12 5l0 14"/>
+                        <path d="M5 12l14 0"/>
+                    </svg>
+                    New+
+                </a>
+            </div>
+            <div class="modal modal-blur fade " id="book-detail" tabindex="-1" role="dialog" aria-hidden="true" style="height: 100%">
+                <div class="modal-dialog modal-fullscreen modal-fullscreen-md-down" role="document">
+                    <div class="modal-content">
+                        <iframe id="book-detail-iframe" class="modal-body card" src="/api/rest/v1/book/detail/view.html?id=">
+    
+                        </iframe>
+                        <div class="modal-footer">
+                            <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                                Cancel
+                            </a>
+                            <a href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
+                                Confirm
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal modal-blur fade" id="modal-report" tabindex="-1" role="dialog" aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title">Info</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <h5 class="modal-title">New+</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-btn"></button>
                         </div>
                         <form class="card" id="entity-form">
-                            <input hidden name="id" value="" readonly />
-                            <input hidden name="fileName" value="" readonly />    
-                            <input hidden name="suffix" value="" readonly />
-                            <input hidden name="serialNumber" value="" readonly />
-                            <input hidden name="code" value="" readonly />
-                            <input hidden name="width" value="" readonly />
-                            <input hidden name="height" value=""  readonly/>
-                            <input hidden name="thumbnail" value="" readonly />
-                            <input hidden name="isDeleted" value="" readonly /> 
+                            <input hidden name="id" value="" readonly /> 
+ 
+                            <input hidden name="isDeleted" value="" readonly />  
                             <div class="modal-body">
                                 <div class="mb-3">
-                                    <label class="form-label">realName</label>
-                                    <input type="text" class="form-control" name="realName"
-                                           placeholder="realName" >
+                                    <label class="form-label">Name</label>
+                                    <input type="text" class="form-control" name="name"
+                                           placeholder="name">
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">type</label>
                                     <input type="text" class="form-control" name="type"
-                                           placeholder="type" readonly>
+                                           placeholder="type">
                                 </div>
                             </div>
                             <div class="modal-body">
@@ -292,14 +318,14 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label class="form-label">size</label>
-                                            <input type="text" class="form-control" name="size" readonly>
+                                            <label class="form-label">createId</label>
+                                            <input type="text" class="form-control" name="createId" readonly>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="mb-3">
-                                            <label class="form-label">sha256</label>
-                                            <input type="text" class="form-control" name="sha256" readonly>
+                                            <label class="form-label">updateId</label>
+                                            <input type="text" class="form-control" name="updateId" readonly>
                                         </div>
                                     </div>
                                     <div class="col-lg-6">
@@ -327,51 +353,30 @@
                             <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
                                 Cancel
                             </a>
-                            <a class="btn btn-primary ms-auto" data-bs-dismiss="modal" id="edit-submit"> 
-                                Edit
+                            <a href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal" id="add-submit">
+                                Put
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="container-xl">
+            <div class="container-xl"> 
                 <div class="card-body">
-                    <div class="row row-cards" >
-                        <div class="col-12">
+                    <div class="row row-cards">
+                        <div class="col-xs-4 col-md-4 col-lg-4">
                             <div class="col">
                                 <h2 class="page-title">
-                                    Gallery
+                                    Book
                                 </h2>
-                                <div class="text-secondary mt-1">
-                                    <text>total:&nbsp;<text id="totalInfo"></text></text>
-                                    <br>
-                                    <text>window:&nbsp;<text id="windowInfo"></text></text>
-                                    <br>
-                                    <text>screen:&nbsp;<text id="screenInfo"></text></text>
-                                </div>
+                                <div class="text-secondary mt-1" id="totalInfo">1-12 of 241 photos</div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col">
-                                <label class="form-label">order by</label>
-                                <select type="text" class="form-select" id="select-order-field" value="">
-                                    <option value="createTime">createTime</option>
-                                    <option value="updateTime">updateTime</option>
-                                    <option value="realName">realName</option>
-                                    <option value="size">size</option>
-                                    <option value="clickCount">clickCount</option>
-
-                                </select>
-                            </div>
-                            <div class="col">
-                                <label class="form-label">order direction</label>
-                                <select type="text" class="form-select" id="orderDirection" value="">
-                                    <option value="asc">asc</option>
-                                    <option value="desc">desc</option>
-                                </select>
-                            </div>
-                            <div class="col" >
+                        <div class="col-xs-2 col-md-2 col-lg-2">
+                            
+                        </div>
+                        <div class="col-xs-2 col-sm-2 col-md-2">
+                            <div class="d-flex" style="justify-content: center;align-items: center">
                                 <div class="me-3">
                                     <label class="form-check form-check-inline">
                                         <input class="form-check-input" type="checkbox" id="isDeleted" value="1">
@@ -384,53 +389,66 @@
                                         <span class="form-check-label">hash</span>
                                     </label>
                                 </div>
-                                <div class="me-3">
-                                    <label class="form-check form-check-inline">
-                                        <input class="form-check-input" type="checkbox" id="heart" value="1">
-                                        <span class="form-check-label">heart</span>
-                                    </label>
-                                </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col">
-                                <a href="#" class="btn btn-primary" id="upload-btn" type="file" style="width: 100%;">
-                                    <svg xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-upload"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" /><path d="M7 9l5 -5l5 5" /><path d="M12 4l0 12" /></svg>
-                                    Upload
-                                </a>
-                            </div>
-                            <div class="col">
-                                <div class="input-icon">
-                                    <input type="text" value="" id="keyword" class="form-control" placeholder="Search…">
-                                    <span class="input-icon-addon" id="search">
-                                    </span>
+                        <div class="col-xs-4 col-md-4 col-lg-4">
+                            <div class="d-flex" style="justify-content: center;align-items: center">
+                                <div class="me-3">
+                
+                                    <div class="input-icon">
+                                        <input type="text" value="" id="keyword" class="form-control" placeholder="Search…">
+                                        <span class="input-icon-addon" id="search">
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col">
                                 <a href="#" class="btn btn-primary" id="search-btn">
                                     <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
-                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                                        stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                                         <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
                                         <path d="M21 21l-6 -6" />
                                     </svg>
                                     Search
                                 </a>
+                                <div class="me-3">
+                                    <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal"
+                                       data-bs-target="#modal-report">
+                                        <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                             stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                            <path d="M12 5l0 14"/>
+                                            <path d="M5 12l14 0"/>
+                                        </svg>
+                                        New+
+                                    </a>
+                                    <a href="#" class="btn btn-primary d-sm-none btn-icon" data-bs-toggle="modal"
+                                       data-bs-target="#modal-report" aria-label="Create new report">
+                                        <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                             stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                            <path d="M12 5l0 14"/>
+                                            <path d="M5 12l14 0"/>
+                                        </svg>
+                                    </a>
+                                </div>
                             </div>
-                           
                         </div>
                     </div>
-                </div>
+                </div> 
             </div>
-        </div>
+        </div> 
         <div class="page-body">
             <div class="container-xl">
-                
                 <div class="d-flex">
 
                     <ul class="pagination ms-auto align-items-center">
-                        <li class="page-item ">
+                        <li class="page-item">
                             <a class="page-link top-btn" href="#" tabindex="-1" aria-disabled="true">
                                 top
                             </a>
@@ -440,21 +458,33 @@
                                 first
                             </a>
                         </li>
-                        <!-- <li class="page-item   page-prev-btn">
+                        <li class="page-item   page-prev-btn">
                             <a class="page-link" href="#"  >
-                                prev
+                                <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                     stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M15 6l-6 6l6 6"/>
+                                </svg>
                             </a>
-                        </li> -->
+                        </li>
                         <li class="page-item"><a class="page-link page-index-top" href="#">1</a></li>
                         <li class="page-item active"><a class="page-link page-index-top" href="#">2</a></li>
                         <li class="page-item"><a class="page-link page-index-top" href="#">3</a></li>
                         <li class="page-item"><a class="page-link page-index-top" href="#">4</a></li>
                         <li class="page-item"><a class="page-link page-index-top" href="#">5</a></li>
-                        <!-- <li class="page-item page-next-btn">
+                        <li class="page-item page-next-btn">
                             <a class="page-link" href="#">
-                                next
+                                <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                     stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M9 6l6 6l-6 6"/>
+                                </svg>
                             </a>
-                        </li> -->
+                        </li>
                         <li class="page-item">
                             <a class="page-link last-btn" href="#" tabindex="-1" aria-disabled="true">
                                 last
@@ -462,7 +492,7 @@
                         </li>
                         <li class="page-item">
                             <input type="text" class="form-control page-size-input"
-                                   name="example-text-input" value="15">
+                                   name="example-text-input" value="30">
                         </li>
                         <li class="page-item">
                             <select   class="form-select page-select ">
@@ -470,13 +500,13 @@
                         </li>
                     </ul>
                 </div>
-                <div class="row row-cards" id="main-context" style="will-change: transform; backface-visibility: hidden;">
+                <div class="row row-cards" id="gallery-context">
                 </div>
                 
                 <div class="d-flex">
 
                     <ul class="pagination ms-auto align-items-center">
-                        <li class="page-item  " >
+                        <li class="page-item">
                             <a class="page-link top-btn" href="#" tabindex="-1" aria-disabled="true">
                                 top
                             </a>
@@ -486,21 +516,33 @@
                                 first
                             </a>
                         </li>
-                        <!-- <li class="page-item page-prev-btn">
+                        <li class="page-item page-prev-btn">
                             <a class="page-link" href="#" >
-                                prev
+                                <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                     stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M15 6l-6 6l6 6"/>
+                                </svg>
                             </a>
-                        </li> -->
+                        </li>
                         <li class="page-item"><a class="page-link page-index-bottom" href="#">1</a></li>
                         <li class="page-item active"><a class="page-link page-index-bottom" href="#">2</a></li>
                         <li class="page-item"><a class="page-link page-index-bottom" href="#">3</a></li>
                         <li class="page-item"><a class="page-link page-index-bottom" href="#">4</a></li>
                         <li class="page-item"><a class="page-link page-index-bottom" href="#">5</a></li>
-                        <!-- <li class="page-item page-next-btn">
+                        <li class="page-item page-next-btn">
                             <a class="page-link" href="#">
-                                next
+                                <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                     stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                                    <path d="M9 6l6 6l-6 6"/>
+                                </svg>
                             </a>
-                        </li> -->
+                        </li>
                         <li class="page-item">
                             <a class="page-link last-btn" href="#" tabindex="-1" aria-disabled="true">
                                 last
@@ -508,7 +550,7 @@
                         </li>
                         <li class="page-item">
                             <input type="text" class="form-control page-size-input"
-                                   name="example-text-input" value="15">
+                                   name="example-text-input" value="30">
                         </li>
                         <li class="page-item">
                             <select  class="form-select page-select ">
@@ -521,209 +563,37 @@
     </div>
 </div>
 <!-- Libs JS -->
-<!-- Tabler Core -->   
- <script src="/tabler/tabler.js?1692870487" defer></script> 
+<!-- Tabler Core -->
+<script src="/js/nouislider.min.js?1692870487" defer></script>
+<script src="/js/litepicker.js?1692870487" defer></script>
+<script src="/js/tom-select.base.min.js?1692870487" defer></script>
+<script src="/js/dropzone-min.js?1692870487" defer></script> 
+<script src="/js/tabler.min.js?1692870487" defer></script>
+<script src="/js/demo.min.js?1692870487" defer></script> 
 <script src="/js/axios.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="/js/fancybox.umd.js" type="text/javascript" charset="utf-8"></script>
-<script src="/js/typed.umd.js" type="text/javascript" charset="utf-8"></script>
 <script src="/js/common/common.js"></script>
-<script src="/js/common/html-element.js"></script>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         console.log("DOMContentLoaded...")
-        const apiUrl = server.API_URL
-       
+        const apiUrl = server.API_URL 
         var danger_ok_btn = document.getElementById("danger_ok");
         var pageSizeInputList = Array.from(document.getElementsByClassName("page-size-input")); 
         var keywordInput = document.getElementById("keyword");
         var totalInfoDiv = document.getElementById("totalInfo");
         var page_select_list = Array.from(document.getElementsByClassName("page-select"));
- 
+
         var pagePrevBtnList = Array.from(document.getElementsByClassName("page-prev-btn"));
         var pageNextBtnList = Array.from(document.getElementsByClassName("page-next-btn"));
 
-        var select_order_field = document.getElementById('select-order-field');
-        var orderDirection = document.getElementById('orderDirection');
-
-        var contextHtml = document.getElementById('main-context'); 
-        var config = {
-            maxFilesize: 10240000,
-            uploadMultiple: false,
-            parallelUploads: 1,
-        }
-
-
-        Fancybox.bind("[data-fancybox]", {
-            // Custom options for all galleries
-        });
+        var contextHtml = document.getElementById('gallery-context');
  
-        var upload_btn = document.getElementById('upload-btn')
-        upload_btn?.addEventListener('click', (evt)=>{ 
-            var input = document.createElement('input')
-            input.type = 'file';
-            input.setAttribute('multiple', '');
-            input.addEventListener('click', (evt1)=>{
-                console.log('inpput click ......')
-                console.log(input.files)
-            })
-            input.addEventListener('change', (evt1)=>{
-                console.log('inpput change ......')
-                var files = input.files;
-                console.log(files)
-                var parent = upload_btn.parentElement;
-                console.log(parent)
-                var upload_btn_html = parent.innerHTML;
-                var uploadedCount = 0
-                var uploadedCountPercent = uploadedCount / files.length * 100
- 
-                reloadParentHtml(parent, uploadedCount, files.length, uploadedCountPercent, upload_btn_html)
-
-                const processItem = async (item) => {
-                    console.log(item);
-                    // 在这里处理每个文件
-                    const form = new FormData();
-                    form.append('file', item);
-
-                    await axios.post(apiUrl + '/api/rest/v1/file/upload', form)
-                        .then(response => {
-                            console.log('File uploaded successfully:', response.data);
-                        })
-                        .catch(error => {
-                            console.error('Error uploading file:', error);
-                        })
-                        .finally(() => {
-                            uploadedCount += 1
-                            reloadParentHtml(parent, uploadedCount, files.length, (uploadedCount / files.length * 100), upload_btn_html)
-                        })
-
-                };
-                const processItemsInOrder = async () => {
-                    for (const item of files) {
-                        await processItem(item);
-                    }
-                    console.log('所有项按顺序处理完成');
-                };
-                processItemsInOrder();
-                function reloadParentHtml(parent, uploadedCount, total, uploadedCountPercent, upload_btn_html) {
-                    //console.log('reloadParentHtml -> ', uploadedCount)
-                    if (uploadedCount != total) {
-                        parent.innerHTML = `
-                    <div class="progress mb-2" id="">
-                        <div class="progress-bar" style="width: ${uploadedCountPercent}%" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="${total}" aria-label="${uploadedCountPercent}% Complete">
-                            <span class="visually-hidden">${uploadedCountPercent}% Complete</span>
-                        </div>
-                    </div>
-                `
-                    } else {
-                        parent.innerHTML = ``
-                        parent.appendChild(upload_btn)
-                    }
-
-                }
-            })
-            input.click();
-        })
-
-        //https://github.com/mattboldt/typed.js
-        var totalInfoTyped = new Typed('#totalInfo', {
-            strings: ['0'], 
-            typeSpeed: 10,
-            backSpeed: 10,
-            backDelay: 500,
-            startDelay: 10,
-            loop: false,
-            showCursor: false,
-        });
-        var windowInfoTyped = new Typed('#windowInfo', {
-            strings: [`${window.innerWidth}*${window.innerHeight}`], 
-            typeSpeed: 10,
-            backSpeed: 10,
-            backDelay: 500,
-            startDelay: 10,
-            loop: false,
-            showCursor: false,
-        });
-        var screenInfoTyped = new Typed('#screenInfo', {
-            strings: [`${screen.width}*${screen.height}`], 
-            typeSpeed: 10,
-            backSpeed: 10,
-            backDelay: 500,
-            startDelay: 10,
-            loop: false,
-            showCursor: false,
-        });
-        window.addEventListener('resize', function (event) {
-            // 在这里编写你的代码来处理窗口大小变化
-            requestAnimationFrame(() => {
-                windowInfoTyped.strings = [`${window.innerWidth}*${window.innerHeight}`]
-                windowInfoTyped.reset(); 
-                screenInfoTyped.strings = [`${screen.width}*${screen.height}`]
-                screenInfoTyped.reset();
-            })
-        });
- 
-
-        //MutationObserver+IntersectionObserver+ResizeObserver
-        var observer = new MutationObserver(function (mutations) {
-            mutations.forEach(function (mutation) { 
-                if ('childList' === mutation.type) {
-                    //console.log(mutation)
-                    edit_btn_build()
-                    delete_btn_build()
-                    restore_btn_build()
-                    load_detail()
-                    click_count()
-                    heart_btn_build()
-                    convert_format_btn_build()
-                }
-
-            });
-        });
-        // 开始观察目标节点
-        observer.observe(contextHtml, {
-            childList: true,        // 子节点的增减
-            attributes: false,       // 属性的变动
-            characterData: false,    // 节点内容或节点文本的变动
-            subtree: false,          // 是否将观察器应用于该节点的所有后代节点
-            attributeOldValue: false, // 记录变动前的属性值（attributes变动时）
-            characterDataOldValue: false, // 记录变动前的数据（characterData变动时）
-        });
-
         var request = {
             pageNumber: 1,
             pageSize: pageSizeInputList[0].value,
             lastPageNumber: 1,
         }
         load_data(request, 1)
-        //requestAnimationFrame(load_data)
-
-        // let worker;
-        // workerTest()
-        // function workerTest(){
-        //     const workerCode = `
-        //         self.onmessage = function(e) {
-        //         const n = e.data;
-        //         let sum = 0;
-        //         for(let i=1; i<=n; i++) sum += i;
-        //         self.postMessage(sum);
-        //         };
-        //     `;
-        //     const blob = new Blob([workerCode], { type: 'application/javascript' });
-
-        //     worker = worker = new Worker(URL.createObjectURL(blob));
-        //      // 接收消息
-        //     worker.onmessage = function(e) {
-        //         console.log('worker.onmessage -> ' + e.data)
-        //     };
-
-        //     // 错误处理
-        //     worker.onerror = function(e) {
-        //         console.log('worker.onerror -> ' + e)
-        //     };
-
-        //     // 发送数据到Worker
-        //     worker.postMessage(10)
-        // }
 
         pageSizeInputList.forEach(pageSizeInput => {
             pageSizeInput.addEventListener("change", function (evt) {
@@ -735,6 +605,7 @@
             })
         })
         
+
 
         page_select_list.forEach(element => {
             element.addEventListener("change", function (event) {
@@ -751,179 +622,73 @@
         })
  
         function buildGallery(item, url) {
-            return `<div class="col-md-4 col-sm-12" id="">
-                        <div class="card">
-                            <div class="card-body"  >
+            return `<div class="col-sm-8 col-sm-6 col-lg-4" id="">
+                        <div class="card card-sm">
+                            <a href123 ="` + apiUrl + ('/api/rest/v1/book/detail/first/' + item.id) + `" class="d-block card-img-top entity" id="` + item.id + `"  data-fslightbox="gallery" ><img
+                                    src="` + apiUrl + ('/api/rest/v1/book/detail/first/' + item.id) + `"
+                                    class="card-img-top"  ></a>
+                            <div class="card-body base-info-div"  >
                               <div class="row row-cards"   >
-                                <div class="col-9">
+                                 <div class="col-xs-2 col-sm-2 col-md-2">
                                   <div class="mb-3">
-                                    <input type="text" class="form-control-plaintext" name="example-disabled-input"  value="${item.realName}" disabled>
-                                  </div>
-                                </div> 
-                                <div class="col">
-                                  <div class="mb-3">
-                                    <input type="text" class="form-control-plaintext" name="example-disabled-input"  value="${(item.width && item.height) ? (item.width) + ` * ` + (item.height) : ``}" disabled>
-                                  </div>
-                                </div> 
-                              </div>
-                            </div>
-                            <a ${(item.type?.startsWith("video") ? 'data-fancybox="' + item.id + '"' : 'data-fancybox="gallery"')} href ="${apiUrl + url}" class="d-block card-img-top entity " id="${item.id}" target-id="${item.id}" data-fslightbox="gallery" >
-                                <img src="${apiUrl + (item.type?.startsWith("video") ? url + '.jpg' : url)}" class="card-img-top"  >
-                            </a>
-                            <div class="card-body container base-info-div"  >
-                              <div class="row row-cards"   >
-                                 <div class="col">
-                                  <div class="mb-3">
-                                        <a target-id="${item.id}" class="btn btn-link delete-btn">
+                                        <a target-id="` + item.id + `" class="btn btn-link delete-btn">
                                             delete
                                         </a>
                                   </div>
-                                </div> 
-                                <div class="col-6">
+                                </div>
+                                <div class="col-xs-1 col-sm-1 col-md-1">
+                                </div>
+                                <div class="col-xs-1 col-sm-6 col-md-6">
                                   <div class="mb-3"> 
-                                    <input type="text" class="form-control-plaintext" name="example-disabled-input" placeholder="Readonly..." value="${item.createTime}" readonly="" disabled>
+                                    <input type="text" class="form-control" name="example-disabled-input" placeholder="Readonly..." value="` + (item.name) + `" readonly="">
                                   </div>
                                 </div>
-                                <div class="col">
+                                <div class="col-xs-2 col-sm-2 col-md-2">
                                   <div class="mb-3">
                                     <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                       Action
                                     </button>
                                     <div class="dropdown-menu">
-                                      <a class="dropdown-item edit-btn" target-id="${item.id}"  data-bs-toggle="modal" data-bs-target="#modal-info-view">
+                                      <a class="dropdown-item edit-btn" target-id="` + item.id + `"  data-bs-toggle="modal" data-bs-target="#modal-report">
                                         edit
                                       </a> 
-                                      <a class="dropdown-item move-btn" target-id="${item.id}">
+                                      <a class="dropdown-item move-btn" target-id="` + item.id + `">
                                         move
                                       </a>
-                                      <a class="dropdown-item text-red delete-btn" target-id="${item.id}" >
+                                      <a class="dropdown-item text-red delete-btn" target-id="` + item.id + `" >
                                         delete
                                       </a>
-                                      <a class="dropdown-item restore-btn" target-id="${item.id}">
+                                      <a class="dropdown-item restore-btn" target-id="` + item.id + `">
                                         restore
                                       </a>
-                                      ${item.type.startsWith("video") ? `
-                                      <a class="dropdown-item convert-format-btn" target-id="${item.id}">
-                                        convert format
-                                      </a>
-                                      `:``}
-                                      ${item.type.startsWith("image") ? `
-                                      <a class="dropdown-item find-similar-btn" target-id="${item.id}">
-                                        find similar
-                                      </a>
-                                      `:``}
                                     </div>
                                   </div>
                                 </div>
                               </div>
-                            </div>
-                            <div class="container card-body extra-info-div"  >
-                        
-                              <div class="row row-cards" style=" align-items: center;justify-content: space-between;">
-
-                                    <div class="col">
-                                        <div class="mb-3">
-                                            <input type="text" class="form-control-plaintext" name="example-disabled-input" placeholder="Readonly..." value="${item.type}" readonly="" disabled>
-                                        </div> 
-                                    </div> 
-                                    <div class="col"> 
-                                        <div class="mb-3">
-                                            <input type="text" class="form-control-plaintext" name="example-disabled-input" placeholder="Readonly..." value="${(item.size / 1024.0 / 1024.0).toFixed(1)}MB" readonly="" disabled>
-                                        </div> 
-                                    </div>  
-                                    <div class="col" > 
-                                        <div class="mb-3">
-                                            <a class="text-secondary click-count" disabled>
-                                                <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" /></svg>
-                                                ${item.clickCount}
-                                            </a> 
-                                        </div> 
-                                    </div> 
-                                    <div class="col">
-                                        <div class="mb-3">
-                                            <a class="text-secondary heart-btn" target-id="${item.id}" >
-                                            <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon ${((item.heartByCurrentUserCount == 1) ? 'icon-filled text-red' : '')}" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" /></svg>
-                                            ${item.heartCount}
-                                            </a>
-                                        </div> 
-                                    </div>  
-                              </div>
-
-                            </div>
+                            </div> 
                         </div>
                     </div>`
         }
- 
-        function buildCard(item, url) {
-            return `<div class="col-md-4 col-sm-12" >
-                    <div class="card">
-                        <div class="card-body">
-                            <h3 class="card-title">${item.realName}</h3>
-                            <p class="text-secondary">${item.createTime}</p>
-                        </div>
-                        <div class="card-body base-info-div"  >
-                            <div class="row row-cards"   >
-                                <div class="col">
-                                    <input type="text" class="form-control-plaintext" name="example-disabled-input" placeholder="Readonly..." value="${(item.size / 1024.0 / 1024.0).toFixed(1)}MB" readonly="" disabled>
-                                </div> 
-                                <div class="col-6">
-                                    <div class="mb-3">
-                                        <input type="text" class="form-control" name="example-disabled-input" placeholder="Readonly..." value="${item.realName}" readonly="">
-                                    </div>
-                                </div>
-                                
-                                <div class="col">
-                                    <div class="mb-3">
-                                        <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Action
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item detail-btn" target-id="${item.id}" href="${apiUrl + url}" target="_blank">
-                                                detail
-                                            </a>
-                                            <a class="dropdown-item edit-btn" target-id="${item.id}" data-bs-toggle="modal" data-bs-target="#modal-info-view">
-                                                edit
-                                            </a>
-                                            <a class="dropdown-item text-red delete-btn" target-id="${item.id}" >
-                                                delete
-                                            </a>
-                                            <a class="dropdown-item restore-btn" target-id="${item.id}">
-                                                restore
-                                            </a>
-                                            <a class="dropdown-item move-btn" target-id="${item.id}">
-                                                search similar
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> 
-                    </div>
-                </div>`
-        }  
 
+ 
         function delete_btn_build() {
             var delete_btn_list = document.getElementsByClassName("delete-btn");
             for (let el of delete_btn_list) {
                 el.addEventListener('click', function (evt) {
-                    evt.stopPropagation();
-                    evt.stopImmediatePropagation()
                     console.log(el.getAttribute("target-id")) 
                     danger_ok_btn.setAttribute("target-id", el.getAttribute("target-id"))
 
                     var id = danger_ok_btn.getAttribute("target-id");
                     console.log(id)
                     var parentElement = el.parentElement.parentElement.parentElement.parentElement;
-                    if (id && parentElement) {
+                    if (id) {
                         parentElement.innerHTML = `
                                     <div class="col-xs-12 col-sm-12 col-md-12"> 
                                         <div class="spinner-border spinner-border-sm text-secondary" role="status"></div>
                                     </div> 
                                     `
                         axios
-                            .delete(apiUrl + '/api/rest/v1/file/delete/' + id)
+                            .delete(apiUrl + '/api/rest/v1/book/delete/' + id)
                             .then(response => {
                                 console.log(response)
                                 //alert(response.data.msg)
@@ -960,7 +725,7 @@
                             })
                     }
 
-                }, true)
+                })
             }
         }
 
@@ -968,13 +733,11 @@
             var btn_list = document.getElementsByClassName("edit-btn");
             for (let el of btn_list) {
                 el.addEventListener('click', function (evt) {
-                    evt.stopPropagation();
-                    evt.stopImmediatePropagation()
                     var id = el.getAttribute("target-id");
                     console.log(id)
                     var temp = showLoading('entity-form')
                     axios
-                        .get(apiUrl + '/api/rest/v1/file/detail/' + id)
+                        .get(apiUrl + '/api/rest/v1/book/detail/' + id)
                         .then(response => {
                             response = response.data
                             console.log(response)
@@ -990,95 +753,11 @@
                         })
                         .finally(() => { 
                         })
-                }, true)
+                })
             }
         }
 
-        function click_count(){
-            var btn_list = document.getElementsByClassName("entity"); 
-            for (let element of btn_list) {  
-                element.onclick = handler; 
-            }
-
-            function handler(evt) {
-                var currentTarget = evt.currentTarget;
-                var id = currentTarget.getAttribute("target-id");
-                    axios
-                        .post(apiUrl + '/api/rest/v1/file/click/' + id)
-                        .then(response => {
-                            response = response.data
-                            if(response.code == 200){
-                                currentTarget.parentElement.querySelector('.click-count').innerHTML = `
-                                <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" /></svg>
-                                `+ response.data.clickCount
-                            }else{
-
-                            }
-                        })
-                        .catch(error => {
-                            console.log(error) 
-                        })
-                        .finally(() => { 
-
-                        })
-            }
-        }
-        function heart_btn_build(){
-            var btn_list = document.getElementsByClassName("heart-btn"); 
-            for (let element of btn_list) {  
-                element.onclick = handler; 
-            }
-
-            function handler(evt) {
-                var currentTarget = evt.currentTarget;
-                var id = currentTarget.getAttribute("target-id");
-                    axios
-                        .post(apiUrl + '/api/rest/v1/file/heart/' + id)
-                        .then(response => {
-                            response = response.data
-                            if(response.code == 200){ 
-                                currentTarget.parentElement.querySelector('.heart-btn').innerHTML =
-                                `
-                                <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon `+((response.data.t1.isDeleted == '0')? 'icon-filled text-red' : '')+`" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" /></svg>
-                                `+ response.data.t2 + ''
-                            }else{
-
-                            }
-                        })
-                        .catch(error => {
-                            console.log(error) 
-                        })
-                        .finally(() => { 
-
-                        })
-            }
-        }
-
-        function convert_format_btn_build() {
-            var btn_list = document.getElementsByClassName("convert-format-btn");
-            for (let element of btn_list) {
-                element.onclick = (evt)=>{
-                    var currentTarget = evt.currentTarget;
-                    var id = currentTarget.getAttribute("target-id");
-                    axios
-                        .post(apiUrl + '/api/rest/v1/file/convert-format/' + id)
-                        .then(response => {
-                            response = response.data
-
-                        })
-                        .catch(error => {
-                            console.log(error)
-                        })
-                        .finally(() => {
-
-                        })
-                };
-            }
-        }
-
-        var update = document.getElementById('edit-submit');
+        var update = document.getElementById('add-submit');
         update.addEventListener('click', (e) => {
             console.log("submit onclick...")
             const form = document.querySelector('#entity-form');
@@ -1089,15 +768,12 @@
             const formJson = JSON.stringify(addForm);
             console.log(formJson)
             axios
-                .post(apiUrl + '/api/rest/v1/file/update', addForm)
+                .put(apiUrl + '/api/rest/v1/book/put', addForm)
                 .then(response => {
                     console.log(response)
-                    response = response.data
-                    if(response.code == 200){
+                    if (response.data.code == 200) {
+                        console.log(form.reset())
                         load_data(request)
-                    }else{
-                        document.getElementById("modal-danger-context").textContent = response.msg
-                        document.getElementById("danger-btn").click();
                     }
                 })
                 .catch(error => {
@@ -1105,12 +781,17 @@
                 })
         })
 
+
+        document.getElementById('close-btn').addEventListener('click', (e) => {
+            console.log("close-btn onclick...")
+            const form = document.querySelector('#entity-form');
+            form.reset()
+        })
+
         function restore_btn_build() {
             var btn_list = document.getElementsByClassName("restore-btn");
             for (let el of btn_list) {
                 el.addEventListener('click', function (evt) {
-                    evt.stopPropagation();
-                    evt.stopImmediatePropagation()
                     console.log(el.getAttribute("target-id")) 
                     danger_ok_btn.setAttribute("target-id", el.getAttribute("target-id"))
 
@@ -1125,7 +806,7 @@
                                     
                                     `
                         axios
-                            .post(apiUrl + '/api/rest/v1/file/restore/' + id)
+                            .post(apiUrl + '/api/rest/v1/book/restore/' + id)
                             .then(response => {
                                 console.log(response) 
                                 if (response.data.code == 200) { 
@@ -1169,8 +850,7 @@
             if (data.pageNumber > (3)) {
 
             }
-            var start = data.pageNumber == 1 || data.pageNumber <= 2 ? 1 : data.pageNumber - 2;
-            console.log(start)
+            var start = data.pageNumber == 1 && data.pageNumber < 2 ? 1 : data.pageNumber - 2;
             for (let el of page_index_list) {
                 el.innerText = start
                 start = numberAdd(start, 1)
@@ -1187,137 +867,76 @@
         }
 
         function page_select_build(data) {
-
+            
             var pageIndex_size = (data.total / data.pageSize)
             request.lastPageNumber = pageIndex_size + 1
             page_select_list.forEach(el => el.innerHTML = '')
             pageIndex_size = pageIndex_size == 0 ? 1 : pageIndex_size;
-            var selectHtml = ""
             for (let i = 1; i <= (pageIndex_size + 1); i++) {
-                selectHtml += `<option ${i == data.pageNumber ? 'selected' : ''} value="` + i + `" >` + i + `</option>`
+                if (i == data.pageNumber) {
+                    page_select_list.forEach(el => el.innerHTML += `<option selected value="` + i + `" >` + i + `</option>`)
+                } else {
+                    page_select_list.forEach(el => el.innerHTML += `<option value="` + i + `" >` + i + `</option>`)
+                }
             }
-            page_select_list.forEach(el => {
-                el.innerHTML = selectHtml
-            })
         }
 
         function load_detail() {
-            var items = document.getElementsByClassName('detail-btn');
-
-            for (let item of items) {
+            var items = document.querySelectorAll('#gallery-context .entity');
+            items.forEach(function (item) {
                 item.addEventListener('click', function (evt) {
                     evt.preventDefault()
                     evt.stopImmediatePropagation()
                     evt.stopPropagation()
-                    var targetId = evt.currentTarget.getAttribute("href") 
-                    document.getElementById("entity-detail-btn").click()
-                    var detail_iframe = document.getElementById("entity-detail-iframe");
-                    detail_iframe.src = targetId;
+                    document.getElementById("book-detail-btn").click()
+                    var detail_iframe = document.getElementById("book-detail-iframe");
+                    detail_iframe.src = "/templates/book/detail-view.html?id=" + evt.currentTarget.id;
                 });
-            }
+            });
 
         }
 
         function load_data(request, show) {
             const start = new Date().getTime();
  
-
-            new Promise((resolve, reject) => {
-                var temp = showLoading('main-context')
-                resolve(temp)
-            })
-                .then(function (temp) {
-                    return axios
-                        .post(apiUrl + '/api/rest/v1/file/sql/page', {
-                            ...request,
-                            "keyword": keywordInput?.value,
-                            "hash": document.getElementById("hash")?.checked ? document.getElementById("hash")?.value : "0",
-                            "isDeleted": document.getElementById("isDeleted")?.checked ? document.getElementById("isDeleted")?.value : "0",
-                            "heart": document.getElementById("heart")?.checked ? document.getElementById("heart")?.value : "0",
-                            "orderField": select_order_field?.value,
-                            "orderDirection": orderDirection?.value,
-                            //"type": "image",
-                        })
-                })
-                .then(response => { 
-                    var resp = response.data;
-                    console.log(resp)
-                    totalInfoTyped.strings = [`${resp.total}`]
-                    totalInfoTyped.reset();  
-
-                    pageSizeInputList.forEach(item =>{
-                        item.value = resp.pageSize
-                    })
-                    page_select_build(resp)
-                    page_index_build(resp, "page-index-top");
-                    page_index_build(resp, "page-index-bottom");
-                    contextHtml.innerHTML = ""
-                    resp.data.forEach(item => {
-                        requestAnimationFrame(()=>{
-                            var url = resp.prevUrl + item.relativePath;
-                            var divHtml = item.type?.startsWith("text") || item.type?.startsWith("application") ? buildCard(item, url) : buildGallery(item, url);
-                            const div = document.createElement('div');
-                            div.innerHTML = divHtml; 
-                            contextHtml.appendChild(div.firstChild) 
-                        });
-                    }) 
-
-                    //resolve(resp)
-                })
-                .catch(error => {
-                    console.log(error)
-                })
-                .finally(() => {
-                    console.log('load_data cost = ' + (new Date().getTime() - start))
-                })
-   
-            return;
             if(show){
-                var temp = showLoading('main-context')
+                var temp = showLoading('gallery-context')
             }
             axios
-                .post( apiUrl + '/api/rest/v1/file/sql/page', {
-                    ...request, 
-                    "keyword": keywordInput?.value,
-                    "hash": document.getElementById("hash")?.checked ? document.getElementById("hash")?.value : "0",
-                    "isDeleted": document.getElementById("isDeleted")?.checked ? document.getElementById("isDeleted")?.value : "0", 
-                    "heart": document.getElementById("heart")?.checked ? document.getElementById("heart")?.value : "0", 
-                    "orderField": select_order_field?.value,
-                    "orderDirection": orderDirection?.value,
+                .post( apiUrl + '/api/rest/v1/book/page', {
+                    ...request,
+                    "keyword": keywordInput?.value, 
+                    "isDeleted": document.getElementById("isDeleted")?.checked ? document.getElementById("isDeleted")?.value : "0",
                     //"type": "image",
                 })
                 .then(response => {
                     var resp = response.data;
                     console.log(resp)
                     var totalInfo = "<text>total = " + resp.total + "</text>";
-                    //console.log(totalInfo)
-                    //totalInfoDiv.innerHTML = totalInfo;
-                    totalInfoTyped.strings = [totalInfo]
-                    totalInfoTyped.reset();
+                    console.log(totalInfo)
+                    totalInfoDiv.innerHTML = totalInfo;
+ 
                     pageSizeInputList.forEach(item =>{
                         item.value = resp.pageSize
                     })
 
                     page_select_build(resp)
+
                     page_index_build(resp, "page-index-top");
                     page_index_build(resp, "page-index-bottom");
                     contextHtml.innerHTML = ""
+                    var context = ""
                     resp.data.forEach(item => {
-                           
-                        requestAnimationFrame(()=>{
-                            var url = resp.prevUrl + item.relativePath;
-                            var divHtml = item.type?.startsWith("text") || item.type?.startsWith("application") ? buildCard(item, url) : buildGallery(item, url);
-                            //console.log(divHtml)
-                            const div = document.createElement('div');
-                            div.innerHTML = divHtml; 
-                            //console.log(div.firstChild)
-                            contextHtml.appendChild(div.firstChild) 
+                        var url = resp.prevUrl + item.relativePath;
+                        var div =  buildGallery(item, url);
+                        context += div
+                    })
+                    contextHtml.innerHTML = context
 
-                        });
-                         
-                    }) 
-
-                    
+                    edit_btn_build()
+                    delete_btn_build()
+                    restore_btn_build()
+                    load_detail()
                 })
                 .catch(error => {
                     console.log(error)
@@ -1327,7 +946,6 @@
                 })
 
             document.getElementById("top")?.click()
-            
         }
 
         var page_index_top_list = document.getElementsByClassName("page-index-top");
@@ -1345,6 +963,7 @@
             })
         }
  
+
         pagePrevBtnList.forEach(el => {
             el.addEventListener('click', function (evt) {
                 request.pageNumber = numberSub(request.pageNumber, 1)
@@ -1374,7 +993,8 @@
                 load_data(request,1)
             })
         })
-  
+
+
     });
 </script>
 </body>

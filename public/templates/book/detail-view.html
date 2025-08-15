@@ -15,14 +15,11 @@
     <title>Photogrid - Tabler - Premium and Open Source dashboard template with responsive and high quality UI.</title>
     <!-- CSS files -->
     <link href="/css/dropzone.css?1692870487" rel="stylesheet"/>
-    <link href="/css/tabler.min.css?1692870487" rel="stylesheet"/>
-    <link href="/css/tabler-flags.min.css?1692870487" rel="stylesheet"/>
-    <link href="/css/tabler-payments.min.css?1692870487" rel="stylesheet"/>
-    <link href="/css/tabler-vendors.min.css?1692870487" rel="stylesheet"/>
-    <link href="/css/demo.min.css?1692870487" rel="stylesheet"/>
-    <link href="/css/fancybox.css?1692870487" rel="stylesheet"/>
+    <link href="/tabler/tabler.css?1746260450" rel="stylesheet" />
+    <link href="/tabler/tabler-theme.css?1746260450" rel="stylesheet" />
+    <link href="/css/fancybox.css?1692870487" rel="stylesheet" />
     <style>
-        @import url('/css/inter.css');
+        @import url('https://rsms.me/inter/inter.css');
 
         :root {
             --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
@@ -31,13 +28,10 @@
         body {
             font-feature-settings: "cv03", "cv04", "cv11";
         }
-        .dropzone {
-            height: 25px;
-        }
     </style>
 </head>
 <body>
-<script src="/js/demo-theme.min.js?1692870487"></script>
+<script src="/tabler/tabler-theme.js?1692870487" defer></script>
 <div class="page">
     <div class="page-wrapper" >
         <div class="page-body" >
@@ -81,13 +75,12 @@
 <!-- Libs JS -->
 <script src="/js/dropzone-min.js?1692870487" defer></script> 
 <!-- Tabler Core -->
-<script src="/js/tabler.min.js?1692870487" defer></script>
-<script src="/js/demo.min.js?1692870487" defer></script>
-<script src="/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+<script src="/tabler/tabler.js?1692870487" defer></script> 
 <script src="/js/axios.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="/js/fancybox.umd.js" type="text/javascript" charset="utf-8"></script>
-<script src="/js/layer.js"></script>
+<script src="/js/typed.umd.js" type="text/javascript" charset="utf-8"></script>
 <script src="/js/common/common.js"></script>
+<script src="/js/common/html-element.js"></script>
 <script th:inline="javascript">
     document.addEventListener("DOMContentLoaded", function () {
         console.log("DOMContentLoaded...")
