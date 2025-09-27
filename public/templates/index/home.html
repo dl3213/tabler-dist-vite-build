@@ -16,6 +16,9 @@
     <link rel="icon" type="image/svg+xml" href="/static/favicon.ico" />
     <link href="/tabler/tabler.css?1746260450" rel="stylesheet" />
     <link href="/tabler/tabler-theme.css?1746260450" rel="stylesheet" />
+
+    <link href="/lib/video.js/video-js.css" rel="stylesheet" />
+    
     <style>
         @import url('/css/inter.css');
     
@@ -1012,12 +1015,24 @@
                             </div>
                         </div>
                         <div class="col-md-6 col-lg-4">
-                            <a href="/static-file/2024-12-05/1864677661977219072.jpg" class="card card-sponsor"
-                                target="_blank" rel="noopener"
-                                style="background-image: url(/static-file/2024-12-05/1864677661977219072.jpg)"
-                                aria-label="Sponsor Tabler!">
-                                <div class="card-body"></div>
-                            </a>
+                            <video id="my-video" class="video-js" controls width="640" height="264" poster="MY_VIDEO_POSTER.jpg"
+                                data-setup="{}">
+                                <source src="
+                        http://192.168.10.53:8080/static-file/2025-06-28/1938859508839354368.mkv" type="video/mp4" />
+                                <p class="vjs-no-js">
+                                    To view this video please enable JavaScript, and consider upgrading to a
+                                    web browser that
+                                    <a href="https://videojs.com/html5-video-support/" target="_blank">supports HTML5 video</a>
+                                </p>
+                            </video>
+                        
+                            <!-- <a href="/static-file/2024-12-05/1864677661977219072.jpg" class="card card-sponsor"
+                                                        target="_blank" rel="noopener"
+                                                        style="background-image: url(/static-file/2024-12-05/1864677661977219072.jpg)"
+                                                        aria-label="Sponsor Tabler!">
+                                                        <div class="card-body"></div>
+                                                    </a> -->
+                        
                         </div>
                         <div class="col-md-6 col-lg-4">
                             <div class="card">
@@ -1969,6 +1984,7 @@
     <script src="/js/tabler.min.js?1692870487" defer></script>
     <script src="/js/demo.min.js?1692870487" defer></script> 
     <script src="/js/axios.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/lib/video.js/video.min.js"></script>
     <script src="/js/common/common.js?v=20250303"></script>
     <script>
         // @formatter:off

@@ -386,7 +386,7 @@
                         <div class="col-12">
                             <div class="col">
                                 <h2 class="page-title">
-                                    File
+                                    Pixiv
                                 </h2>
                                 <div class="text-secondary mt-1">
                                     <text>total:&nbsp;<text id="totalInfo"></text></text>
@@ -438,12 +438,13 @@
                             </div>
                         </div>
                         <div class="row">
+                            
                             <div class="col">
-                                <a href="#" class="btn btn-primary" id="upload-btn" type="file" style="width: 100%;">
+                                <a href="#" class="btn btn-primary" id="upload-pixiv-btn" type="file" style="width: 100%;">
                                     <svg xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-upload"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" /><path d="M7 9l5 -5l5 5" /><path d="M12 4l0 12" /></svg>
-                                    Upload
+                                    Pixiv
                                 </a> 
-                            </div> 
+                            </div>
                             <div class="col">
                                 <div class="input-icon">
                                     <input type="text" value="" id="keyword" class="form-control" placeholder="Search…">
@@ -611,8 +612,9 @@
  
         upload_build()
         function upload_build() {
-            var upload_btn = document.getElementById('upload-btn')
-            upload_btn?.addEventListener('click', (evt) => {
+  
+            var upload_pixiv_btn = document.getElementById('upload-pixiv-btn')
+            upload_pixiv_btn?.addEventListener('click', (evt) => {
                 var input = document.createElement('input')
                 input.type = 'file';
                 input.setAttribute('multiple', '');
@@ -624,7 +626,7 @@
                     console.log('inpput change ......')
                     var files = input.files;
                     console.log(files)
-                    var parent = upload_btn.parentElement;
+                    var parent = upload_pixiv_btn.parentElement;
                     console.log(parent)
                     var upload_btn_html = parent.innerHTML;
                     var uploadedCount = 0
@@ -637,7 +639,7 @@
                         // 在这里处理每个文件
                         const form = new FormData();
                         form.append('file', item);
-                        form.append('json', JSON.stringify({}));
+                        form.append('json', JSON.stringify({code: 'pixiv'}))
                         await axios.post(apiUrl + entityUrl.upload, form)
                             .then(response => {
                                 console.log('File uploaded successfully:', response.data);
@@ -670,7 +672,7 @@
                 `
                         } else {
                             parent.innerHTML = ``
-                            parent.appendChild(upload_btn)
+                            parent.appendChild(upload_pixiv_btn)
                         }
 
                     }
@@ -815,7 +817,7 @@
                                     <input type="text" class="form-control-plaintext" name="example-disabled-input"  value="${(item.code ? item.code : '')} ${item.realName}" disabled>
                                   </div>
                                 </div> 
-                                <div class="col"> 
+                                <div class="col">
                                   <div class="mb-3">
                                     <input type="text" class="form-control-plaintext" name="example-disabled-input"  value="${(item.width && item.height) ? (item.width) + ` * ` + (item.height) : ``}" disabled>
                                   </div>
@@ -1330,6 +1332,7 @@
                     return axios
                         .post(apiUrl + entityUrl.page, {
                             ...request,
+                            "code": "pixiv",
                             "keyword": keywordInput?.value,
                             "hash": document.getElementById("hash")?.checked ? document.getElementById("hash")?.value : "0",
                             "isDeleted": document.getElementById("isDeleted")?.checked ? document.getElementById("isDeleted")?.value : "0",
