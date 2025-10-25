@@ -1,39 +1,4 @@
 <div>
-    <!doctype html>
-<!--
-* Tabler - Premium and Open Source dashboard template with responsive and high quality UI.
-* @version 1.0.0-beta20
-* @link https://tabler.io
-* Copyright 2018-2023 The Tabler Authors
-* Copyright 2018-2023 codecalm.net Paweł Kuna
-* Licensed under MIT (https://github.com/tabler/tabler/blob/master/LICENSE)
--->
-<html lang="en">
-<head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
-    <title>kotlin-runner</title>
-    <link rel="icon" type="image/svg+xml" href="/static/favicon.ico" />
-    <link href="/tabler/tabler.css?1746260450" rel="stylesheet" />
-    <link href="/tabler/tabler-theme.css?1746260450" rel="stylesheet" />
- 
-    
-    <style>
-        @import url('/css/inter.css');
-    
-        :root {
-            --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
-        }
-    
-        body {
-            font-feature-settings: "cv03", "cv04", "cv11";
-        }
-    </style>
-    
-</head>
-<body>
-    <script src="/tabler/tabler-theme.js?1692870487" defer></script>
     <div class="page">
         <!-- Navbar -->
         <div class="page-wrapper">
@@ -712,7 +677,8 @@
                                         <div class="row g-2">
                                             <div class="col-auto">
                                                 <div class="chart-sparkline chart-sparkline-square"
-                                                    id="sparkline-activity"></div>
+                                                    id="sparkline-activity">
+                                                </div>
                                             </div>
                                             <div class="col">
                                                 <div>Today's Earning: $4,262.40</div>
@@ -1015,12 +981,14 @@
                             </div>
                         </div>
                         <div class="col-md-6 col-lg-4">
-                        
-                            <a href="/static-file/2024-12-05/1864677661977219072.jpg" class="card card-sponsor" target="_blank" rel="noopener"
-                                style="background-image: url(/static-file/2024-12-05/1864677661977219072.jpg)" aria-label="Sponsor Tabler!">
+
+                            <a href="/static-file/2024-12-05/1864677661977219072.jpg" class="card card-sponsor"
+                                target="_blank" rel="noopener"
+                                style="background-image: url(/static-file/2024-12-05/1864677661977219072.jpg)"
+                                aria-label="Sponsor Tabler!">
                                 <div class="card-body"></div>
                             </a>
-                        
+
                         </div>
                         <div class="col-md-6 col-lg-4">
                             <div class="card">
@@ -1962,17 +1930,6 @@
             </div>
         </div>
     </div>
-    <!-- Libs JS -->
-    <script src="/libs/apexcharts/dist/apexcharts.min.js?1692870487" defer></script>
-    <script src="/libs/jsvectormap/dist/js/jsvectormap.min.js?1692870487" defer></script>
-    <script src="/libs/jsvectormap/dist/maps/world.js?1692870487" defer></script>
-    <script src="/libs/jsvectormap/dist/maps/world-merc.js?1692870487" defer></script>
-    <!-- <script src="https://cdn.jsdelivr.net/npm/animejs/lib/anime.iife.min.js"></script> -->
-    <!-- Tabler Core -->
-    <script src="/js/tabler.min.js?1692870487" defer></script>
-    <script src="/js/demo.min.js?1692870487" defer></script> 
-    <script src="/js/axios.min.js" type="text/javascript" charset="utf-8"></script> 
-    <script src="/js/common/common.js?v=20250303"></script>
     <script>
         // @formatter:off
         document.addEventListener("DOMContentLoaded", function () {
@@ -2133,7 +2090,7 @@
                         stroke: tabler.getColor('border-color'),
                         strokeWidth: 2,
                     }
-                }, 
+                },
                 // -------- Series --------
                 zoomOnScroll: true,
                 zoomButtons: false,
@@ -2642,11 +2599,10 @@
             })).render();
         });
         // @formatter:on
-    </script>
-
-    <script>
+    </script> 
+    <script> 
         document.addEventListener("DOMContentLoaded", function () {
-            console.log("home ready...")
+            console.log("home ready...") 
             const apiUrl = server.API_URL
             let cpuInfoList = [];
             let cpuEventSource = getCpuInfo();
@@ -2974,6 +2930,5 @@
             });
         });
     </script>
-</body>
-</html>
+
 </div>

@@ -1,0 +1,391 @@
+<!doctype html>
+<!--
+* Tabler - Premium and Open Source dashboard template with responsive and high quality UI.
+* @version 1.0.0-beta20
+* @link https://tabler.io
+* Copyright 2018-2023 The Tabler Authors
+* Copyright 2018-2023 codecalm.net Paweł Kuna
+* Licensed under MIT (https://github.com/tabler/tabler/blob/master/LICENSE)
+-->
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Tabler - Premium and Open Source dashboard template with responsive and high quality UI.</title>
+  <link rel="icon" type="image/svg+xml" href="/static/favicon.ico" />
+  <link href="/tabler/tabler.css?1746260450" rel="stylesheet" />
+  <link href="/tabler/tabler-theme.css?1746260450" rel="stylesheet" />
+  <link href="/css/fancybox.css?1692870487" rel="stylesheet" />
+
+  <style>
+    /* @import url('https://rsms.me/inter/inter.css'); */
+    @import url('/css/inter.css');
+
+    :root {
+      --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+    }
+
+    body {
+      font-feature-settings: "cv03", "cv04", "cv11";
+    }
+  </style>
+</head>
+
+<body>
+  <script src="/tabler/tabler-theme.js?1692870487" defer></script>
+  <div class="page">
+    <div class="page-wrapper">
+      <!-- Page header -->
+      <div class="page-header d-print-none">
+        <div class="container-xl">
+          <div class="row g-2 align-items-center">
+            <div class="col">
+              <h2 class="page-title">
+                Box
+              </h2>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Page body -->
+      <div class="page-body" id="page-body">
+        <div class="container-xl">
+          <div class="row row-cards">
+
+            <div html-modal="alert-msg">
+            </div>
+            <div html-modal="box/box-form-view">
+            </div>
+
+            <div class="col-8">
+              <div class="input-group">
+                <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true"
+                  aria-expanded="false">
+                  Code
+                </button>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="#">
+                    Action
+                  </a>
+                  <a class="dropdown-item" href="#">
+                    Another action
+                  </a>
+                </div>
+
+                <input type="text" class="form-control" aria-label="Text input with dropdown button" id="code-input">
+              </div>
+
+            </div>
+
+            <div class="col-2">
+              <a href="#" class="btn btn-primary" id="new-btn" data-bs-toggle="modal" data-bs-target="#box-form-view"
+                onclick="document.getElementById('entity-form').reset();">
+                <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="icon icon-tabler icons-tabler-outline icon-tabler-plus">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M12 5l0 14" />
+                  <path d="M5 12l14 0" />
+                </svg>
+                New+
+              </a>
+            </div>
+
+            <div class="col-12" id="fisrt-loding-div">
+              <div class="card">
+                <div class="card-body text-start placeholder-glow">
+                  <div class="placeholder col-9 mb-3"></div>
+                  <div class="placeholder placeholder-xs col-10"></div>
+                  <div class="placeholder placeholder-xs col-12"></div>
+                  <div class="placeholder placeholder-xs col-11"></div>
+                  <div class="placeholder placeholder-xs col-8"></div>
+                  <div class="placeholder placeholder-xs col-10"></div>
+
+                  <div class="placeholder col-9 mb-3"></div>
+                  <div class="placeholder placeholder-xs col-10"></div>
+                  <div class="placeholder placeholder-xs col-12"></div>
+                  <div class="placeholder placeholder-xs col-11"></div>
+                  <div class="placeholder placeholder-xs col-8"></div>
+                  <div class="placeholder placeholder-xs col-10"></div>
+
+                  <div class="placeholder col-9 mb-3"></div>
+                  <div class="placeholder placeholder-xs col-10"></div>
+                  <div class="placeholder placeholder-xs col-12"></div>
+                  <div class="placeholder placeholder-xs col-11"></div>
+                  <div class="placeholder placeholder-xs col-8"></div>
+                  <div class="placeholder placeholder-xs col-10"></div>
+
+                  <div class="placeholder col-9 mb-3"></div>
+                  <div class="placeholder placeholder-xs col-10"></div>
+                  <div class="placeholder placeholder-xs col-12"></div>
+                  <div class="placeholder placeholder-xs col-11"></div>
+                  <div class="placeholder placeholder-xs col-8"></div>
+                  <div class="placeholder placeholder-xs col-10"></div>
+
+                  <div class="placeholder col-9 mb-3"></div>
+                  <div class="placeholder placeholder-xs col-10"></div>
+                  <div class="placeholder placeholder-xs col-12"></div>
+                  <div class="placeholder placeholder-xs col-11"></div>
+                  <div class="placeholder placeholder-xs col-8"></div>
+                  <div class="placeholder placeholder-xs col-10"></div>
+                </div>
+              </div>
+
+
+            </div>
+
+            <div class="col-12" id="table-div" style="display: none;">
+              <div class="card">
+                <div class="table-responsive">
+                  <table class="table table-vcenter card-table table-striped">
+                    <thead>
+                      <tr>
+                        <th>Key</th>
+                        <th>Value</th>
+                        <th>remark</th>
+                        <th>description</th>
+                        <th>code</th>
+
+                        <th class="w-1"></th>
+                      </tr>
+                    </thead>
+                    <tbody id="table-body">
+                      <tr>
+                        <td>Maryjo Lebarree</td>
+                        <td class="text-secondary">
+                          Civil Engineer, Product Management
+                        </td>
+                        <td class="text-secondary"><a href="#" class="text-reset">mlebarree5@unc.edu</a></td>
+                        <td class="text-secondary">
+                          User
+                        </td>
+                        <td>
+                          <a href="#">Edit</a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Egan Poetz</td>
+                        <td class="text-secondary">
+                          Research Nurse, Engineering
+                        </td>
+                        <td class="text-secondary"><a href="#" class="text-reset">epoetz6@free.fr</a></td>
+                        <td class="text-secondary">
+                          Admin
+                        </td>
+                        <td>
+                          <a href="#">Edit</a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Kellie Skingley</td>
+                        <td class="text-secondary">
+                          Teacher, Services
+                        </td>
+                        <td class="text-secondary"><a href="#" class="text-reset">kskingley7@columbia.edu</a></td>
+                        <td class="text-secondary">
+                          User
+                        </td>
+                        <td>
+                          <a href="#">Edit</a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Christabel Charlwood</td>
+                        <td class="text-secondary">
+                          Tax Accountant, Engineering
+                        </td>
+                        <td class="text-secondary"><a href="#" class="text-reset">ccharlwood8@nifty.com</a></td>
+                        <td class="text-secondary">
+                          Owner
+                        </td>
+                        <td>
+                          <a href="#">Edit</a>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>Haskel Shelper</td>
+                        <td class="text-secondary">
+                          Staff Scientist, Legal
+                        </td>
+                        <td class="text-secondary"><a href="#" class="text-reset">hshelper9@woothemes.com</a></td>
+                        <td class="text-secondary">
+                          Admin
+                        </td>
+                        <td>
+                          <a href="#">edit</a>
+                          <a href="#">delete</a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Libs JS -->
+  <!-- Tabler Core -->
+  <script src="/js/tabler.min.js?1692870487" defer></script>
+  <script src="/js/axios.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="/js/common/common.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+
+      htmlContentLoaded()
+        .then(ret => {
+          console.log(ret)
+          const apiUrl = server.API_URL
+          var codeInput = document.getElementById("code-input");
+
+
+          codeInput.addEventListener("input", function () {
+            var code = codeInput.value.trim();
+            console.log("code -> ", code);
+            loadData(code);
+          });
+
+          function loadData(code) {
+            if (!code) return;
+            axios
+              .get(apiUrl + "/api/rest/v1/base/box/list/" + code)
+              .then(response => {
+                console.log(response)
+                if (response.status && response.status == 200) {
+                  element('fisrt-loding-div').style.display = 'none';
+                  element('table-div').style.display = '';
+
+                  var html = ""
+                  for (let item of response.data.data) {
+                    html += `
+                      <tr>
+                          <td class="text- ">${item.key}</td>
+                          <td class="text- ">
+                            ${item.value}
+                          </td>
+                          <td class="text- ">${item.remark}</td>
+                          <td class="text- ">
+                            ${item.description}
+                          </td>
+                          <td class="text- ">
+                            ${item.code}
+                          </td>
+                          <td>
+                            <a href="#" action-event='update' target-id="${item.id}" data-bs-toggle="modal" data-bs-target="#box-form-view" >update</a> 
+                          </td>
+                          <td> 
+                            <a href="#" action-event='delete' target-id="${item.id}" >delete</a>
+                          </td>
+                        </tr>
+                    `
+                  }
+
+                  element('table-body').innerHTML = html
+                } else {
+                  element("modal-danger-context").textContent = response.message
+                  element("danger-btn").click();
+                }
+              })
+              .catch(error => {
+                console.log(error)
+                element("modal-danger-context").textContent = error.message
+                element("danger-btn").click();
+              })
+              .finally(() => {
+
+              })
+          }
+
+          console.log("submitBoxForm -> ", element("box-submit"));
+          console.log("submitBoxForm -> ", document.getElementById("box-submit"));
+
+
+          element("box-submit").onclick = () => {
+            var form = element("entity-form");
+            var formData = new FormData(form);
+            var form = Object.fromEntries(formData.entries());
+            form.code = codeInput.value.trim();
+            const json = JSON.stringify(form);
+            console.log(json);
+            axios
+              .post(apiUrl + "/api/rest/v1/base/box/put", form)
+              .then(response => {
+                console.log(response)
+                if (response.status && response.status == 200) { 
+                  loadData(codeInput.value.trim())
+                } else {
+                  tablerCommon.alert(response.message)
+                }
+              })
+              .catch(error => {
+                console.log(error) 
+                tablerCommon.alert(error.response.data.message)
+              })
+              .finally(() => {
+
+              })
+          }
+
+          htmlObserver('page-body', action)
+
+          function action(targetId, actionEvent, currentTarget) {
+            if ('update' == actionEvent) {
+              axios
+                .get(apiUrl + "/api/rest/v1/base/box/detail/" + targetId)
+                .then(response => response.data)
+                .then(response => {
+                  console.log(response)
+                  if (response.code && response.code == 200) {
+                    console.log(document.getElementById('entity-form'))
+                    document.getElementById('entity-form').reset()
+                    formSetData('entity-form', response.data)
+                  } else {
+                    tablerCommon.alert(response.message)
+                  }
+                })
+                .catch(error => {
+                  console.log(error) 
+                  tablerCommon.alert(error.response.data.message)
+                })
+                .finally(() => {
+
+                })
+            }
+            if ('delete' == actionEvent) {
+              axios
+                .delete(apiUrl + "/api/rest/v1/base/box/delete/" + targetId)
+                .then(response => {
+                  console.log(response)
+                  if (response.status && response.status == 200) {
+                    loadData(codeInput.value.trim())
+                  } else {
+                    tablerCommon.alert(response.message)
+                  }
+                })
+                .catch(error => {
+                  console.log(error)
+                  tablerCommon.alert(error.response.data.message)
+                })
+                .finally(() => {
+
+                })
+            }
+          }
+
+
+
+
+        })
+
+
+    });
+  </script>
+</body>
+
+</html>

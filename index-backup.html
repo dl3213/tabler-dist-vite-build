@@ -1,13 +1,24 @@
 <!doctype html>
+<!--
+* Tabler - Premium and Open Source dashboard template with responsive and high quality UI.
+* @version 1.0.0-beta20
+* @link https://tabler.io
+* Copyright 2018-2023 The Tabler Authors
+* Copyright 2018-2023 codecalm.net Paweł Kuna
+* Licensed under MIT (https://github.com/tabler/tabler/blob/master/LICENSE)
+-->
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
 
-  <title>My App</title>
-  <link rel="icon" type="image/svg+xml" href="/static/favicon.ico" />  
+  <title>kotlin-runner</title>
+  <link rel="icon" type="image/svg+xml" href="/static/favicon.ico" />
+  <link href="/tabler/tabler.css?1746260450" rel="stylesheet" />
+  <link href="/tabler/tabler-theme.css?1746260450" rel="stylesheet" />
   <style>
+      @import url('https://rsms.me/inter/inter.css');
       :root {
       	--tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
       }
@@ -18,7 +29,9 @@
  
 </head>
 <body>
-<div class="page"> 
+  <script src="/tabler/tabler-theme.js?1692870487" defer></script>
+
+  <div class="page">
     <div class="sticky-top">
       <!-- Navbar -->
       <header class="navbar navbar-expand-md sticky-top d-print-none">
@@ -238,10 +251,13 @@
           </div>
         </div>
       </header>
+      <!-- <div class="progress ">
+        <div class="progress-bar progress-bar-indeterminate  " id="head-progress"></div>
+      </div> -->
   
     </div>
     <div class="page-wrapper">
-      <iframe id="index-main-iframe" class="page-wrapper" src="/templates/index/home.html"></iframe>  
+      <iframe id="index-main-iframe" class="page-wrapper" src="/templates/index/home.html"></iframe>
     </div>
     <div class="settings">
       <a href="#" class="btn btn-floating btn-icon btn-primary" style="width: 34px;" data-bs-toggle="offcanvas"
@@ -484,5 +500,26 @@
       </form>
     </div>
   </div>
+
+  <script src="/tabler/tabler.js?1692870487" defer></script>
+  <script src="/tabler/tabler-theme-setting.js?v=20250303"></script>
+  <script src="/js/axios.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="/js/common/common.js?v=20250303"></script>
+
+  <script src="/js/common/index.js?v=20250303"></script>
+
+  <script type="text/javascript">
+
+    document.addEventListener("DOMContentLoaded", function () {
+      console.log('index.html DOMContentLoaded');
+      const apiUrl = server.API_URL
+      console.log(apiUrl);
+
+      menu_build(apiUrl)
+      load_menu_base(apiUrl)
+
+    });
+  </script>
   <script type="module" src="/src/main.js"></script>
 </body>
+</html>

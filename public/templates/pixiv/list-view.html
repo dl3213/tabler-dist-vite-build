@@ -17,8 +17,8 @@
     <link rel="icon" type="image/svg+xml" href="/static/favicon.ico" />
     <link href="/tabler/tabler.css?1746260450" rel="stylesheet" />
     <link href="/tabler/tabler-theme.css?1746260450" rel="stylesheet" />
-    <link href="/css/fancybox.css?1692870487" rel="stylesheet" /> 
-    <link href="/lib/video.js/video-js.css" rel="stylesheet" />
+    <link href="/css/fancybox.css?1692870487" rel="stylesheet" />  
+     
     <style>
         /* @import url('https://rsms.me/inter/inter.css'); */
         @import url('/css/inter.css');
@@ -248,136 +248,9 @@
                 </div>
             </div>
 
-            <div class="modal modal-blur fade" id="modal-info-view" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Info</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <form class="card" id="entity-form">
-                            <input hidden name="id" value="" readonly />
-                            <input hidden name="fileName" value="" readonly />    
-                            <input hidden name="suffix" value="" readonly />
-                            <input hidden name="serialNumber" value="" readonly />
-                            <input hidden name="code" value="" readonly />
-                            <input hidden name="width" value="" readonly />
-                            <input hidden name="height" value=""  readonly/>
-                            <input hidden name="thumbnail" value="" readonly />
-                            <input hidden name="isDeleted" value="" readonly /> 
-                            <div class="modal-body">
-                                <div class="mb-3">
-                                    <label class="form-label">realName</label>
-                                    <input type="text" class="form-control" name="realName"
-                                           placeholder="realName" >
-                                </div>
-                                <div class="mb-3">
-                                    <label class="form-label">type</label>
-                                    <input type="text" class="form-control" name="type"
-                                           placeholder="type" readonly>
-                                </div>
-                            </div>
-                            <div class="modal-body">
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">absolutePath</label>
-                                            <input type="text" class="form-control" name="absolutePath" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">relativePath</label>
-                                            <input type="text" class="form-control" name="relativePath" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">size</label>
-                                            <input type="text" class="form-control" name="size" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">sha256</label>
-                                            <input type="text" class="form-control" name="sha256" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">createTime</label>
-                                            <input type="date-time" class="form-control" name="createTime"   >
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">updateTime</label>
-                                            <input type="date-time" class="form-control" name="updateTime"  >
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div>
-                                            <label class="form-label">description</label>
-                                            <textarea class="form-control" rows="3" name="description"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                        <div class="modal-footer">
-                            <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
-                                Cancel
-                            </a>
-                            <a class="btn btn-primary ms-auto" data-bs-dismiss="modal" id="edit-submit"> 
-                                Edit
-                            </a>
-                        </div>
-                    </div>
-                </div>
+            <div html-modal="modal-info-view"> 
             </div>
-
-            <div class="modal modal-blur fade" id="copy-info-view" tabindex="-1" role="dialog" aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Info</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <form class="card" id="copy-form">
-                            <input hidden name="id" value="" readonly />
-                            <div class="modal-body">
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">startTime</label>
-                                            <input type="text" class="form-control" name="startTime" value="00:00:00" >
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">endTime</label>
-                                            <input type="text" class="form-control" name="endTime" value="00:00:00">
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-12">
-                                        <div class="mb-3">
-                                            <label class="form-label">toPath</label>
-                                            <input type="text" class="form-control" name="toPath" value="D:\\4pc\\" readonly>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                        <div class="modal-footer">
-                            <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
-                                Cancel
-                            </a>
-                            <a class="btn btn-primary ms-auto" data-bs-dismiss="modal" id="copy-submit"> 
-                                Copy
-                            </a>
-                        </div>
-                    </div>
-                </div>
+            <div html-modal="tag-info" > 
             </div>
 
             <div class="container-xl">
@@ -394,12 +267,12 @@
                                     <text>window:&nbsp;<text id="windowInfo"></text></text>
                                     <br>
                                     <text>screen:&nbsp;<text id="screenInfo"></text></text>
-                                </div>
+                                </div> 
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row" >
                             <div class="col">
-                                <label class="form-label">order by</label>
+                                order by
                                 <select type="text" class="form-select" id="select-order-field" value="">
                                     <option value="createTime">createTime</option>
                                     <option value="updateTime">updateTime</option>
@@ -410,32 +283,49 @@
                                 </select>
                             </div>
                             <div class="col">
-                                <label class="form-label">order direction</label>
+                                order direction
                                 <select type="text" class="form-select" id="orderDirection" value="">
                                     <option value="asc">asc</option>
                                     <option value="desc">desc</option>
                                 </select>
-                            </div>
+                            </div>  
+                        </div>
+                        <div class="row" style="margin-top: 1%;">  
                             <div class="col" >
                                 <div class="me-3">
                                     <label class="form-check form-check-inline">
                                         <input class="form-check-input" type="checkbox" id="isDeleted" value="1">
                                         <span class="form-check-label">isDeleted</span>
                                     </label>
-                                </div>
+                                </div> 
+                            </div>
+                            <div class="col" > 
                                 <div class="me-3">
                                     <label class="form-check form-check-inline">
                                         <input class="form-check-input" type="checkbox" id="hash" value="1">
                                         <span class="form-check-label">hash</span>
                                     </label>
-                                </div>
+                                </div> 
+                            </div>
+                            <div class="col" >  
                                 <div class="me-3">
                                     <label class="form-check form-check-inline">
                                         <input class="form-check-input" type="checkbox" id="heart" value="1">
                                         <span class="form-check-label">heart</span>
                                     </label>
-                                </div>
+                                </div> 
                             </div>
+                            
+                        </div>
+                        <div class="row" style="margin-bottom: 1%;">
+                            <div class="col">
+                                page size
+                                <input type="text" class="form-control page-size-input" name="example-text-input" value="30">
+                            </div>
+                            <div class="col">
+                                code
+                                <input type="text" class="form-control code-input" name="example-text-input" value="pixiv" disabled>
+                            </div> 
                         </div>
                         <div class="row">
                             
@@ -447,7 +337,7 @@
                             </div>
                             <div class="col">
                                 <div class="input-icon">
-                                    <input type="text" value="" id="keyword" class="form-control" placeholder="Search…">
+                                    <input type="text"  id="keyword" class="form-control" placeholder="Search…" value="">
                                     <span class="input-icon-addon" id="search">
                                     </span>
                                 </div>
@@ -485,31 +375,18 @@
                             <a class="page-link first-btn" href="#" tabindex="-1" aria-disabled="true">
                                 first
                             </a>
-                        </li>
-                        <!-- <li class="page-item   page-prev-btn">
-                            <a class="page-link" href="#"  >
-                                prev
-                            </a>
-                        </li> -->
+                        </li> 
                         <li class="page-item"><a class="page-link page-index-top" href="#">1</a></li>
                         <li class="page-item active"><a class="page-link page-index-top" href="#">2</a></li>
                         <li class="page-item"><a class="page-link page-index-top" href="#">3</a></li>
                         <li class="page-item"><a class="page-link page-index-top" href="#">4</a></li>
                         <li class="page-item"><a class="page-link page-index-top" href="#">5</a></li>
-                        <!-- <li class="page-item page-next-btn">
-                            <a class="page-link" href="#">
-                                next
-                            </a>
-                        </li> -->
+                        
                         <li class="page-item">
                             <a class="page-link last-btn" href="#" tabindex="-1" aria-disabled="true">
                                 last
                             </a>
-                        </li>
-                        <li class="page-item">
-                            <input type="text" class="form-control page-size-input"
-                                   name="example-text-input" value="15">
-                        </li>
+                        </li> 
                         <li class="page-item">
                             <select   class="form-select page-select ">
                             </select>
@@ -531,31 +408,18 @@
                             <a class="page-link first-btn" href="#" tabindex="-1" aria-disabled="true">
                                 first
                             </a>
-                        </li>
-                        <!-- <li class="page-item page-prev-btn">
-                            <a class="page-link" href="#" >
-                                prev
-                            </a>
-                        </li> -->
+                        </li> 
                         <li class="page-item"><a class="page-link page-index-bottom" href="#">1</a></li>
                         <li class="page-item active"><a class="page-link page-index-bottom" href="#">2</a></li>
                         <li class="page-item"><a class="page-link page-index-bottom" href="#">3</a></li>
                         <li class="page-item"><a class="page-link page-index-bottom" href="#">4</a></li>
                         <li class="page-item"><a class="page-link page-index-bottom" href="#">5</a></li>
-                        <!-- <li class="page-item page-next-btn">
-                            <a class="page-link" href="#">
-                                next
-                            </a>
-                        </li> -->
+                         
                         <li class="page-item">
                             <a class="page-link last-btn" href="#" tabindex="-1" aria-disabled="true">
                                 last
                             </a>
-                        </li>
-                        <li class="page-item">
-                            <input type="text" class="form-control page-size-input"
-                                   name="example-text-input" value="15">
-                        </li>
+                        </li> 
                         <li class="page-item">
                             <select  class="form-select page-select ">
                             </select>
@@ -571,15 +435,25 @@
  <script src="/tabler/tabler.js?1692870487" defer></script> 
 <script src="/js/axios.min.js" type="text/javascript" charset="utf-8"></script>
 <script src="/js/fancybox.umd.js" type="text/javascript" charset="utf-8"></script>
-<script src="/js/typed.umd.js" type="text/javascript" charset="utf-8"></script>
-<script src="/lib/video.js/video.min.js"></script>
-<script src="/js/common/common.js"></script>
-<script src="/js/common/html-element.js"></script>
-<!-- <script src="https://vjs.zencdn.net/8.23.3/video.min.js"></script> -->
+<script src="/js/typed.umd.js" type="text/javascript" charset="utf-8"></script> 
+<script src="/js/common/common.js"></script> 
+<script defer>
+    var htmlModals = document.querySelectorAll('[html-modal]');
+    for (let item of htmlModals) {
+        var htmlModalValue = item.getAttribute("html-modal")
+        fetch('/templates/modal/' + htmlModalValue + '.html')
+            .then(data => data.text())
+            .then(html => {
+                item.innerHTML = html;
+            });
+    }
+
+</script>
 <script>
+
     document.addEventListener("DOMContentLoaded", function () { 
         const apiUrl = server.API_URL
-
+ 
         var entityUrl = {
             "page": '/api/rest/v1/file/sql/page',
             "upload": '/api/rest/v1/file/upload',
@@ -620,12 +494,12 @@
                 input.setAttribute('multiple', '');
                 input.addEventListener('click', (evt1) => {
                     console.log('inpput click ......')
-                    console.log(input.files)
+                    console.log(input.files.length)
                 })
                 input.addEventListener('change', (evt1) => {
                     console.log('inpput change ......')
                     var files = input.files;
-                    console.log(files)
+                    console.log(files.length)
                     var parent = upload_pixiv_btn.parentElement;
                     console.log(parent)
                     var upload_btn_html = parent.innerHTML;
@@ -725,6 +599,7 @@
             mutations.forEach(function (mutation) { 
                 if ('childList' === mutation.type) {
                     //console.log(mutation)
+                    action_event_build()
                     edit_btn_build()
                     delete_btn_build()
                     restore_btn_build()
@@ -847,28 +722,21 @@
                                       Action
                                     </button>
                                     <div class="dropdown-menu">
+                                      <a class="dropdown-item " action-event='add-tag' target-id="${item.id}"  data-bs-toggle="modal" data-bs-target="#tag-info">
+                                        add tag
+                                      </a>
                                       <a class="dropdown-item edit-btn" target-id="${item.id}"  data-bs-toggle="modal" data-bs-target="#modal-info-view">
                                         edit
-                                      </a> 
-                                      <a class="dropdown-item move-btn" target-id="${item.id}">
-                                        move
-                                      </a>
+                                      </a>  
                                       <a class="dropdown-item text-red delete-btn" target-id="${item.id}" >
                                         delete
                                       </a>
+                                       <a class="dropdown-item text-red" action-event='delete-pixiv' target-id="${item.id}" >
+                                        delete-pixiv
+                                      </a>
                                       <a class="dropdown-item restore-btn" target-id="${item.id}">
                                         restore
-                                      </a>
-                                      ${item.type.startsWith("video") ? `
-                                      <a class="dropdown-item convert-format-btn" target-id="${item.id}">
-                                        convert format
-                                      </a>
-                                      `:``}
-                                       ${item.type.startsWith("video") ? `
-                                      <a class="dropdown-item copy-btn" target-id="${item.id}" data-bs-toggle="modal" data-bs-target="#copy-info-view">
-                                        copy
-                                      </a>
-                                      `:``}
+                                      </a>  
                                       ${item.type.startsWith("image") ? `
                                       <a class="dropdown-item find-similar-btn" target-id="${item.id}">
                                         find similar
@@ -914,57 +782,122 @@
                               </div>
 
                             </div>
+
+                            <div class="container card-body tag-info-div"  >
+                        
+                              <div class="row row-cards" style=" align-items: center;justify-content: space-between;">
+                                <div class="tags-list">
+                                    <span class="tag">
+                                        Label 1
+                                        <a href="#" class="btn-close"></a>
+                                    </span>
+                                    <span class="tag">
+                                        Label 2
+                                        <a href="#" class="btn-close"></a>
+                                    </span>
+                                    <span class="tag">
+                                        Label 3
+                                        <a href="#" class="btn-close"></a>
+                                    </span>
+                                    <span class="tag">
+                                        Label 4
+                                        <a href="#" class="btn-close"></a>
+                                    </span>
+                                    <span class="tag">
+                                        Label 5
+                                        <a href="#" class="btn-close"></a>
+                                    </span> 
+                                    </div>
+                                
+                              </div>
+
+                            </div>
+
                         </div>
                     </div>`
         }
+
+        
  
-        function buildCard(item, url) {
-            return `<div class="col-md-4 col-sm-12" >
-                    <div class="card">
-                        <div class="card-body">
-                            <h3 class="card-title">${item.realName}</h3>
-                            <p class="text-secondary">${item.createTime}</p>
-                        </div>
-                        <div class="card-body base-info-div"  >
-                            <div class="row row-cards"   >
-                                <div class="col">
-                                    <input type="text" class="form-control-plaintext" name="example-disabled-input" placeholder="Readonly..." value="${(item.size / 1024.0 / 1024.0).toFixed(1)}MB" readonly="" disabled>
-                                </div> 
-                                <div class="col-6">
-                                    <div class="mb-3">
-                                        <input type="text" class="form-control" name="example-disabled-input" placeholder="Readonly..." value="${item.realName}" readonly="">
+        function action_event_build(){
+            // 获取所有具有特定属性的元素
+            var elements = document.querySelectorAll('[action-event]');
+            for (let el of elements){
+                el.onclick = (evt) => { 
+                    var currentTarget = (evt.currentTarget)
+                    var actionEvent = currentTarget.getAttribute("action-event")
+                    var targetId = currentTarget.getAttribute("target-id")
+                    if(!actionEvent) return;
+                    if(!targetId) return;
+                    console.log(`targetId = ${targetId}, actionEvent = ${actionEvent}`)
+                    action(targetId, actionEvent, currentTarget)
+                }
+            }
+
+        }
+
+        function action(targetId, actionEvent, el) {
+            switch (actionEvent) {
+                case 'add-tag': {
+                    console.log('add-tag -> ' + targetId) 
+                    const form = document.querySelector('#tag-form');
+                    console.log(form)
+                    const formData = new FormData(form);
+                    console.log(formData)
+                    var addForm = Object.fromEntries(formData.entries());
+                    const formJson = JSON.stringify(addForm);
+                    console.log(formJson)
+                }
+                    break
+
+                case 'delete-pixiv': {
+                    var parentElement = el.parentElement.parentElement.parentElement.parentElement;
+                    parentElement.innerHTML = `
+                                    <div class="col-xs-12 col-sm-12 col-md-12"> 
+                                        <div class="spinner-border spinner-border-sm text-secondary" role="status"></div>
                                     </div>
-                                </div>
-                                
-                                <div class="col">
-                                    <div class="mb-3">
-                                        <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Action
-                                        </button>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item detail-btn" target-id="${item.id}" href="${apiUrl + url}" target="_blank">
-                                                detail
-                                            </a>
-                                            <a class="dropdown-item edit-btn" target-id="${item.id}" data-bs-toggle="modal" data-bs-target="#modal-info-view">
-                                                edit
-                                            </a>
-                                            <a class="dropdown-item text-red delete-btn" target-id="${item.id}" >
-                                                delete
-                                            </a>
-                                            <a class="dropdown-item restore-btn" target-id="${item.id}">
-                                                restore
-                                            </a>
-                                            <a class="dropdown-item move-btn" target-id="${item.id}">
-                                                search similar
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> 
-                    </div>
-                </div>`
-        }  
+                                    
+                                    `
+                    axios
+                        .delete(apiUrl + "/api/rest/v1/file/pixiv/delete/all/" + targetId)
+                        .then(response => {
+                            console.log(response)
+                            if (response.data.code == 200) {
+                                parentElement.innerHTML = `
+                                            <div class="col-xs-12 col-sm-12 col-md-12"> 
+                                                <div class="alert alert-success" style="margin:0" role="alert">
+                                                  <div class="d-flex">
+                                                    <div>
+                                                      <!-- Download SVG icon from http://tabler-icons.io/i/check -->
+                                                      <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>
+                                                         `+ response.data.msg + `
+                                                      </div>
+                                                  </div>
+                                                </div>
+                                            </div>
+                                               
+                                                `
+                                load_data(request)
+                            } else {
+                                document.getElementById("modal-danger-context").textContent = response.data.msg
+                                document.getElementById("danger-btn").click();
+                            }
+                        })
+                        .catch(error => { 
+                            document.getElementById("modal-danger-context").textContent = error.message
+                            document.getElementById("danger-btn").click();
+                        })
+                        .finally(() => { 
+                            danger_ok_btn.setAttribute("target-id", "")
+                        })
+                }
+                    break
+                default: break
+            }
+
+        }
+
+
 
         function delete_btn_build() {
             var delete_btn_list = document.getElementsByClassName("delete-btn");
@@ -1151,7 +1084,7 @@
 
    
         var update = document.getElementById('edit-submit');
-        update.addEventListener('click', (e) => {
+        update?.addEventListener('click', (e) => {
             console.log("submit onclick...")
             const form = document.querySelector('#entity-form');
             console.log(form)
@@ -1179,7 +1112,7 @@
 
 
          var copy = document.getElementById('copy-submit');
-        copy.addEventListener('click', (e) => {
+        copy?.addEventListener('click', (e) => {
             console.log("submit onclick...")
             const form = document.querySelector('#copy-form');
             console.log(form)

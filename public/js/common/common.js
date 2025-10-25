@@ -27,11 +27,15 @@ function showLoading(el, msg){
 }
 
 function formSetData(el, obj) {
-    const form = document.getElementById(el);
+    const form = document.getElementById(el); 
     if (form && obj) {
         for (let key in obj) {
+            console.log(obj.hasOwnProperty(key)) 
             if (obj.hasOwnProperty(key)) { 
                 var element = form.elements[key]
+                console.log(key)
+                console.log(form.elements['key'])
+                console.log(element)
                 if(element){
                     element.value = obj[key];
                 } 
@@ -117,4 +121,76 @@ function checkBreakpoint() {
         return r;
     }, '');
     return currentBreakpoint;
+}
+
+function htmlObserver(htmlElId, callback) {
+    var observer = new MutationObserver((mutations) => {
+        mutations.forEach(function (mutation) {
+            if ('childList' === mutation.type) {
+                action_event_build(callback)
+            }
+
+        });
+    });
+
+    observer.observe(document.getElementById(htmlElId), {
+        childList: true,        // 子节点的增减
+        attributes: true,       // 属性的变动
+        characterData: true,    // 节点内容或节点文本的变动
+        subtree: true,          // 是否将观察器应用于该节点的所有后代节点
+        attributeOldValue: true, // 记录变动前的属性值（attributes变动时）
+        characterDataOldValue: true, // 记录变动前的数据（characterData变动时）
+    });
+
+    return observer;
+}
+
+function action_event_build(callback) {
+    // 获取所有具有特定属性的元素
+    var elements = document.querySelectorAll('[action-event]');
+    for (let el of elements) {
+        el.onclick = (evt) => {
+            var currentTarget = (evt.currentTarget)
+            var actionEvent = currentTarget.getAttribute("action-event")
+            var targetId = currentTarget.getAttribute("target-id")
+            if (!actionEvent) return;
+            if (!targetId) return;
+            console.log(`targetId = ${targetId}, actionEvent = ${actionEvent}`)
+            callback(targetId, actionEvent, currentTarget)
+        }
+    }
+}
+
+function htmlContentLoaded() {
+    return new Promise(resolve => {
+        resolve(document.querySelectorAll('[html-modal]'));
+    })
+        .then(elList => {
+            let arr = Array.from(elList)
+                .map(item => {
+                    var htmlModalValue = item.getAttribute("html-modal")
+                    return fetch('/templates/modal/' + htmlModalValue + '.html')
+                        .then(data => data.text())
+                        .then(html => {
+                            item.innerHTML = html;
+                            return item;
+                        });
+                })
+ 
+            return Promise.allSettled(arr)
+        })
+}
+
+function elementId(id){
+   return document.querySelectorAll(`[element-id="${id}"]`)
+}
+function element(id){
+   return document.getElementById(id)
+}
+
+var tablerCommon = {
+    alert: function (msg) {
+        element("modal-danger-context").textContent = msg
+        element("danger-btn").click();
+    }
 }

@@ -1,0 +1,56 @@
+<div class="modal modal-blur fade" id="box-form-view" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Info</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form class="card" id="entity-form">
+                <input hidden name="id" value="" readonly />
+                <input hidden name="isDeleted" value="" readonly />
+                <input hidden name="createId" value="" readonly />
+                <input hidden name="createTime" value="" readonly />
+                <input hidden name="updateId" value="" readonly />
+                <input hidden name="updateTime" value="" readonly />
+                <input hidden name="isEncrypted" value="" readonly />
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label class="form-label">key</label>
+                                <input type="text" class="form-control" name="key"  >
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="mb-3">
+                                <label class="form-label">value</label>
+                                <input type="text" class="form-control" name="value"  >
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div>
+                                <label class="form-label">remark</label>
+                                <textarea class="form-control" rows="3" name="remark"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div>
+                                <label class="form-label">description</label>
+                                <textarea class="form-control" rows="3" name="description"></textarea>
+                            </div>
+                        </div> 
+                    </div>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+                    Cancel
+                </a>
+                <a class="btn btn-primary ms-auto" data-bs-dismiss="modal" id="box-submit">
+                    Submit
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

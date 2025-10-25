@@ -437,6 +437,7 @@
                                 </div>
                             </div>
                         </div>
+                         
                         <div class="row">
                             <div class="col">
                                 <a href="#" class="btn btn-primary" id="upload-btn" type="file" style="width: 100%;">
@@ -618,12 +619,12 @@
                 input.setAttribute('multiple', '');
                 input.addEventListener('click', (evt1) => {
                     console.log('inpput click ......')
-                    console.log(input.files)
+                    console.log(input.files.length)
                 })
                 input.addEventListener('change', (evt1) => {
                     console.log('inpput change ......')
                     var files = input.files;
-                    console.log(files)
+                    console.log(files.length)
                     var parent = upload_btn.parentElement;
                     console.log(parent)
                     var upload_btn_html = parent.innerHTML;
@@ -1331,6 +1332,7 @@
                         .post(apiUrl + entityUrl.page, {
                             ...request,
                             "keyword": keywordInput?.value,
+                            "codeNe": "pixiv",
                             "hash": document.getElementById("hash")?.checked ? document.getElementById("hash")?.value : "0",
                             "isDeleted": document.getElementById("isDeleted")?.checked ? document.getElementById("isDeleted")?.value : "0",
                             "heart": document.getElementById("heart")?.checked ? document.getElementById("heart")?.value : "0",
