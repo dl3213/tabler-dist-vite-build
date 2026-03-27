@@ -1,0 +1,67 @@
+<div style="display: none;">
+    <div class="col-md-4 col-sm-12" template-id="book">
+        <div class="card">
+            <div class="card-body">
+                <div class="row row-cards">
+                    <div class="col-9">
+                        <div class="mb-3">
+                            <input type="text" class="form-control-plaintext" name="example-disabled-input"
+                                value="{name}" disabled>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="mb-3">
+                            <input type="text" class="form-control-plaintext" name="example-disabled-input"
+                                value=""
+                                disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a data-fancybox="gallery" href="{bookFisrt}" action-event="book-detail-click" class="d-block card-img-top entity " id="{id}"
+                target-id="{id}"  data-bs-toggle="modal" data-bs-target="#book-detail-view">
+                <img src="{bookFisrt}" class="card-img-top">
+            </a>
+            <div class="card-body container base-info-div">
+                <div class="row row-cards">
+                    <div class="col">
+                        <div class="mb-3">
+                            <a class="btn btn-link delete-btn" action-event='delete' target-id="{id}">
+                                delete
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <input type="text" class="form-control-plaintext" name="example-disabled-input"
+                                placeholder="Readonly..." value="{createTime}" readonly="" disabled>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="mb-3">
+                            <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                Action
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item edit-btn" action-event='edit' target-id="{id}" data-bs-toggle="modal"
+                                    data-bs-target="#modal-info-view">
+                                    edit
+                                </a>
+                                <a class="dropdown-item move-btn" action-event='move' target-id="{id}">
+                                    move
+                                </a>
+                                <a class="dropdown-item text-red delete-btn" action-event='delete' target-id="{id}">
+                                    delete
+                                </a>
+                                <a class="dropdown-item restore-btn" action-event='restore' target-id="{id}">
+                                    restore
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

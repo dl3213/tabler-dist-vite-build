@@ -1,0 +1,47 @@
+<div style="display: none;">
+    <div class="col-md-4 col-sm-12" template-id="card">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title">{realName}</h3>
+                <p class="text-secondary">{createTime}</p>
+            </div>
+            <div class="card-body base-info-div">
+                <div class="row row-cards">
+                    <div class="col">
+                        <input type="text" class="form-control-plaintext" name="example-disabled-input" placeholder="Readonly..." value="{sizeDescription}" readonly="" disabled>
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <input type="text" class="form-control" name="example-disabled-input"  placeholder="Readonly..." value="{realName}" readonly="">
+                        </div>
+                    </div>
+
+                    <div class="col">
+                        <div class="mb-3">
+                            <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Action
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item detail-btn" target-id="{id}" href="{url}" target="_blank">
+                                    detail
+                                </a>
+                                <a class="dropdown-item edit-btn" target-id="{id}" data-bs-toggle="modal" data-bs-target="#modal-info-view">
+                                    edit
+                                </a>
+                                <a class="dropdown-item text-red delete-btn" action-event="delete" target-id="{id}">
+                                    delete
+                                </a>
+                                <a class="dropdown-item restore-btn" target-id="{id}">
+                                    restore
+                                </a>
+                                <a class="dropdown-item move-btn" target-id="{id}">
+                                    search similar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

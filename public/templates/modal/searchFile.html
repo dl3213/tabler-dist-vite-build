@@ -1,0 +1,90 @@
+<div class="container-xl">
+    <div class="card-body">
+        <form id="requestForm">
+            <div class="row row-cards">
+                <div class="col-12">
+                    <div class="col">
+                        <h2 class="page-title" id="pageTitle">
+                            Title
+                        </h2>
+                        <div class="text-secondary mt-1">
+                            <text>total:&nbsp;<text id="totalInfo"></text></text>
+                            <text>window:&nbsp;<text id="windowInfo"></text></text>
+                            <text>screen:&nbsp;<text id="screenInfo"></text></text>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        order by
+                        <select type="text" class="form-select query-item" name="orderField" value="">
+                            <option value="createTime">createTime</option>
+                            <option value="updateTime">updateTime</option>
+                            <option value="realName">realName</option>
+                            <option value="size">size</option>
+                            <option value="clickCount">clickCount</option>
+                            <option value="videoDurationSecond">videoDurationSecond</option>
+
+
+                        </select>
+                    </div>
+                    <div class="col">
+                        direction
+                        <select type="text" class="form-select query-item" name="orderDirection" value="">
+                            <option value="asc">asc</option>
+                            <option value="desc">desc</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        option
+                        <select type="text" class="form-select query-item" name="optionField" value="">
+                            <option value="isDeleted">isDeleted</option>
+                            <option value="hash">hash</option>
+                            <option value="heart">heart</option>
+                            <option value="random">random</option>
+
+                        </select>
+                    </div>
+                    <div class="col">
+                        option value
+                        <select type="text" class="form-select query-item"  name="optionValue" value="1">
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row" style="margin-bottom: 1%;">
+                    <div class="col">
+                        page size
+                        <input type="text" class="form-control page-size-input query-item" name="pageSize" value="30">
+                    </div>
+                    <div class="col">
+                        code
+                        <input type="text" class="form-control code-input  query-item" id="code" name="code" value="">
+                    </div>
+                    <div class="col">
+                        keyword
+                        <div class="input-icon">
+                            <input type="text" name="keyword" class="form-control query-item" placeholder="Search…" value=""> 
+                        </div>
+                    </div>
+                    <div class="col">
+                        upload
+                        <a href="#" class="btn btn-primary" id="upload-btn" type="file" style="width: 100%;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round"
+                                class="icon icon-tabler icons-tabler-outline icon-tabler-upload">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-2" />
+                                <path d="M7 9l5 -5l5 5" />
+                                <path d="M12 4l0 12" />
+                            </svg>
+                            Upload
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

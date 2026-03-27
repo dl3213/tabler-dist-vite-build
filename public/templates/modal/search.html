@@ -1,0 +1,113 @@
+<div class="container-xl">
+    <div class="card-body">
+        <div class="row row-cards">
+            <div class="col-12">
+                <div class="col">
+                    <h2 class="page-title">
+                        Book
+                    </h2>
+                    <div class="text-secondary mt-1">
+                        <text>total:&nbsp;<text id="totalInfo">{totalInfo}</text></text>
+                        <br>
+                        <text>window:&nbsp;<text id="windowInfo">{windowInfo}</text></text>
+                        <br>
+                        <text>screen:&nbsp;<text id="screenInfo">{screenInfo}</text></text>
+                    </div>
+                </div>
+            </div>
+            <form id="requestForm">
+                <div class="row">
+                    <div class="col">
+                        <label class="form-label">order by</label>
+                        <select type="text" class="form-select" name="orderField" >
+                            <option value="createTime">createTime</option>
+                            <option value="updateTime">updateTime</option>
+                            <option value="name">name</option>
+                            <option value="size">size</option>
+                            <option value="clickCount">clickCount</option>
+                        </select>
+                    </div>
+                    <div class="col">
+                        <label class="form-label">order direction</label>
+                        <select type="text" class="form-select" name="orderDirection" >
+                            <option value="asc">asc</option>
+                            <option value="desc">desc</option>
+                        </select>
+                    </div> 
+                </div>
+                <div class="row">
+                     
+                    <div class="row" style="margin-top: 1%;">  
+                            <div class="col" >
+                                <div class="me-3">
+                                    <label class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" name="isDeleted" >
+                                        <span class="form-check-label">isDeleted</span>
+                                    </label>
+                                </div> 
+                            </div>
+                            <div class="col" > 
+                                <div class="me-3">
+                                    <label class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" name="hash"  >
+                                        <span class="form-check-label">hash</span>
+                                    </label>
+                                </div> 
+                            </div>
+                            <div class="col" >  
+                                <div class="me-3">
+                                    <label class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" name="heart"  >
+                                        <span class="form-check-label">heart</span>
+                                    </label>
+                                </div> 
+                            </div>
+                             <div class="col" >  
+                                <div class="me-3">
+                                    <label class="form-check form-check-inline">
+                                        <input class="form-check-input" type="checkbox" name="random" checked >
+                                        <span class="form-check-label">random</span>
+                                    </label>
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="row" style="margin-bottom: 1%;">
+                            <div class="col">
+                                page size
+                                <input type="text" class="form-control page-size-input" name="pageSize" value="30">
+                            </div>
+                            <div class="col">
+                                code
+                                <input type="text" class="form-control code-input" name="code" value="book" disabled>
+                            </div> 
+                        </div>
+                </div>
+                <div class="row">
+                    
+                    <div class="col">
+                        <div class="input-icon">
+                            <input type="text" value="" name="keyword" class="form-control" placeholder="Search…">
+                            <span class="input-icon-addon" name="search">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <a href="#" class="btn btn-primary" id="search-btn">
+                            <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+                                <path d="M21 21l-6 -6" />
+                            </svg>
+                            Search
+                        </a>
+                    </div>
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

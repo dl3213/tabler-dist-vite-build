@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文件夹上传 - WebFlux</title>
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+            --warning-color: #f59e0b;
+            --bg-color: #f9fafb;
+            --card-bg: #ffffff;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-color), #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .upload-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .upload-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .upload-area {
+            background: var(--card-bg);
+            border: 3px dashed var(--border-color);
+            border-radius: 16px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 280px;
+        }
+        
+        .upload-area:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .upload-area.dragover {
+            border-color: var(--primary-color);
+            background-color: rgba(79, 70, 229, 0.05);
+        }
+        
+        .upload-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+        
+        .stats-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            border-radius: 12px;
+            background: var(--bg-color);
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        
+        .btn {
+            padding: 14px 32px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            background: #4338ca;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+        }
+        
+        .btn-secondary {
+            background: white;
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+        }
+        
+        .btn-secondary:hover {
+            border-color: var(--primary-color);
+            background: var(--bg-color);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+        
+        .progress-container {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .progress-bar {
+            height: 12px;
+            background: var(--border-color);
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-color), var(--success-color));
+            border-radius: 6px;
+            width: 0%;
+            transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            color: var(--text-secondary);
+        }
+        
+        .file-list-container {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 30px;
+            margin-top: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .file-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        
+        .file-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: background 0.2s;
+        }
+        
+        .file-item:hover {
+            background: var(--bg-color);
+            border-radius: 8px;
+        }
+        
+        .file-icon {
+            width: 24px;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+        
+        .file-name {
+            flex: 1;
+            font-family: 'SF Mono', monospace;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+        
+        .file-size {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            min-width: 80px;
+            text-align: right;
+        }
+        
+        .folder {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .folder .file-icon {
+            color: var(--primary-color);
+        }
+        
+        .status {
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .status.success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: var(--success-color);
+        }
+        
+        .status.error {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: var(--error-color);
+        }
+        
+        .status-icon {
+            font-size: 24px;
+        }
+        
+        .folder-structure {
+            font-family: 'SF Mono', monospace;
+            font-size: 0.9rem;
+            line-height: 1.8;
+            padding: 20px;
+            background: var(--bg-color);
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+        
+        .structure-line {
+            white-space: pre;
+        }
+        
+        .structure-folder {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .structure-file {
+            color: var(--text-primary);
+        }
+        
+        input[type="file"] {
+            display: none;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .uploaded-files {
+            margin-top: 40px;
+        }
+        
+        .uploaded-files h3 {
+            margin-bottom: 20px;
+            color: var(--text-primary);
+        }
+        
+        .file-preview {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .file-tree {
+            font-family: 'SF Mono', monospace;
+            white-space: pre;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>📁 文件夹上传</h1>
+        <p class="subtitle">完整保留文件夹结构，支持子文件夹和批量文件上传，使用 Spring WebFlux 响应式后端处理</p>
+    </header>
+
+    <main>
+        <div class="upload-container">
+            <div class="upload-area" id="dropArea">
+                <div class="upload-icon">📁</div>
+                <h3>拖放文件夹到此处</h3>
+                <p>或点击下方按钮选择文件夹</p>
+                <div style="margin-top: 20px;">
+                    <button class="btn btn-secondary" onclick="document.getElementById('folderInput').click()">
+                        <span>📂 选择文件夹</span>
+                    </button>
+                </div>
+                <input type="file" id="folderInput" webkitdirectory directory multiple>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 15px;">
+                    支持任意深度的子文件夹结构
+                </p>
+            </div>
+
+            <div class="stats-card">
+                <h3>文件统计</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-value" id="totalFiles">0</div>
+                        <div class="stat-label">总文件数</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="totalFolders">0</div>
+                        <div class="stat-label">文件夹数</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="totalSize">0 B</div>
+                        <div class="stat-label">总大小</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="maxDepth">0</div>
+                        <div class="stat-label">最大深度</div>
+                    </div>
+                </div>
+                
+                <div id="selectedFolderName" style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border-color);">
+                    <div style="color: var(--text-secondary); font-size: 0.9rem;">已选择文件夹:</div>
+                    <div id="folderName" style="font-weight: 600; color: var(--primary-color); margin-top: 5px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-primary" id="uploadBtn" onclick="uploadFolder()" disabled>
+                <span>🚀 开始上传</span>
+            </button>
+            <button class="btn btn-secondary" onclick="clearSelection()">
+                <span>🗑️ 清空选择</span>
+            </button>
+        </div>
+
+        <div class="progress-container" id="progressContainer" style="display: none;">
+            <h3>上传进度</h3>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-info">
+                <span id="currentFile">等待开始...</span>
+                <span id="progressPercent">0%</span>
+            </div>
+        </div>
+
+        <div id="statusContainer"></div>
+
+        <div class="file-list-container">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3>文件夹结构预览</h3>
+                <button class="btn btn-secondary" onclick="toggleTreeView()" style="padding: 8px 16px;">
+                    <span>切换视图</span>
+                </button>
+            </div>
+            
+            <div id="treeView" style="display: none;">
+                <div class="folder-structure" id="treeStructure">
+                    <!-- 树状结构将在这里显示 -->
+                </div>
+            </div>
+            
+            <div id="listView">
+                <div class="file-list" id="fileList">
+                    <!-- 文件列表将在这里显示 -->
+                    <div style="text-align: center; padding: 40px; color: var(--text-secondary);">
+                        <div style="font-size: 48px; margin-bottom: 20px;">📁</div>
+                        <h3>尚未选择文件夹</h3>
+                        <p>请选择或拖放一个文件夹来开始</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // 全局变量
+        let selectedFiles = [];
+        let folderStructure = {};
+        let uploadInProgress = false;
+        let currentView = 'list'; // 'list' 或 'tree'
+
+        // DOM 元素
+        const dropArea = document.getElementById('dropArea');
+        const folderInput = document.getElementById('folderInput');
+        const fileList = document.getElementById('fileList');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const progressContainer = document.getElementById('progressContainer');
+        const progressFill = document.getElementById('progressFill');
+        const progressPercent = document.getElementById('progressPercent');
+        const currentFile = document.getElementById('currentFile');
+        const statusContainer = document.getElementById('statusContainer');
+        const treeStructure = document.getElementById('treeStructure');
+        const treeView = document.getElementById('treeView');
+        const listView = document.getElementById('listView');
+
+        // 统计元素
+        const totalFilesEl = document.getElementById('totalFiles');
+        const totalFoldersEl = document.getElementById('totalFolders');
+        const totalSizeEl = document.getElementById('totalSize');
+        const maxDepthEl = document.getElementById('maxDepth');
+        const folderNameEl = document.getElementById('folderName');
+        const selectedFolderNameEl = document.getElementById('selectedFolderName');
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            folderInput.addEventListener('change', handleFolderSelection);
+            
+            // 拖放事件
+            dropArea.addEventListener('dragover', handleDragOver);
+            dropArea.addEventListener('dragleave', handleDragLeave);
+            dropArea.addEventListener('drop', handleDrop);
+            
+            // 隐藏文件夹名称显示
+            selectedFolderNameEl.style.display = 'none';
+        });
+
+        // 处理拖放
+        function handleDragOver(e) {
+            e.preventDefault();
+            dropArea.classList.add('dragover');
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            dropArea.classList.remove('dragover');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            dropArea.classList.remove('dragover');
+            
+            const items = e.dataTransfer.items;
+            if (items && items.length > 0) {
+                // 检查是否是文件夹（基于第一个item）
+                const item = items[0].webkitGetAsEntry();
+                if (item && item.isDirectory) {
+                    traverseFileTree(item);
+                } else {
+                    showStatus('请拖放文件夹，而不是单个文件', 'error');
+                }
+            }
+        }
+
+        // 遍历文件树
+        function traverseFileTree(item, path = '') {
+            selectedFiles = [];
+            
+            if (item.isFile) {
+                item.file(file => {
+                    selectedFiles.push({
+                        file: file,
+                        webkitRelativePath: path + file.name
+                    });
+                    processSelectedFiles();
+                });
+            } else if (item.isDirectory) {
+                const dirReader = item.createReader();
+                const entries = [];
+                
+                function readEntries() {
+                    dirReader.readEntries(function(results) {
+                        if (results.length) {
+                            entries.push(...results);
+                            readEntries();
+                        } else {
+                            // 所有条目已读取完毕
+                            processDirectoryEntries(item, entries, path);
+                        }
+                    });
+                }
+                
+                readEntries();
+            }
+        }
+
+        function processDirectoryEntries(rootDir, entries, path = '') {
+            let processed = 0;
+            const total = entries.length;
+            
+            entries.forEach(entry => {
+                if (entry.isFile) {
+                    entry.file(file => {
+                        selectedFiles.push({
+                            file: file,
+                            webkitRelativePath: path + file.name
+                        });
+                        processed++;
+                        if (processed === total) {
+                            // 获取文件夹名称
+                            folderNameEl.textContent = rootDir.name;
+                            selectedFolderNameEl.style.display = 'block';
+                            processSelectedFiles();
+                        }
+                    });
+                } else if (entry.isDirectory) {
+                    const subPath = path + entry.name + '/';
+                    traverseFileTree(entry, subPath);
+                    processed++;
+                    if (processed === total) {
+                        folderNameEl.textContent = rootDir.name;
+                        selectedFolderNameEl.style.display = 'block';
+                        processSelectedFiles();
+                    }
+                }
+            });
+        }
+
+        // 处理文件夹选择
+        function handleFolderSelection(e) {
+            selectedFiles = [];
+            const files = Array.from(e.target.files);
+            
+            if (files.length > 0) {
+                // 获取文件夹名称（从第一个文件的相对路径）
+                const firstFile = files[0];
+                const pathParts = firstFile.webkitRelativePath.split('/');
+                if (pathParts.length > 1) {
+                    folderNameEl.textContent = pathParts[0];
+                    selectedFolderNameEl.style.display = 'block';
+                }
+                
+                files.forEach(file => {
+                    selectedFiles.push({
+                        file: file,
+                        webkitRelativePath: file.webkitRelativePath
+                    });
+                });
+                
+                processSelectedFiles();
+            }
+        }
+
+        // 处理选中的文件
+        function processSelectedFiles() {
+            if (selectedFiles.length === 0) return;
+            
+            folderStructure = {};
+            let totalSize = 0;
+            let folderCount = 0;
+            let maxDepth = 0;
+            
+            // 构建文件夹结构并计算统计信息
+            selectedFiles.forEach(item => {
+                const path = item.webkitRelativePath;
+                const parts = path.split('/');
+                totalSize += item.file.size;
+                
+                // 计算最大深度
+                const depth = parts.length - 1;
+                if (depth > maxDepth) maxDepth = depth;
+                
+                // 构建结构
+                let current = folderStructure;
+                for (let i = 0; i < parts.length - 1; i++) {
+                    const part = parts[i];
+                    if (!current[part]) {
+                        current[part] = {};
+                        folderCount++;
+                    }
+                    current = current[part];
+                }
+                
+                const fileName = parts[parts.length - 1];
+                current[fileName] = {
+                    file: item.file,
+                    size: item.file.size
+                };
+            });
+            
+            // 更新统计信息
+            updateStatistics(selectedFiles.length, folderCount, totalSize, maxDepth);
+            
+            // 更新UI
+            updateFileList();
+            
+            // 启用上传按钮
+            uploadBtn.disabled = false;
+            uploadBtn.innerHTML = '<span>🚀 开始上传 (' + selectedFiles.length + '个文件)</span>';
+        }
+
+        // 更新统计信息
+        function updateStatistics(fileCount, folderCount, totalSize, maxDepth) {
+            totalFilesEl.textContent = fileCount;
+            totalFoldersEl.textContent = folderCount;
+            totalSizeEl.textContent = formatFileSize(totalSize);
+            maxDepthEl.textContent = maxDepth;
+        }
+
+        // 更新文件列表显示
+        function updateFileList() {
+            if (selectedFiles.length === 0) {
+                fileList.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: var(--text-secondary);">
+                        <div style="font-size: 48px; margin-bottom: 20px;">📁</div>
+                        <h3>尚未选择文件夹</h3>
+                        <p>请选择或拖放一个文件夹来开始</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            if (currentView === 'list') {
+                displayFileList();
+            } else {
+                displayTreeStructure();
+            }
+        }
+
+        // 显示列表视图
+        function displayFileList() {
+            fileList.innerHTML = '';
+            
+            function displayStructure(structure, indent = 0) {
+                Object.keys(structure).forEach(key => {
+                    const item = structure[key];
+                    
+                    const div = document.createElement('div');
+                    div.className = 'file-item';
+                    div.style.paddingLeft = `${indent * 24 + 16}px`;
+                    
+                    if (item.file) {
+                        // 这是文件
+                        div.className = 'file-item';
+                        div.innerHTML = `
+                            <div class="file-icon">📄</div>
+                            <div class="file-name">${key}</div>
+                            <div class="file-size">${formatFileSize(item.size)}</div>
+                        `;
+                    } else {
+                        // 这是文件夹
+                        div.className = 'file-item folder';
+                        div.innerHTML = `
+                            <div class="file-icon">📁</div>
+                            <div class="file-name">${key}</div>
+                            <div class="file-size"></div>
+                        `;
+                        // 递归显示子内容
+                        displayStructure(item, indent + 1);
+                    }
+                    
+                    fileList.appendChild(div);
+                });
+            }
+            
+            displayStructure(folderStructure);
+        }
+
+        // 显示树状结构
+        function displayTreeStructure() {
+            let treeHtml = '';
+            
+            function buildTree(structure, prefix = '', isLast = true) {
+                const keys = Object.keys(structure);
+                keys.forEach((key, index) => {
+                    const isLastItem = index === keys.length - 1;
+                    const item = structure[key];
+                    
+                    const linePrefix = prefix + (isLast ? '    ' : '│   ');
+                    const currentPrefix = prefix + (isLast ? '└── ' : '├── ');
+                    
+                    if (item.file) {
+                        // 文件
+                        treeHtml += `<div class="structure-line">${currentPrefix}<span class="structure-file">${key}</span> (${formatFileSize(item.size)})</div>`;
+                    } else {
+                        // 文件夹
+                        treeHtml += `<div class="structure-line">${currentPrefix}<span class="structure-folder">${key}/</span></div>`;
+                        buildTree(item, linePrefix, isLastItem);
+                    }
+                });
+            }
+            
+            buildTree(folderStructure);
+            treeStructure.innerHTML = treeHtml;
+        }
+
+        // 切换视图
+        function toggleTreeView() {
+            if (currentView === 'list') {
+                currentView = 'tree';
+                listView.style.display = 'none';
+                treeView.style.display = 'block';
+                displayTreeStructure();
+            } else {
+                currentView = 'list';
+                treeView.style.display = 'none';
+                listView.style.display = 'block';
+                displayFileList();
+            }
+        }
+
+        // 格式化文件大小
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 B';
+            
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        // 清空选择
+        function clearSelection() {
+            if (uploadInProgress) {
+                if (!confirm('上传正在进行中，确定要取消吗？')) return;
+            }
+            
+            selectedFiles = [];
+            folderStructure = {};
+            folderInput.value = '';
+            uploadBtn.disabled = true;
+            uploadBtn.innerHTML = '<span>🚀 开始上传</span>';
+            progressContainer.style.display = 'none';
+            selectedFolderNameEl.style.display = 'none';
+            
+            updateStatistics(0, 0, 0, 0);
+            updateFileList();
+            
+            statusContainer.innerHTML = '';
+            uploadInProgress = false;
+        }
+
+        // 显示状态信息
+        function showStatus(message, type = 'info') {
+            const statusDiv = document.createElement('div');
+            statusDiv.className = `status ${type}`;
+            
+            let icon = 'ℹ️';
+            if (type === 'success') icon = '✅';
+            else if (type === 'error') icon = '❌';
+            else if (type === 'warning') icon = '⚠️';
+            
+            statusDiv.innerHTML = `
+                <div class="status-icon">${icon}</div>
+                <div>${message}</div>
+            `;
+            
+            statusContainer.innerHTML = '';
+            statusContainer.appendChild(statusDiv);
+            
+            // 如果是错误信息，5秒后自动消失
+            if (type === 'error') {
+                setTimeout(() => {
+                    statusDiv.remove();
+                }, 5000);
+            }
+        }
+
+        // 上传文件夹
+        async function uploadFolder() {
+            if (selectedFiles.length === 0) {
+                showStatus('请先选择文件夹', 'error');
+                return;
+            }
+            
+            if (uploadInProgress) {
+                showStatus('上传正在进行中，请稍候', 'warning');
+                return;
+            }
+            
+            uploadInProgress = true;
+            uploadBtn.disabled = true;
+            uploadBtn.innerHTML = '<div class="loading"></div><span>上传中...</span>';
+            
+            progressContainer.style.display = 'block';
+            progressFill.style.width = '0%';
+            progressPercent.textContent = '0%';
+            currentFile.textContent = '准备上传...';
+            
+            const formData = new FormData();
+            
+            // 添加文件及其路径
+            selectedFiles.forEach((item, index) => {
+                // 使用路径作为键，以便服务器端重建结构
+                formData.append('files', item.file);
+                formData.append('paths', item.webkitRelativePath);
+            });
+            
+            // 添加元数据
+            formData.append('totalFiles', selectedFiles.length.toString());
+            formData.append('timestamp', new Date().toISOString());
+            formData.append('folderName', folderNameEl.textContent || 'unnamed');
+            
+            try {
+                const response = await fetch('http://127.0.0.1:8080/api/rest/v1/file/folder-reactive', {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`上传失败: ${response.status} ${response.statusText}`);
+                }
+                
+                const result = await response.json();
+                
+                // 更新进度到100%
+                progressFill.style.width = '100%';
+                progressPercent.textContent = '100%';
+                currentFile.textContent = '上传完成！';
+                
+                // 显示成功信息
+                showStatus(`✅ 上传成功！共上传 ${result.filesProcessed} 个文件，保存到: ${result.savedPath}`, 'success');
+                
+                // 重置按钮状态
+                uploadInProgress = false;
+                uploadBtn.disabled = false;
+                uploadBtn.innerHTML = '<span>🚀 开始上传</span>';
+                
+            } catch (error) {
+                console.error('上传错误:', error);
+                showStatus(`上传失败: ${error.message}`, 'error');
+                
+                // 重置按钮状态
+                uploadInProgress = false;
+                uploadBtn.disabled = false;
+                uploadBtn.innerHTML = '<span>🚀 重新上传</span>';
+            }
+        }
+
+        // 模拟进度更新（可选，如果服务器不支持进度）
+        function simulateProgress(totalFiles) {
+            let processed = 0;
+            
+            const interval = setInterval(() => {
+                if (processed >= totalFiles) {
+                    clearInterval(interval);
+                    return;
+                }
+                
+                processed += Math.floor(Math.random() * 3) + 1;
+                if (processed > totalFiles) processed = totalFiles;
+                
+                const percent = Math.floor((processed / totalFiles) * 100);
+                progressFill.style.width = percent + '%';
+                progressPercent.textContent = percent + '%';
+                currentFile.textContent = `正在上传 ${processed}/${totalFiles} 个文件...`;
+            }, 200);
+            
+            return interval;
+        }
+    </script>
+</body>
+</html>

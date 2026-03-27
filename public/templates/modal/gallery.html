@@ -1,0 +1,125 @@
+<div style="display: none;">
+    <div class="col-md-4 col-sm-12" id="" template-id="gallery">
+        <div class="card">
+            <div class="card-body">
+                <div class="row row-cards">
+                    <div class="col-9">
+                        <div class="mb-3">
+                            <input type="text" class="form-control-plaintext" name="example-disabled-input"
+                                value="{realName}" disabled>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="mb-3">
+                            <input type="text" class="form-control-plaintext" name="example-disabled-input"
+                                value="{code}"  disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a href="{url}" class="d-block card-img-top entity" id="{id}" action-event="click" target-id="{id}" data-fancybox="{gallery}">
+                <img src="{preview}" class="card-img-top">
+            </a>
+            <div class="card-body container base-info-div">
+                <div class="row row-cards">
+                    <div class="col">
+                        <div class="mb-3">
+                            <a action-event="delete" target-id="{id}" class="btn btn-link delete-btn">delete</a>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <input type="text" class="form-control-plaintext" name="example-disabled-input" placeholder="Readonly..." value="{createTime}" readonly="" disabled>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="mb-3">
+                            <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Action
+                            </button>
+                            <div class="dropdown-menu">
+                                 
+                                <a class="dropdown-item text-red  " action-event="delete" target-id="{id}">
+                                    delete
+                                </a>
+                                 <a class="dropdown-item text-red " action-event="delete-pixiv" target-id="{id}">
+                                    delete-pixiv
+                                </a>
+                                <a class="dropdown-item " action-event="restore" target-id="{id}">
+                                    restore
+                                </a>
+                                <!-- <a class="dropdown-item " action-event='play2m3u8' action-event="play2m3u8" target-id="{id}"  data-bs-toggle="modal" data-bs-target="#video-play">
+                                    play2m3u8
+                                </a>
+                                <a class="dropdown-item " action-event='convert2m3u8'  target-id="{id}">
+                                    convert2m3u8
+                                </a>
+                                <a class="dropdown-item convert-format-btn" action-event="convert-format" target-id="{id}">
+                                    convert format
+                                </a>
+                                <a class="dropdown-item copy-btn" action-event="copy" target-id="{id}" data-bs-toggle="collapse"  data-bs-target="#copy-info-view">
+                                    copy
+                                </a>
+                                <a class="dropdown-item " action-event='find-similar' target-id="{id}" data-bs-toggle="modal" data-bs-target="#list-view">
+                                    find similar
+                                </a> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container card-body extra-info-div">
+
+                <div class="row row-cards" style=" align-items: center;justify-content: space-between;">
+
+                    <div class="col">
+                        <div class="mb-3">
+                            <input type="text" class="form-control-plaintext" name="example-disabled-input"
+                                placeholder="Readonly..." value="{type}" readonly="" disabled>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="mb-3">
+                            <input type="text" class="form-control-plaintext" name="example-disabled-input"
+                                placeholder="Readonly..." value="{sizeDescription}"
+                                readonly="" disabled>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="mb-3">
+                            <a class="text-secondary click-count" disabled>
+                                <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                                    viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                    stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" />
+                                    <path
+                                        d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" />
+                                </svg>
+                                {clickCount}
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="mb-3">
+                            <a class="text-secondary heart-btn" action-event='heart' target-id="{id}">
+                                <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                    class="icon {((heartByCurrentUserCount == 1) ? 'icon-filled text-red' : '')}"
+                                    width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                    fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                                    <path
+                                        d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" />
+                                </svg>
+                                {heartCount}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

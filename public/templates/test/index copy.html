@@ -1,0 +1,416 @@
+<!doctype html>
+<!--
+* Tabler - Premium and Open Source dashboard template with responsive and high quality UI.
+* @version 1.0.0-beta20
+* @link https://tabler.io
+* Copyright 2018-2023 The Tabler Authors
+* Copyright 2018-2023 codecalm.net Paweł Kuna
+* Licensed under MIT (https://github.com/tabler/tabler/blob/master/LICENSE)
+-->
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Tabler - Premium and Open Source dashboard template with responsive and high quality UI.</title>
+  <link rel="icon" type="image/svg+xml" href="/static/favicon.ico" />
+  <link href="/tabler/tabler.css?1746260450" rel="stylesheet" />
+  <link href="/tabler/tabler-theme.css?1746260450" rel="stylesheet" />
+  <link href="/css/fancybox.css?1692870487" rel="stylesheet" />
+
+  <style>
+    /* @import url('https://rsms.me/inter/inter.css'); */
+    @import url('/css/inter.css');
+
+    :root {
+      --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+    }
+
+    body {
+      font-feature-settings: "cv03", "cv04", "cv11";
+    }
+  </style>
+</head>
+
+<body>
+  <script src="/tabler/tabler-theme.js?1692870487" defer></script>
+  <div class="page">
+
+    <div class="page-wrapper">
+      <!-- Page body -->
+      <div class="page-body">
+        <div class="container-xl d-flex flex-column justify-content-center">
+          <h1>文件夹上传示例</h1>
+          <p>上传整个文件夹，保持文件夹结构不变</p>
+
+          <div class="stats" id="stats">
+            文件统计：0个文件夹，0个文件
+          </div>
+
+          <div class="upload-area" id="dropArea">
+            <div id="uploadPrompt">
+              <h3>点击选择文件夹 或 拖放文件夹到此处</h3>
+              <p>支持子文件夹结构，文件结构将被完整保留</p>
+              <input type="file" id="folderInput" webkitdirectory directory multiple style="display: none;">
+              <button onclick="document.getElementById('folderInput').click()">选择文件夹</button>
+            </div>
+          </div>
+
+          <div class="file-list" id="fileList">
+            <!-- 文件列表将在这里显示 -->
+          </div>
+
+          <div class="progress-container" style="display: none;" id="progressContainer">
+            <div class="progress-bar">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p id="progressText">上传进度：0%</p>
+          </div>
+
+          <div>
+            <button onclick="uploadFiles()" id="uploadBtn" disabled>开始上传</button>
+            <button onclick="clearSelection()">清空选择</button>
+          </div>
+
+          <div id="status" class="status"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Libs JS -->
+  <!-- Tabler Core -->
+  <script src="/js/tabler.min.js?1692870487" defer></script>
+  <script src="/js/axios.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="/js/common/common.js"></script>
+  <script>
+    // 存储选择的文件
+    let selectedFiles = [];
+    let folderStructure = {};
+
+    // DOM 元素
+    const dropArea = document.getElementById('dropArea');
+    const folderInput = document.getElementById('folderInput');
+    const fileList = document.getElementById('fileList');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const progressContainer = document.getElementById('progressContainer');
+    const progressFill = document.getElementById('progressFill');
+    const progressText = document.getElementById('progressText');
+    const statusDiv = document.getElementById('status');
+    const statsDiv = document.getElementById('stats');
+
+    // 事件监听器
+    document.addEventListener('DOMContentLoaded', () => {
+      // 文件夹选择变化事件
+      folderInput.addEventListener('change', handleFolderSelection);
+
+      // 拖放事件
+      dropArea.addEventListener('dragover', handleDragOver);
+      dropArea.addEventListener('dragleave', handleDragLeave);
+      dropArea.addEventListener('drop', handleDrop);
+
+      // 点击上传区域触发文件选择
+      dropArea.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'BUTTON') {
+          folderInput.click();
+        }
+      });
+    });
+
+    // 处理拖放
+    function handleDragOver(e) {
+      e.preventDefault();
+      dropArea.classList.add('dragover');
+    }
+
+    function handleDragLeave(e) {
+      e.preventDefault();
+      dropArea.classList.remove('dragover');
+    }
+
+    function handleDrop(e) {
+      e.preventDefault();
+      dropArea.classList.remove('dragover');
+
+      const items = e.dataTransfer.items;
+      if (items) {
+        for (let i = 0; i < items.length; i++) {
+          const item = items[i].webkitGetAsEntry();
+          if (item) {
+            traverseFileTree(item);
+          }
+        }
+      }
+    }
+
+    // 遍历文件树（处理拖放的文件夹）
+    function traverseFileTree(item, path = '') {
+      if (item.isFile) {
+        item.file(file => {
+          selectedFiles.push({
+            file: file,
+            webkitRelativePath: path + file.name
+          });
+          updateFileList();
+        });
+      } else if (item.isDirectory) {
+        const dirReader = item.createReader();
+        dirReader.readEntries(entries => {
+          for (let i = 0; i < entries.length; i++) {
+            traverseFileTree(entries[i], path + item.name + '/');
+          }
+        });
+      }
+    }
+
+    // 处理文件夹选择
+    function handleFolderSelection(e) {
+      selectedFiles = [];
+      const files = Array.from(e.target.files);
+
+      files.forEach(file => {
+        selectedFiles.push({
+          file: file,
+          webkitRelativePath: file.webkitRelativePath
+        });
+      });
+
+      updateFileList();
+    }
+
+    // 更新文件列表显示
+    function updateFileList() {
+      fileList.innerHTML = '';
+      folderStructure = {};
+
+      // 构建文件夹结构
+      selectedFiles.forEach(item => {
+        const path = item.webkitRelativePath;
+        const parts = path.split('/');
+        let current = folderStructure;
+
+        for (let i = 0; i < parts.length - 1; i++) {
+          const part = parts[i];
+          if (!current[part]) {
+            current[part] = {};
+          }
+          current = current[part];
+        }
+
+        // 添加文件到结构
+        const fileName = parts[parts.length - 1];
+        current[fileName] = item.file;
+      });
+
+      // 显示文件夹结构
+      displayFolderStructure(folderStructure, '');
+
+      // 更新统计信息
+      const folderCount = countFolders(folderStructure);
+      const fileCount = selectedFiles.length;
+      statsDiv.textContent = `文件统计：${folderCount}个文件夹，${fileCount}个文件`;
+
+      // 启用上传按钮
+      uploadBtn.disabled = selectedFiles.length === 0;
+    }
+
+    // 递归显示文件夹结构
+    function displayFolderStructure(structure, indent = '') {
+      Object.keys(structure).forEach(key => {
+        const item = structure[key];
+
+        const div = document.createElement('div');
+        div.className = 'file-item';
+        div.style.paddingLeft = `${indent.length * 20 + 10}px`;
+
+        if (item instanceof File) {
+          div.className = 'file-item file';
+          div.innerHTML = `📄 ${key} (${formatFileSize(item.size)})`;
+        } else {
+          div.className = 'file-item folder';
+          div.innerHTML = `📁 ${key}/`;
+          displayFolderStructure(item, indent + ' ');
+        }
+
+        fileList.appendChild(div);
+      });
+    }
+
+    // 计算文件夹数量
+    function countFolders(structure) {
+      let count = 0;
+
+      function count(obj) {
+        Object.keys(obj).forEach(key => {
+          if (!(obj[key] instanceof File)) {
+            count++;
+            count(obj[key]);
+          }
+        });
+      }
+
+      count(structure);
+      return count;
+    }
+
+    // 格式化文件大小
+    function formatFileSize(bytes) {
+      if (bytes === 0) return '0 Bytes';
+
+      const k = 1024;
+      const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+      const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+      return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    }
+
+    // 清空选择
+    function clearSelection() {
+      selectedFiles = [];
+      folderStructure = {};
+      fileList.innerHTML = '';
+      statsDiv.textContent = '文件统计：0个文件夹，0个文件';
+      uploadBtn.disabled = true;
+      statusDiv.innerHTML = '';
+      statusDiv.className = 'status';
+    }
+
+    // 上传文件
+    async function uploadFiles() {
+      if (selectedFiles.length === 0) return;
+
+      uploadBtn.disabled = true;
+      progressContainer.style.display = 'block';
+      statusDiv.innerHTML = '';
+      statusDiv.className = 'status';
+
+      const formData = new FormData();
+
+      // 添加每个文件及其路径信息
+      selectedFiles.forEach((item, index) => {
+        formData.append(`files[${index}].path`, item.webkitRelativePath);
+        formData.append(`files[${index}].file`, item.file);
+      });
+
+      // 添加元数据
+      formData.append('totalFiles', selectedFiles.length);
+      formData.append('timestamp', new Date().toISOString());
+
+      try {
+        // 使用 XMLHttpRequest 来获取上传进度
+        await uploadWithProgress(formData);
+
+        statusDiv.innerHTML = '✅ 上传成功！文件夹结构已保存。';
+        statusDiv.className = 'status success';
+
+        // 3秒后重置
+        setTimeout(() => {
+          clearSelection();
+          progressContainer.style.display = 'none';
+        }, 3000);
+
+      } catch (error) {
+        statusDiv.innerHTML = `❌ 上传失败: ${error.message}`;
+        statusDiv.className = 'status error';
+        uploadBtn.disabled = false;
+      }
+    }
+
+    // 带进度条的上传
+    function uploadWithProgress(formData) {
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+
+        // 监听上传进度
+        xhr.upload.addEventListener('progress', (e) => {
+          if (e.lengthComputable) {
+            const percentComplete = (e.loaded / e.total) * 100;
+            progressFill.style.width = percentComplete + '%';
+            progressText.textContent = `上传进度：${percentComplete.toFixed(1)}%`;
+          }
+        });
+
+        // 请求完成
+        xhr.addEventListener('load', () => {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            try {
+              const response = JSON.parse(xhr.responseText);
+              resolve(response);
+            } catch (e) {
+              resolve(xhr.responseText);
+            }
+          } else {
+            reject(new Error(`上传失败，状态码: ${xhr.status}`));
+          }
+        });
+
+        // 请求错误
+        xhr.addEventListener('error', () => {
+          reject(new Error('网络错误，请检查连接'));
+        });
+
+        // 请求中断
+        xhr.addEventListener('abort', () => {
+          reject(new Error('上传已取消'));
+        });
+
+        // 发送请求
+        xhr.open('POST', '/upload-folder'); // 替换为你的上传端点
+        xhr.send(formData);
+      });
+    }
+
+    // 注意：由于浏览器安全限制，你需要一个服务器端端点来处理上传
+    // 以下是 Node.js Express 服务器的示例代码（仅供参考）：
+    /*
+    const express = require('express');
+    const multer = require('multer');
+    const path = require('path');
+    const fs = require('fs-extra');
+    
+    const app = express();
+    app.use(express.static('public'));
+    
+    // 配置 multer 用于内存存储（因为我们处理的是文件内容）
+    const storage = multer.memoryStorage();
+    const upload = multer({ storage: storage });
+    
+    app.post('/upload-folder', upload.array('files[]'), async (req, res) => {
+        try {
+            const files = req.files;
+            const basePath = 'uploads/' + Date.now();
+            
+            // 保存每个文件，保持目录结构
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const filePath = req.body[`files[${i}].path`] || file.originalname;
+                const fullPath = path.join(basePath, filePath);
+                
+                // 创建目录（如果不存在）
+                await fs.ensureDir(path.dirname(fullPath));
+                
+                // 写入文件
+                await fs.writeFile(fullPath, file.buffer);
+            }
+            
+            res.json({
+                success: true,
+                message: `成功上传 ${files.length} 个文件`,
+                path: basePath
+            });
+        } catch (error) {
+            res.status(500).json({
+                success: false,
+                error: error.message
+            });
+        }
+    });
+    
+    app.listen(3000, () => {
+        console.log('服务器运行在 http://localhost:3000');
+    });
+    */
+  </script>
+</body>
+
+</html>

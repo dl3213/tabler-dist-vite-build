@@ -129,6 +129,4 @@ function load_menu_base(apiUrl) {
         })
 }
 
-function load_menu_sys(apiUrl){
 
-}

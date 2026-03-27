@@ -48,69 +48,23 @@
           </div>
         </div>
       </div>
-      <div class="page-body" id="player-body-div" style="position: -webkit-sticky; position: sticky;z-index: 9999999;" >
+      <div class="page-body" id="player-body-div" style="position: -webkit-sticky; position: sticky;z-index: 9999999;">
         <div class="container-xl">
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-6">
               <div class="card">
                 <div class="list-group card-list-group">
                   <div class="list-group-item">
-                    <div class="row g-2 align-items-center" id="player-div">
-                      <div class="col fs-3">
-                        <div class="card card-sm" >
-                          <a data-fancybox="gallery" class="d-block card-img-top entity"
-                            disabled aria-disabled="" id="21112" data-fslightbox="gallery"><img id="play-ground-img"
-                              src="http://192.168.10.53:8080/static-file/2025-01-23/1882441280215191552.jpeg" class="card-img-top"></a>
-                          <div class="card-body base-info-div">
-                            <div class="row row-cards">
-                              <div class="col-xs-3 col-sm-3 col-md-3">
-                                <div class="mb-3">
-                                  <a target-id="21112" class="btn btn-link delete-btn">
-                                    test
-                                  </a>
-                                </div>
-                              </div> 
-                              <div class="col-xs-6 col-sm-6 col-md-6">
-                                <div class="mb-3">
-                                  <input type="text" id="title-input" class="form-control" name="example-disabled-input" placeholder="Readonly..."
-                                    value="IMG_0822.jpeg" readonly="">
-                                </div>
-                              </div>
-                              <div class="col-xs-3 col-sm-3 col-md-3">
-                                <div class="mb-3">
-                                  <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true"
-                                    aria-expanded="false">
-                                    Action
-                                  </button>
-                                  <div class="dropdown-menu">
-                                    <a class="dropdown-item edit-btn" target-id="21112" data-bs-toggle="modal" data-bs-target="#modal-info-view">
-                                      edit
-                                    </a>
-                                    <a class="dropdown-item move-btn" target-id="21112">
-                                      move
-                                    </a>
-                                    <a class="dropdown-item text-red delete-btn" target-id="21112">
-                                      delete
-                                    </a>
-                                    <a class="dropdown-item restore-btn" target-id="21112">
-                                      restore
-                                    </a>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                      </div>
-                      </div>
-                    </div>
+                    <div id="waveform"></div> 
                   </div>
-                   
+
                 </div>
               </div>
-            </div> 
+            </div>
           </div>
         </div>
       </div>
+       
       <div class="page-body">
         <div class="container-xl">
           <div class="row">
@@ -960,15 +914,15 @@
                   <div class="card">
                     <div class="row row-0">
                       <div class="col-auto">
-                        <img src="/static/static/tracks/c976bfc96d5e44820e553a16a6097cd02a61fd2f.jpg" class="rounded-start" alt="Shape of You"
-                          width="80" height="80">
+                        <img src="/static/static/tracks/c976bfc96d5e44820e553a16a6097cd02a61fd2f.jpg"
+                          class="rounded-start" alt="Shape of You" width="80" height="80">
                       </div>
                       <div class="col">
                         <div class="card-body">
                           Shape of You
                           <div class="text-secondary">
                             Ed Sheeran
-                          </div> 
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -1081,57 +1035,74 @@
   <script src="/js/jquery.min.js"></script>
   <script src="/js/jquery-ui.min.js"></script>
   <script src="/js/axios.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="https://unpkg.com/wavesurfer.js@7"></script>
+  <script src="https://unpkg.com/wavesurfer.js@7/dist/plugins/regions.min.js"></script>
+
   <script src="/js/common/common.js"></script>
+
   <script>
     document.addEventListener("DOMContentLoaded", function () {
 
+      var wavesurfer = WaveSurfer.create({
+        container: '#waveform',
+        waveColor: 'violet',
+        progressColor: 'purple',
+        mediaControls: true,
+      });
+      wavesurfer.on('ready', function () {
+        wavesurfer.play();
+      });
+      // wavesurfer.load('http://localhost:8080/api/rest/v1/music/test');
+
       $("#player-body-div").draggable();
 
-        const apiUrl = server.API_URL
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        let audioSource = audioContext.createBufferSource();
-        var request = {
-          pageNumber: 1,
-          pageSize: 12,
-          lastPageNumber: 1,
-        }
-        load_data()
-        function load_data() {
-          var temp = showLoading('main-context')
+      const apiUrl = server.API_URL
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      let audioSource = audioContext.createBufferSource();
+      var request = {
+        pageNumber: 1,
+        pageSize: 10000,
+        lastPageNumber: 1,
+      }
+      load_data()
+      function load_data() {
+        var temp = showLoading('main-context')
 
-          axios
-            .post(apiUrl + '/api/rest/v1/music/list', {
-              ...request,
-              "type": "audio",
+        axios
+          .post(apiUrl + '/api/rest/v1/music/fromFile/list', {
+            ...request,
+            "type": "audio",
+          })
+          .then(response => response.data)
+          .then(response => {
+            console.log(response)
+            var resp = response.data;
+            console.log(resp)
+            var prevUrl = resp.prevUrl
+            var context = ""
+            var index = 1
+            resp.forEach(item => {
+              context += buildMainContextData(item, prevUrl, index)
+
+              index += 1
             })
-            .then(response => {
-              var resp = response.data;
-              console.log(resp)
-              var prevUrl = resp.prevUrl
-              var context = ""
-              var index = 1
-              resp.forEach(item => {
-                context += buildMainContextData(item, prevUrl, index)
 
-                index += 1
-              })
+            document.getElementById('main-context').innerHTML = context
 
-              document.getElementById('main-context').innerHTML = context
+            data_click_build()
+            //list-group-item
+          })
+          .catch(error => {
+            console.log(error)
+          })
+          .finally(() => {
 
-              data_click_build()
-              //list-group-item
-            })
-            .catch(error => {
-              console.log(error)
-            })
-            .finally(() => {
+          })
+      }
 
-            })
-        }
-
-        function buildMainContextData(item, prevUrl, index) {
-          return `
-                <div class="list-group-item" item-absolute-path="`+ item.absolutePath + `">
+      function buildMainContextData(item, prevUrl, index) {
+        return `
+                <div class="list-group-item"   entity-id="`+item.id+`">
                     <div class="row g-2 align-items-center">
                       <div class="col-auto fs-3">
                         `+ index + `
@@ -1202,66 +1173,60 @@
                   </div>
                 `
 
+      }
+
+      function data_click_build() {
+        var el_list = document.getElementsByClassName("list-group-item");
+        for (let el of el_list) {
+          el.addEventListener('click', function (evt) {
+            var entityId = el.getAttribute("entity-id")
+            console.log(entityId)
+            if (!entityId) return null;
+
+            wavesurfer.load(apiUrl + '/api/rest/v1/music/fromFile/src/' + entityId);
+            return;
+            var temp = showLoading('player-div') 
+            Promise.all([
+              axios
+                .post(apiUrl + '/api/rest/v1/music/fromFile/info/'+entityId, {}, {
+                  responseType: 'blob'  // 设置响应类型为 blob
+                }),
+              axios
+                .post(apiUrl + '/api/rest/v1/music/fromFile/src/'+entityId, {}, {
+                  responseType: 'arraybuffer'  // 设置响应类型为 arraybuffer
+                })
+            ]) 
+              .then(response => {
+                document.getElementById('player-div').innerHTML = temp
+                console.log('response -> ', response)
+                var artist = decodeURIComponent(response[0].headers['artist']).replaceAll('+', ' ')
+                var title = decodeURIComponent(response[0].headers['title']).replaceAll('+', ' ')
+                document.getElementById('title-input').value = artist + ' - ' + title
+                document.getElementById('play-ground-img').src = URL.createObjectURL(response[0].data);
+                var resp = response[1].data;
+                return audioContext.decodeAudioData(resp)
+              })
+              .then(data => {
+                console.log('decodeAudioData then -> ', data)
+                audioSource.disconnect();
+                audioSource = audioContext.createBufferSource();
+                audioSource.buffer = data;
+                audioSource.connect(audioContext.destination);
+                audioSource.start();
+              })
+              .catch(error => {
+                console.log(error)
+              })
+              .finally(() => {
+
+              })
+
+
+          })
         }
+      }
 
-        function data_click_build() {
-          var el_list = document.getElementsByClassName("list-group-item");
-          for (let el of el_list) {
-            el.addEventListener('click', function (evt) {
-              var absolutePath = el.getAttribute("item-absolute-path")
-              console.log(absolutePath)
-              if(!absolutePath) return null;
-              var temp = showLoading('player-div')
-              var requestJson = {
-                "absolutePath": absolutePath
-              }
-              Promise.all([
-                axios
-                  .post(apiUrl + '/api/rest/v1/music/info', requestJson, {
-                    responseType: 'blob'  // 设置响应类型为 blob
-                  }),
-                axios
-                  .post(apiUrl + '/api/rest/v1/music/src', requestJson, {
-                    responseType: 'arraybuffer'  // 设置响应类型为 arraybuffer
-                  })
-              ])
-              // axios
-              //   .post(apiUrl + '/api/rest/v1/music/src/v2', {
-              //     "absolutePath": absolutePath
-              //   }, {
-              //     responseType: 'arraybuffer'  // 设置响应类型为 arraybuffer
-              //   })
-                .then(response => {
-                  document.getElementById('player-div').innerHTML = temp
-                  console.log('response -> ', response)
-                  var artist = decodeURIComponent(response[0].headers['artist']).replaceAll('+',' ')
-                  var title = decodeURIComponent(response[0].headers['title']).replaceAll('+',' ')
-                  document.getElementById('title-input').value = artist + ' - ' + title
-                  document.getElementById('play-ground-img').src = URL.createObjectURL(response[0].data);
-                  var resp = response[1].data;
-                  return audioContext.decodeAudioData(resp) 
-                })
-                .then(data =>{
-                  console.log('decodeAudioData then -> ', data)
-                  audioSource.disconnect();
-                  audioSource = audioContext.createBufferSource();
-                  audioSource.buffer = data;
-                  audioSource.connect(audioContext.destination);
-                  audioSource.start();
-                })
-                .catch(error => {
-                  console.log(error)
-                })
-                .finally(() => {
-
-                })
-
-
-            })
-          }
-        }
-
-      })
+    })
   </script>
 </body>
 
