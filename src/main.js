@@ -95,7 +95,7 @@ function load_menu(apiUrl) {
                                     `
                         arr.forEach(item => {
                             children_html += `
-                                        <a class="dropdown-item" href="` + item.linkUrl + `">
+                                        <a class="dropdown-item" target-link="` + item.linkUrl + `" href="#">
                                             ` + item.name + `
                                         </a>
                                     `

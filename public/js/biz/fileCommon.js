@@ -4,6 +4,7 @@ const apiUrl = Common.server.API_URL
 var request = {
     pageNumber: 1,
     lastPageNumber: 1,
+    withTags: 1,
 }
 
 
@@ -296,6 +297,29 @@ function action(targetId, actionEvent, currentTarget) {
         return
     }
     if ("heart" === actionEvent) {
+        return
+    }
+    if ("add-tag" === actionEvent) {
+        var id = targetId;
+        var tagForm = document.getElementById('tag-form');
+        if (tagForm) {
+            tagForm.querySelector('input[name="id"]').value = id;
+            tagForm.querySelector('input[name="tag"]').value = '';
+        }
+        // 请求全部 tag 并渲染到弹窗
+        axios.get(apiUrl + '/api/rest/v1/file/tag/all')
+            .then(resp => {
+                if (resp.data.code === 200) {
+                    var tags = resp.data.data || [];
+                    var tagsList = document.querySelector('#tag-info .tags-list');
+                    if (tagsList) {
+                        tagsList.innerHTML = tags.map(function(t) {
+                            return '<span class="tag">' + t.name + '<a href="#" class="btn-close" onclick="return false;"></a></span>';
+                        }).join('');
+                    }
+                }
+            })
+            .catch(function(err) { console.log(err); });
         return
     }
     if ("restore" === actionEvent) {
@@ -1132,5 +1156,6 @@ Array.from(document.getElementsByClassName("last-btn")).forEach(el => {
         load_data(request, 1)
     })
 })
- 
+
+
 

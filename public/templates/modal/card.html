@@ -28,6 +28,9 @@
                                 <a class="dropdown-item edit-btn" target-id="{id}" data-bs-toggle="modal" data-bs-target="#modal-info-view">
                                     edit
                                 </a>
+                                <a class="dropdown-item" action-event="add-tag" target-id="{id}" data-bs-toggle="modal" data-bs-target="#tag-info">
+                                    add tag
+                                </a>
                                 <a class="dropdown-item text-red delete-btn" action-event="delete" target-id="{id}">
                                     delete
                                 </a>
@@ -38,6 +41,15 @@
                                     search similar
                                 </a>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container card-body tag-section" style="display:{tags && tags.length > 0 ? 'block' : 'none'}">
+                <div class="row row-cards">
+                    <div class="col-12">
+                        <div class="tags-list">
+                            {tags ? tags.map(function(t){ return '<span class="tag">'+t.name+'<a href="#" class="btn-close" onclick="return false;"></a></span>'; }).join('') : ''}
                         </div>
                     </div>
                 </div>

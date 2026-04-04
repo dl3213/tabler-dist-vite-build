@@ -53,6 +53,7 @@
                     <div html-modal="gallery-mini"></div>
                     <div html-modal="gallery"></div>
                     <div html-modal="card"></div>
+                    <div html-modal="tag-info"></div>
 
                     <div id="custom-menu" class="dropdown-menu">
                         <a class="dropdown-item" event="delete" href="#">
@@ -545,6 +546,32 @@
                     });
 
                     load_data(request, 1)
+
+                    document.getElementById('tag-submit')?.addEventListener('click', function(e) {
+                        var tagForm = document.getElementById('tag-form');
+                        if (!tagForm) return;
+                        var targetId = tagForm.querySelector('input[name="id"]').value;
+                        var tag = tagForm.querySelector('input[name="tag"]').value;
+                        if (!tag || !tag.trim()) return;
+                        window._tagSubmitPending = true;
+                        axios.post(apiUrl + '/api/rest/v1/file/tag/bind', {
+                            entityId: targetId,
+                            tag: tag.trim()
+                        }).then(function(resp) {
+                            if (resp.data.code !== 200) {
+                                window._tagSubmitPending = false;
+                                document.getElementById("modal-danger-context").textContent = resp.data.msg || resp.data.message;
+                                document.getElementById("danger-btn").click();
+                            }
+                        }).catch(function(err) { console.log(err); window._tagSubmitPending = false; });
+                    });
+
+                    document.getElementById('tag-info')?.addEventListener('hidden.bs.modal', function() {
+                        if (window._tagSubmitPending) {
+                            window._tagSubmitPending = false;
+                            load_data(request, 1);
+                        }
+                    });
 
                 })
 

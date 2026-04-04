@@ -55,8 +55,16 @@ var Common = {
     elementId: function (id) {
         return document.querySelectorAll(`[element-id="${id}"]`)
     },
+    decodeTemplateHtml: function (html) {
+        const textarea = document.createElement('textarea');
+        textarea.innerHTML = html;
+        return textarea.value;
+    },
     templateId: function (id) {
-        return document.querySelectorAll(`[template-id="${id}"]`)[0].outerHTML
+        const element = document.querySelector(`[template-id="${id}"]`);
+        if (!element) return '';
+        const html = element.outerHTML;
+        return Common.decodeTemplateHtml(html);
     },
     element: function (id) {
         return document.getElementById(id)
@@ -141,40 +149,29 @@ const templateCache = new Map();
 
 /**
  * 编译模板字符串
- * @param {string} template - 包含 ${expression} 的模板
+ * @param {string} template - 包含 {expression} 的模板
  * @returns {Function} 渲染函数，接收数据对象并返回字符串
  */
 function compile(template) {
-  // 匹配所有 ${...} 占位符，非贪婪匹配
-  const regex = /\{(.*?)}/g;
-  let lastIndex = 0;          // 上次匹配结束位置
-  const parts = [];           // 存储静态文本和表达式的代码片段
-  let match;
+  // 先把可能来自 outerHTML 的 HTML 实体解码回来，避免 &amp;&amp; 或 &quot; 等导致 JS 模板语法错误
+  const decodedTemplate = Common && typeof Common.decodeTemplateHtml === 'function'
+    ? Common.decodeTemplateHtml(template)
+    : template;
 
-  while ((match = regex.exec(template)) !== null) {
-    const start = match.index;                // 占位符起始索引
-    const end = start + match[0].length;      // 占位符结束索引
-
-    // 添加占位符前的静态文本（JSON.stringify 转义并加引号）
-    if (start > lastIndex) {
-      parts.push(JSON.stringify(template.substring(lastIndex, start)));
+  // 支持两种占位符语法：{expr} 和 ${expr}
+  const convertedTemplate = decodedTemplate.replace(/\{(.*?)\}/g, (match, expr, offset) => {
+    if (offset > 0 && decodedTemplate[offset - 1] === '$') {
+      return match;
     }
+    return `\${${expr.trim()}}`;
+  });
 
-    // 添加表达式，用括号包裹以保证正确的求值顺序
-    const expr = match[1].trim();
-    parts.push(`(${expr})`);
+  // 转义模板字面量中的特殊字符，避免原始 HTML 内容破坏 JS 模板字符串
+  const escapedTemplate = convertedTemplate
+    .replace(/\\/g, '\\\\')
+    .replace(/`/g, '\\`');
 
-    lastIndex = end;
-  }
-
-  // 添加剩余的静态文本
-  if (lastIndex < template.length) {
-    parts.push(JSON.stringify(template.substring(lastIndex)));
-  }
-
-  // 使用 with 将数据对象属性直接暴露给表达式，函数体返回拼接结果
-  const body = `with(data) { return ${parts.join(' + ')}; }`;
-  console.log('Compiled function body:', body);
+  const body = `with(data) { return \`${escapedTemplate}\`; }`;
   return new Function('data', body);
 }
 
@@ -185,10 +182,14 @@ function compile(template) {
  * @returns {string} 渲染结果
  */
 function render(template, data) {
-  let fn = templateCache.get(template);
+  const templateKey = Common && typeof Common.decodeTemplateHtml === 'function'
+    ? Common.decodeTemplateHtml(template)
+    : template;
+
+  let fn = templateCache.get(templateKey);
   if (!fn) {
     fn = compile(template);
-    templateCache.set(template, fn);  // 缓存编译结果
+    templateCache.set(templateKey, fn);  // 缓存编译结果
   }
   return fn(data);
 }
