@@ -127,17 +127,24 @@ function load_data(request) {
                 item.url = apiUrl + item.prevUrl + item.relativePath;
                 item.preview = item.type?.startsWith("video") ? apiUrl + item.prevUrl + item.relativePath + '.jpg' : apiUrl + item.prevUrl + item.relativePath;
                 item.bookFisrt = apiUrl + ('/api/rest/v1/book/detail/first/' + item.id)
-
+                var video = item.type?.startsWith('video')
+                item.video = video
+                item.href = video ? 'javascript:void(0)' : item.url
+                item.dataUrl = video ? item.url : ''
+                item.modal = video ? 'data-bs-toggle="modal" data-bs-target="#video-play"' : ''
+                //console.log('item -> ', item)
                 //var template = Common.createTemplate(Common.templateId(item.htmlTemplate))
 
                 var divHtml = render(Common.templateId(item.htmlTemplate), item )
                 //console.log('divHtml -> ', divHtml)
                 const div = document.createElement('div');
                 div.innerHTML = divHtml;
+                //console.log('div -> ', div)
+                //console.log('div.firstChild -> ', div.firstChild)
                 Common.htmlElement('main-context').appendChild(div.firstChild)
             }
 
-            // resp.data.forEach(item => { 
+            // resp.data.forEach(item => {
             //     console.log('item -> ', item.url)
             //     var isPreRender = item.type?.startsWith("image") || item.type?.startsWith("video")
             //     console.log('isPreRender -> ', isPreRender)
@@ -145,7 +152,7 @@ function load_data(request) {
             //     console.log('divHtml-> ', divHtml)
             //     const div = document.createElement('div');
             //     div.innerHTML = divHtml;
-            //     Common.htmlElement('main-context').appendChild(div.firstChild) 
+            //     Common.htmlElement('main-context').appendChild(div.firstChild)
             //     requestAnimationFrame(() => {
             //         // var url = resp.prevUrl + item.relativePath;
             //         // var divHtml = item.type?.startsWith("text") || item.type?.startsWith("application") ? buildCard(item, url) : buildGallery(item, url);
@@ -154,7 +161,7 @@ function load_data(request) {
             //         // contextHtml.appendChild(div.firstChild)
 
             //     });
-            // }) 
+            // })
         })
         .catch(error => {
             console.log(error)
@@ -173,8 +180,10 @@ function action(targetId, actionEvent, currentTarget) {
     var id = targetId
     var el = currentTarget
     if ('click' === actionEvent) {
-        axios
-            .post(apiUrl + request.entityUrl.click + id)
+        var el = currentTarget;
+
+        // Record click (for both image and video)
+        axios.post(apiUrl + request.entityUrl.click + id)
             .then(response => {
                 response = response.data
                 if (response.code == 200) {
@@ -182,17 +191,244 @@ function action(targetId, actionEvent, currentTarget) {
                                             <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
                                             <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" /></svg>
                                             `+ response.data.clickCount
-                } else {
-
                 }
             })
             .catch(error => {
                 console.log(error)
-            })
-            .finally(() => {
+            });
 
-            })
-        return
+        var video = el.getAttribute('href') === 'javascript:void(0)';
+        if (video) {
+            var videoUrl = el.dataset.url;
+            var videoModalEl = document.getElementById('video-play');
+
+            // Fetch file detail for title and info
+            var fileDetailData = null;
+            axios.get(apiUrl + request.entityUrl.detail + id)
+                .then(function(resp) {
+                    if (resp.data.code === 200) {
+                        fileDetailData = resp.data.data;
+                        console.log('[video] file detail:', fileDetailData);
+                        // Update modal title
+                        var titleEl = document.getElementById('video-play-title');
+                        if (titleEl) titleEl.textContent = fileDetailData.realName || 'Video Player';
+                        // Update file info in custom controls
+                        var nameEl = document.getElementById('video-file-name');
+                        var sizeEl = document.getElementById('video-file-size');
+                        var urlEl = document.getElementById('video-file-url');
+                        if (nameEl) nameEl.textContent = fileDetailData.realName || '';
+                        // sizeDescription may not exist, compute from size if needed
+                        var sizeBytes = fileDetailData.size || 0;
+                        var sizeMB = sizeBytes / 1024 / 1024;
+                        var sizeText = fileDetailData.sizeDescription || (sizeMB >= 1 ? sizeMB.toFixed(1) + ' MB' : (sizeBytes / 1024).toFixed(1) + ' KB');
+                        if (sizeEl) sizeEl.textContent = sizeText;
+                        if (urlEl) urlEl.textContent = fileDetailData.relativePath || '';
+                    }
+                })
+                .catch(function(err) { console.log(err); });
+
+            if (window._videoPlayer) {
+                window._videoPlayer.dispose();
+                window._videoPlayer = null;
+            }
+            videoModalEl.addEventListener('shown.bs.modal', function() {
+                var playerEl = document.getElementById('videojs-player');
+                if (!playerEl) {
+                    var modalBody = videoModalEl.querySelector('.modal-body');
+                    if (modalBody) {
+                        modalBody.innerHTML = '<video id="videojs-player" class="video-js vjs-big-play-centered vjs-fluid" controls preload="auto" width="100%" height="100%"><p class="vjs-no-js">播放器不支持此视频。</p></video>';
+                    }
+                    playerEl = document.getElementById('videojs-player');
+                }
+                if (playerEl) {
+                    window._videoPlayer = videojs(playerEl, {
+                        controls: true,
+                        autoplay: true,
+                        preload: 'auto',
+                        fluid: true,
+                        playbackRates: [0.5, 1, 1.5, 2],
+                    });
+                    window._videoPlayer.src({ src: videoUrl, type: 'video/mp4' });
+                    window._videoPlayer.ready(function() {
+                        // Helper: format time as MM:SS or HH:MM:SS
+                        function formatTime(seconds, showSign) {
+                            var s = Math.abs(Math.floor(seconds));
+                            var h = Math.floor(s / 3600);
+                            var m = Math.floor((s % 3600) / 60);
+                            var sec = s % 60;
+                            var sign = showSign && seconds < 0 ? '-' : '';
+                            if (h > 0) {
+                                return sign + String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(sec).padStart(2, '0');
+                            }
+                            return sign + String(m).padStart(2, '0') + ':' + String(sec).padStart(2, '0');
+                        }
+
+                        // Inject CSS for video control buttons & time display
+                        var style = document.createElement('style');
+                        style.id = 'video-control-btn-css';
+                        style.textContent = `
+                            #video-custom-controls .seek-btn,#video-custom-controls .copy-time-btn{display:inline-flex!important;align-items:center;padding:6px 14px!important;font-size:14px!important;color:#fff!important;cursor:pointer!important;border:none!important;border-radius:6px!important;background:rgba(43,51,63,0.85)!important;transition:all 0.15s ease!important}
+                            #video-custom-controls .seek-btn:hover,#video-custom-controls .copy-time-btn:hover{background:rgba(63,71,83,0.95)!important;transform:scale(1.05)!important}
+                            #video-custom-controls .seek-btn{padding:6px 16px!important;font-size:16px!important;font-weight:bold!important}
+                            #video-custom-controls .video-time{display:inline-flex!important;align-items:center!important;padding:0 10px!important;font-size:14px!important;color:#ccc!important;font-variant-numeric:tabular-nums!important}
+                            .vjs-time-display{display:flex!important;align-items:center!important;font-size:13px!important;color:#fff!important;opacity:.85!important;line-height:1!important}
+                            .vjs-time-display .vjs-current-time{order:1!important}
+                            .vjs-time-display .vjs-time-separator{order:2!important;display:none}
+                            .vjs-time-display .vjs-duration{order:3!important;display:none}
+                            .vjs-time-display .vjs-remaining-time{order:4!important;display:none}
+                            .video-time-left{display:inline-flex!important;align-items:center!important;padding:0 6px!important;font-size:13px!important;color:#fff!important;opacity:.85!important}
+                            .video-time-right{display:inline-flex!important;align-items:center!important;padding:0 6px!important;font-size:13px!important;color:#fff!important;opacity:.85!important}
+                        `;
+                        document.head.appendChild(style);
+
+                        // Remove existing buttons to avoid duplication
+                        document.querySelectorAll('.copy-time-btn,.seek-btn,.video-time-left,.video-time-right').forEach(function(b){ b.remove(); });
+
+                        // Time display elements
+                        var timeLeft = document.createElement('div');
+                        timeLeft.className = 'vjs-control vjs-button video-time-left';
+                        timeLeft.style.cssText = 'display:inline-flex!important;align-items:center;padding:0 6px;font-size:13px;color:#fff;opacity:.85;cursor:default;border:none;background:none;box-shadow:none';
+                        timeLeft.innerHTML = '<span class="vjs-current-time-display">00:00</span>';
+
+                        var timeRight = document.createElement('div');
+                        timeRight.className = 'vjs-control vjs-button video-time-right';
+                        timeRight.style.cssText = 'display:inline-flex!important;align-items:center;padding:0 6px;font-size:13px;color:#fff;opacity:.85;cursor:default;border:none;background:none;box-shadow:none';
+                        timeRight.innerHTML = '<span>-00:00</span>';
+
+                        // Update time display
+                        function updateTimeDisplay() {
+                            if (!window._videoPlayer) return;
+                            var current = window._videoPlayer.currentTime() || 0;
+                            var duration = window._videoPlayer.duration() || 0;
+                            var remaining = duration - current;
+                            var currentEl = timeLeft.querySelector('span');
+                            var remainingEl = timeRight.querySelector('span');
+                            if (currentEl) currentEl.textContent = formatTime(current, false);
+                            if (remainingEl) remainingEl.textContent = '-' + formatTime(remaining, false);
+                        }
+
+                        // Helper: create seek button
+                        function addSeekBtn(seconds, label) {
+                            var btn = document.createElement('div');
+                            btn.className = 'vjs-control vjs-button seek-btn';
+                            btn.textContent = label;
+                            btn.style.cursor = 'pointer';
+                            btn.style.display = 'flex';
+                            btn.style.alignItems = 'center';
+                            btn.style.justifyContent = 'center';
+                            btn.style.color = '#fff';
+                            btn.addEventListener('click', function() {
+                                var newTime = window._videoPlayer.currentTime() + seconds;
+                                var duration = window._videoPlayer.duration() || 0;
+                                if (newTime < 0) newTime = 0;
+                                if (newTime > duration) newTime = duration;
+                                window._videoPlayer.currentTime(newTime);
+                            });
+                            return btn;
+                        }
+
+                        // Copy-time button
+                        var btn = document.createElement('div');
+                        btn.className = 'vjs-control vjs-button copy-time-btn';
+                        btn.textContent = '复制时间';
+                        btn.style.cursor = 'pointer';
+                        btn.style.display = 'flex';
+                        btn.style.alignItems = 'center';
+                        btn.style.justifyContent = 'center';
+                        btn.style.padding = '0 6px';
+                        btn.style.fontSize = '14px';
+                        btn.style.color = '#fff';
+                        btn.style.backgroundColor = 'rgba(43, 51, 63, 0.8)';
+                        btn.style.borderRadius = '4px';
+                        btn.addEventListener('click', function() {
+                            var t = window._videoPlayer.currentTime();
+                            var h = Math.floor(t / 3600);
+                            var m = Math.floor((t % 3600) / 60);
+                            var s = Math.floor(t % 60);
+                            var ts = h > 0
+                                ? String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0')
+                                : String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+                            navigator.clipboard.writeText(ts).then(function() {
+                                var span = btn;
+                                if (span) span.textContent = '✓ 已复制';
+                                setTimeout(function() {
+                                    var sp2 = btn;
+                                    if (sp2) sp2.textContent = '复制时间';
+                                }, 1000);
+                            });
+                        });
+
+                        // Append buttons to custom footer row instead of ControlBar
+                        var customControls = document.getElementById('video-custom-controls');
+                        var controlBar = window._videoPlayer.getChild('ControlBar');
+                        if (customControls) {
+                            // Insert time display: left of progress bar = current time, right = remaining time
+                            if (controlBar) {
+                                var progressControl = controlBar.getChild('ProgressControl');
+                                if (progressControl) {
+                                    var progressEl = progressControl.el();
+                                    // Hide default time displays
+                                    var currentTimeDisplay = controlBar.getChild('CurrentTimeDisplay');
+                                    var durationDisplay = controlBar.getChild('DurationDisplay');
+                                    var remainingDisplay = controlBar.getChild('RemainingTimeDisplay');
+                                    [currentTimeDisplay, durationDisplay, remainingDisplay].forEach(function(c) {
+                                        if (c && c.el_) c.el_.style.display = 'none';
+                                    });
+                                    // Insert timeLeft before progress bar
+                                    progressEl.parentNode.insertBefore(timeLeft, progressEl);
+                                    // Insert timeRight after progress bar
+                                    progressEl.parentNode.insertBefore(timeRight, progressEl.nextSibling);
+                                    // Start update loop
+                                    updateTimeDisplay();
+                                    window._videoPlayer.on('timeupdate', updateTimeDisplay);
+                                }
+                            }
+                            // Add custom buttons to footer row
+                            customControls.innerHTML = ''; // Clear placeholder
+                            customControls.appendChild(addSeekBtn(-10, '-10'));
+                            customControls.appendChild(btn);
+                            customControls.appendChild(addSeekBtn(10, '+10'));
+                            console.log('[video] time display & buttons added to footer');
+
+                            // Add start/end time capture buttons
+                            var btnSetStart = document.getElementById('btn-set-start');
+                            var btnSetEnd = document.getElementById('btn-set-end');
+                            var inputStart = document.getElementById('video-input-1');
+                            var inputEnd = document.getElementById('video-input-2');
+
+                            // Clear input fields when entering video page
+                            if (inputStart) inputStart.value = '';
+                            if (inputEnd) inputEnd.value = '';
+
+                            if (btnSetStart && inputStart) {
+                                btnSetStart.addEventListener('click', function() {
+                                    var t = window._videoPlayer.currentTime() || 0;
+                                    inputStart.value = formatTime(t, false);
+                                });
+                            }
+                            if (btnSetEnd && inputEnd) {
+                                btnSetEnd.addEventListener('click', function() {
+                                    var t = window._videoPlayer.currentTime() || 0;
+                                    inputEnd.value = formatTime(t, false);
+                                });
+                            }
+                        } else {
+                            console.log('[video] customControls NOT found');
+                        }
+                    });
+                    window._videoPlayer.play();
+                }
+            });
+
+            videoModalEl.addEventListener('hidden.bs.modal', function() {
+                if (window._videoPlayer) {
+                    window._videoPlayer.dispose();
+                    window._videoPlayer = null;
+                }
+            });
+            return;
+        } else {
+        }
     }
     if ("move" === actionEvent) {
         return
@@ -201,9 +437,9 @@ function action(targetId, actionEvent, currentTarget) {
         var parentElement = el.parentElement.parentElement.parentElement.parentElement;
         if (id && parentElement) {
             parentElement.innerHTML = `
-                                    <div class="col-xs-12 col-sm-12 col-md-12"> 
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
                                         <div class="spinner-border spinner-border-sm text-secondary" role="status"></div>
-                                    </div> 
+                                    </div>
                                     `
             axios
                 .delete(apiUrl + request.entityUrl.delete + id)
@@ -211,13 +447,13 @@ function action(targetId, actionEvent, currentTarget) {
                     console.log(response)
                     if (response.data.code == 200) {
                         parentElement.innerHTML = `
-                                                <div class="col-xs-12 col-sm-12 col-md-12"> 
+                                                <div class="col-xs-12 col-sm-12 col-md-12">
                                                     <div class="alert alert-success" style="margin:0" role="alert">
                                                         <div class="d-flex">
                                                             <div>
                                                                 <!-- Download SVG icon from http://tabler-icons.io/i/check -->
                                                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>
-                                                                 `+ response.data.msg + `   
+                                                                 `+ response.data.msg + `
                                                                 </div>
                                                         </div>
                                                     </div>
@@ -243,10 +479,10 @@ function action(targetId, actionEvent, currentTarget) {
     if ("delete-pixiv" === actionEvent) {
         var parentElement = el.parentElement.parentElement.parentElement.parentElement;
         parentElement.innerHTML = `
-                                    <div class="col-xs-12 col-sm-12 col-md-12"> 
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
                                         <div class="spinner-border spinner-border-sm text-secondary" role="status"></div>
                                     </div>
-                                    
+
                                     `
         axios
             .delete(apiUrl + "/api/rest/v1/file/pixiv/delete/all/" + targetId)
@@ -254,7 +490,7 @@ function action(targetId, actionEvent, currentTarget) {
                 console.log(response)
                 if (response.data.code == 200) {
                     parentElement.innerHTML = `
-                                            <div class="col-xs-12 col-sm-12 col-md-12"> 
+                                            <div class="col-xs-12 col-sm-12 col-md-12">
                                                 <div class="alert alert-success" style="margin:0" role="alert">
                                                   <div class="d-flex">
                                                     <div>
@@ -265,7 +501,45 @@ function action(targetId, actionEvent, currentTarget) {
                                                   </div>
                                                 </div>
                                             </div>
-                                               
+
+                                                `
+                } else {
+                    document.getElementById("modal-danger-context").textContent = response.data.message
+                    document.getElementById("danger-btn").click();
+                }
+            })
+            .catch(error => {
+                document.getElementById("modal-danger-context").textContent = error.message
+                document.getElementById("danger-btn").click();
+            })
+            .finally(() => {
+                danger_ok_btn.setAttribute("target-id", "")
+            })
+        return
+    }
+    if ("restore-pixiv" === actionEvent) {
+        var parentElement = el.parentElement.parentElement.parentElement.parentElement;
+        parentElement.innerHTML = `
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
+                                        <div class="spinner-border spinner-border-sm text-secondary" role="status"></div>
+                                    </div>
+                                    `
+        axios
+            .post(apiUrl + "/api/rest/v1/file/pixiv/restore/all/" + targetId)
+            .then(response => {
+                console.log(response)
+                if (response.data.code == 200) {
+                    parentElement.innerHTML = `
+                                            <div class="col-xs-12 col-sm-12 col-md-12">
+                                                <div class="alert alert-success" style="margin:0" role="alert">
+                                                  <div class="d-flex">
+                                                    <div>
+                                                      <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>
+                                                         `+ response.data.message + `
+                                                      </div>
+                                                  </div>
+                                                </div>
+                                            </div>
                                                 `
                 } else {
                     document.getElementById("modal-danger-context").textContent = response.data.message
@@ -294,6 +568,41 @@ function action(targetId, actionEvent, currentTarget) {
         return
     }
     if ("preview" === actionEvent) {
+        var id = targetId;
+        var el = currentTarget;
+        var url = el.dataset.url || el.getAttribute('href');
+
+        var videoModal = document.getElementById('video-play');
+        var modal = new bootstrap.Modal(videoModal);
+
+        if (window._videoPlayer) {
+            window._videoPlayer.dispose();
+            window._videoPlayer = null;
+        }
+
+        modal.show();
+
+        videoModal.addEventListener('shown.bs.modal', function() {
+            window._videoPlayer = videojs('videojs-player', {
+                controls: true,
+                autoplay: true,
+                preload: 'auto',
+                fluid: true,
+                playbackRates: [0.5, 1, 1.5, 2],
+            });
+            window._videoPlayer.src({ src: url, type: 'video/mp4' });
+            window._videoPlayer.play();
+        });
+
+        videoModal.addEventListener('hidden.bs.modal', function() {
+            if (window._videoPlayer) {
+                window._videoPlayer.dispose();
+                window._videoPlayer = null;
+            }
+        });
+
+        // Record click
+        axios.post(apiUrl + request.entityUrl.click + id).catch(function(err) { console.log(err); });
         return
     }
     if ("heart" === actionEvent) {
@@ -327,10 +636,10 @@ function action(targetId, actionEvent, currentTarget) {
         var parentElement = el.parentElement.parentElement.parentElement.parentElement;
         if (id) {
             parentElement.innerHTML = `
-                                    <div class="col-xs-12 col-sm-12 col-md-12"> 
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
                                         <div class="spinner-border spinner-border-sm text-secondary" role="status"></div>
                                     </div>
-                                    
+
                                     `
             axios
                 .post(apiUrl + request.entityUrl.restore + id)
@@ -338,7 +647,7 @@ function action(targetId, actionEvent, currentTarget) {
                     console.log(response)
                     if (response.data.code == 200) {
                         parentElement.innerHTML = `
-                                            <div class="col-xs-12 col-sm-12 col-md-12"> 
+                                            <div class="col-xs-12 col-sm-12 col-md-12">
                                                 <div class="alert alert-success" style="margin:0" role="alert">
                                                   <div class="d-flex">
                                                     <div>
@@ -349,7 +658,7 @@ function action(targetId, actionEvent, currentTarget) {
                                                   </div>
                                                 </div>
                                             </div>
-                                               
+
                                                 `
                     } else {
                         document.getElementById("modal-danger-context").textContent = response.data.msg
@@ -379,7 +688,7 @@ function action(targetId, actionEvent, currentTarget) {
     if ("book-detail-click" === actionEvent) {
         const start = new Date().getTime();
         var contextElementId = "detail-context"
-        var detailContext = document.getElementById(contextElementId); 
+        var detailContext = document.getElementById(contextElementId);
         if (!targetId) return
         detailRequest.id = targetId
         detailRequest.pageNumber = currentTarget ? 1 : detailRequest.pageNumber
@@ -404,7 +713,7 @@ function action(targetId, actionEvent, currentTarget) {
                         var url = apiUrl + "/static-file/" + item.relativePath;
                         item.url = url
                         var template = Common.createTemplate(Common.templateId('bookPage'))
-                        var divHtml = template(item) 
+                        var divHtml = template(item)
                         const div = document.createElement('div');
                         div.innerHTML = divHtml;
                         detailContext.appendChild(div.firstChild)
@@ -476,7 +785,7 @@ function action(targetId, actionEvent, currentTarget) {
             })
     }
     if ('play2m3u8' == actionEvent) {
-        // 判断浏览器是否支持 HLS
+        // 判断浏览器是否支�?HLS
         if (Hls.isSupported()) {
             var video = document.getElementById('video');
             var hls = new Hls();
@@ -489,7 +798,7 @@ function action(targetId, actionEvent, currentTarget) {
                 console.log('Manifest parsed, starting playback');
             });
         } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            // 如果浏览器原生支持 HLS (如 Safari)
+            // 如果浏览器原生支�?HLS (�?Safari)
             video.src = `http://ip:8080/static-file/cache/m3u8/${targetId}/${targetId}.m3u8`;
         }
     }
@@ -521,7 +830,7 @@ function upload_build() {
 
             const processItem = async (item) => {
                 console.log(item);
-                // 在这里处理每个文件
+                // 在这里处理每个文�?
                 const form = new FormData();
                 form.append('file', item);
                 var requestForm = Common.getFormData('requestForm')
@@ -543,7 +852,7 @@ function upload_build() {
                 for (const item of files) {
                     await processItem(item);
                 }
-                console.log('所有项按顺序处理完成');
+                console.log('所有项按顺序处理完?');
             };
             processItemsInOrder();
             function reloadParentHtml(parent, uploadedCount, total, uploadedCountPercent, upload_btn_html) {
@@ -577,12 +886,12 @@ function buildGallery(item, url) {
                                   <div class="mb-3">
                                     <input type="text" class="form-control-plaintext" name="example-disabled-input"  value="${(item.code ? item.code : '')} ${item.realName}" disabled>
                                   </div>
-                                </div> 
-                                <div class="col"> 
+                                </div>
+                                <div class="col">
                                   <div class="mb-3">
                                     <input type="text" class="form-control-plaintext" name="example-disabled-input"  value="${(item.width && item.height) ? (item.width) + ` * ` + (item.height) : ``}" disabled>
                                   </div>
-                                </div> 
+                                </div>
                               </div>
                             </div>
                             <a ${(item.type?.startsWith("video") ? 'data-fancybox="' + item.id + '"' : 'data-fancybox="gallery"')}  href ="${apiUrl + url}" class="d-block card-img-top entity video-js " id="${item.id}" target-id="${item.id}" data-fslightbox="gallery" >
@@ -594,9 +903,9 @@ function buildGallery(item, url) {
                                    <div class="mb-3">
                                         ${item.heartCount > 0 ? `` : `<a target-id="${item.id}" class="btn btn-link delete-btn">delete</a>`}
                                   </div>
-                                </div> 
+                                </div>
                                 <div class="col-6">
-                                  <div class="mb-3"> 
+                                  <div class="mb-3">
                                     <input type="text" class="form-control-plaintext" name="example-disabled-input" placeholder="Readonly..." value="${item.createTime}" readonly="" disabled>
                                   </div>
                                 </div>
@@ -608,7 +917,7 @@ function buildGallery(item, url) {
                                     <div class="dropdown-menu">
                                       <a class="dropdown-item edit-btn" action-event='edit' target-id="${item.id}"  data-bs-toggle="modal" data-bs-target="#modal-info-view">
                                         edit
-                                      </a> 
+                                      </a>
                                       <a class="dropdown-item move-btn" action-event='move' target-id="${item.id}">
                                         move
                                       </a>
@@ -619,20 +928,20 @@ function buildGallery(item, url) {
                                         restore
                                       </a>
                                         ${item.m3u8Path ? `
-                                      
+
                                        <a class="dropdown-item " action-event='play2m3u8' target-id="${item.id}" data-bs-toggle="modal" data-bs-target="#video-play">
                                         play2m3u8
-                                      </a> 
+                                      </a>
                                       `: `
                                         <a class="dropdown-item " action-event='convert2m3u8' target-id="${item.id}"  >
                                         convert2m3u8
-                                      </a>                                      
+                                      </a>
                                       `}
 
                                       ${item.type.startsWith("video") ? `
                                       <a class="dropdown-item convert-format-btn" target-id="${item.id}">
                                         convert format
-                                      </a>  
+                                      </a>
                                       `: ``}
                                        ${item.type.startsWith("video") ? `
                                       <a class="dropdown-item copy-btn" target-id="${item.id}" data-bs-toggle="collapse" data-bs-target="#copy-info-view">
@@ -650,28 +959,28 @@ function buildGallery(item, url) {
                               </div>
                             </div>
                             <div class="container card-body extra-info-div"  >
-                        
+
                               <div class="row row-cards" style=" align-items: center;justify-content: space-between;">
 
                                     <div class="col">
                                         <div class="mb-3">
                                             <input type="text" class="form-control-plaintext" name="example-disabled-input" placeholder="Readonly..." value="${item.type}" readonly="" disabled>
-                                        </div> 
-                                    </div> 
-                                    <div class="col"> 
+                                        </div>
+                                    </div>
+                                    <div class="col">
                                         <div class="mb-3">
                                             <input type="text" class="form-control-plaintext" name="example-disabled-input" placeholder="Readonly..." value="${(item.size / 1024.0 / 1024.0).toFixed(1)}MB" readonly="" disabled>
-                                        </div> 
-                                    </div>  
-                                    <div class="col" > 
+                                        </div>
+                                    </div>
+                                    <div class="col" >
                                         <div class="mb-3">
                                             <a class="text-secondary click-count" disabled>
                                                 <!-- Download SVG icon from http://tabler-icons.io/i/eye -->
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 12a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M21 12c-2.4 4 -5.4 6 -9 6c-3.6 0 -6.6 -2 -9 -6c2.4 -4 5.4 -6 9 -6c3.6 0 6.6 2 9 6" /></svg>
                                                 ${item.clickCount}
-                                            </a> 
-                                        </div> 
-                                    </div> 
+                                            </a>
+                                        </div>
+                                    </div>
                                     <div class="col">
                                         <div class="mb-3">
                                             <a class="text-secondary heart-btn" target-id="${item.id}" >
@@ -679,8 +988,8 @@ function buildGallery(item, url) {
                                             <svg xmlns="http://www.w3.org/2000/svg" class="icon ${((item.heartByCurrentUserCount == 1) ? 'icon-filled text-red' : '')}" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" /></svg>
                                             ${item.heartCount}
                                             </a>
-                                        </div> 
-                                    </div>  
+                                        </div>
+                                    </div>
                               </div>
 
                             </div>
@@ -699,13 +1008,13 @@ function buildCard(item, url) {
                             <div class="row row-cards"   >
                                 <div class="col">
                                     <input type="text" class="form-control-plaintext" name="example-disabled-input" placeholder="Readonly..." value="${(item.size / 1024.0 / 1024.0).toFixed(1)}MB" readonly="" disabled>
-                                </div> 
+                                </div>
                                 <div class="col-6">
                                     <div class="mb-3">
                                         <input type="text" class="form-control" name="example-disabled-input" placeholder="Readonly..." value="${item.realName}" readonly="">
                                     </div>
                                 </div>
-                                
+
                                 <div class="col">
                                     <div class="mb-3">
                                         <button type="button" class="btn dropdown-toggle" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -731,7 +1040,7 @@ function buildCard(item, url) {
                                     </div>
                                 </div>
                             </div>
-                        </div> 
+                        </div>
                     </div>
                 </div>`
 }
@@ -750,9 +1059,9 @@ function delete_btn_build() {
             var parentElement = el.parentElement.parentElement.parentElement.parentElement;
             if (id && parentElement) {
                 parentElement.innerHTML = `
-                                    <div class="col-xs-12 col-sm-12 col-md-12"> 
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
                                         <div class="spinner-border spinner-border-sm text-secondary" role="status"></div>
-                                    </div> 
+                                    </div>
                                     `
                 axios
                     .delete(apiUrl + entityUrl.delete + id)
@@ -763,13 +1072,13 @@ function delete_btn_build() {
                             //document.getElementById("modal-success-context").textContent = response.data.msg
                             //document.getElementById("success-btn").click();
                             parentElement.innerHTML = `
-                                                <div class="col-xs-12 col-sm-12 col-md-12"> 
+                                                <div class="col-xs-12 col-sm-12 col-md-12">
                                                     <div class="alert alert-success" style="margin:0" role="alert">
                                                         <div class="d-flex">
                                                             <div>
                                                                 <!-- Download SVG icon from http://tabler-icons.io/i/check -->
                                                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>
-                                                                 `+ response.data.msg + `   
+                                                                 `+ response.data.msg + `
                                                                 </div>
                                                         </div>
                                                     </div>
@@ -934,10 +1243,10 @@ function restore_btn_build() {
             var parentElement = el.parentElement.parentElement.parentElement.parentElement;
             if (id) {
                 parentElement.innerHTML = `
-                                    <div class="col-xs-12 col-sm-12 col-md-12"> 
+                                    <div class="col-xs-12 col-sm-12 col-md-12">
                                         <div class="spinner-border spinner-border-sm text-secondary" role="status"></div>
                                     </div>
-                                    
+
                                     `
                 axios
                     .post(apiUrl + entityUrl.restore + id)
@@ -945,7 +1254,7 @@ function restore_btn_build() {
                         console.log(response)
                         if (response.data.code == 200) {
                             parentElement.innerHTML = `
-                                            <div class="col-xs-12 col-sm-12 col-md-12"> 
+                                            <div class="col-xs-12 col-sm-12 col-md-12">
                                                 <div class="alert alert-success" style="margin:0" role="alert">
                                                   <div class="d-flex">
                                                     <div>
@@ -956,7 +1265,7 @@ function restore_btn_build() {
                                                   </div>
                                                 </div>
                                             </div>
-                                               
+
                                                 `
                             //load_photo(request)
                         } else {
@@ -1156,6 +1465,7 @@ Array.from(document.getElementsByClassName("last-btn")).forEach(el => {
         load_data(request, 1)
     })
 })
+
 
 
 
