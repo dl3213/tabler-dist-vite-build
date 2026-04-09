@@ -57,12 +57,13 @@ var Common = {
     },
     decodeTemplateHtml: function (html) {
         const textarea = document.createElement('textarea');
-        textarea.innerHTML = html;
+        textarea.innerHTML = html; 
         return textarea.value;
     },
     templateId: function (id) {
         const element = document.querySelector(`[template-id="${id}"]`);
         if (!element) return '';
+        
         const html = element.outerHTML;
         return Common.decodeTemplateHtml(html);
     },
@@ -153,11 +154,13 @@ const templateCache = new Map();
  * @returns {Function} 渲染函数，接收数据对象并返回字符串
  */
 function compile(template) {
+
+    //console.log('Compiling template:', template);
+
   // 先把可能来自 outerHTML 的 HTML 实体解码回来，避免 &amp;&amp; 或 &quot; 等导致 JS 模板语法错误
   const decodedTemplate = Common && typeof Common.decodeTemplateHtml === 'function'
     ? Common.decodeTemplateHtml(template)
-    : template;
-
+    : template; 
   // 支持两种占位符语法：{expr} 和 ${expr}
   const convertedTemplate = decodedTemplate.replace(/\{(.*?)\}/g, (match, expr, offset) => {
     if (offset > 0 && decodedTemplate[offset - 1] === '$') {
@@ -172,6 +175,7 @@ function compile(template) {
     .replace(/`/g, '\\`');
 
   const body = `with(data) { return \`${escapedTemplate}\`; }`;
+  //console.log('Compiled template function body:', body);
   return new Function('data', body);
 }
 
@@ -182,11 +186,13 @@ function compile(template) {
  * @returns {string} 渲染结果
  */
 function render(template, data) {
+
+    //console.log('Rendering template :', template);
+
   const templateKey = Common && typeof Common.decodeTemplateHtml === 'function'
     ? Common.decodeTemplateHtml(template)
-    : template;
-
-  let fn = templateCache.get(templateKey);
+    : template; 
+  let fn = templateCache.get(templateKey); 
   if (!fn) {
     fn = compile(template);
     templateCache.set(templateKey, fn);  // 缓存编译结果

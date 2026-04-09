@@ -1,6 +1,8 @@
 <div class="container-xl">
     <div class="card-body">
         <form id="requestForm">
+            <input type="hidden" name="optionField" value="">
+            <input type="hidden" name="optionValue" value="">
             <div class="row row-cards">
                 <div class="col-12">
                     <div class="col">
@@ -24,8 +26,6 @@
                             <option value="size">size</option>
                             <option value="clickCount">clickCount</option>
                             <option value="videoDurationSecond">videoDurationSecond</option>
-
-
                         </select>
                     </div>
                     <div class="col">
@@ -36,31 +36,26 @@
                         </select>
                     </div>
                     <div class="col">
-                        option
-                        <select type="text" class="form-select query-item" name="optionField" value="">
-                            <option value="isDeleted">isDeleted</option>
-                            <option value="hash">hash</option>
-                            <option value="heart">heart</option>
-                            <option value="random">random</option>
-
-                        </select>
-                    </div>
-                    <div class="col">
-                        option value
-                        <select type="text" class="form-select query-item"  name="optionValue" value="1">
-                            <option value="0">0</option>
-                            <option value="1">1</option>
-                        </select>
+                        page size
+                        <input type="text" class="form-control page-size-input query-item" name="pageSize" value="30">
                     </div>
                 </div>
                 <div class="row" style="margin-bottom: 1%;">
                     <div class="col">
-                        page size
-                        <input type="text" class="form-control page-size-input query-item" name="pageSize" value="30">
+                        code
+                        <select type="text" class="form-select code-input query-item" id="code" name="code" value="">
+                            <option value="">all</option>
+                        </select>
                     </div>
                     <div class="col">
-                        code
-                        <input type="text" class="form-control code-input  query-item" id="code" name="code" value="">
+                        type
+                        <select type="text" class="form-select query-item" name="type" value="">
+                            <option value="">all</option>
+                            <option value="image">image</option>
+                            <option value="video">video</option>
+                            <option value="audio">audio</option>
+                            <option value="application">application</option>
+                        </select>
                     </div>
                     <div class="col">
                         keyword
@@ -68,6 +63,8 @@
                             <input type="text" name="keyword" class="form-control query-item" placeholder="Search…" value=""> 
                         </div>
                     </div>
+                </div>
+                <div class="row" style="margin-bottom: 1%;">
                     <div class="col">
                         upload
                         <a href="#" class="btn btn-primary" id="upload-btn" type="file" style="width: 100%;">
@@ -82,6 +79,29 @@
                             </svg>
                             Upload
                         </a>
+                    </div>
+                </div>
+                <div class="row" style="margin-bottom: 1%;">
+                    <div class="col-12">
+                        <div class="form-label">options</div>
+                        <div>
+                            <label class="form-check form-check-inline">
+                                <input class="form-check-input query-item option-check" type="checkbox" name="hash" value="1">
+                                <span class="form-check-label">hash</span>
+                            </label>
+                            <label class="form-check form-check-inline">
+                                <input class="form-check-input query-item option-check" type="checkbox" name="heart" value="1">
+                                <span class="form-check-label">heart</span>
+                            </label>
+                            <label class="form-check form-check-inline">
+                                <input class="form-check-input query-item option-check" type="checkbox" name="random" value="1">
+                                <span class="form-check-label">random</span>
+                            </label>
+                            <label class="form-check form-check-inline">
+                                <input class="form-check-input query-item option-check" type="checkbox" name="isDeleted" value="0">
+                                <span class="form-check-label">isDeleted</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
             </div>

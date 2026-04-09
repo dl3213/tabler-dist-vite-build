@@ -19,7 +19,7 @@
     <link href="/tabler/tabler.css?1746260450" rel="stylesheet" />
     <link href="/tabler/tabler-theme.css?1746260450" rel="stylesheet" />
     <link href="/css/fancybox.css?1692870487" rel="stylesheet" />
-    <link href="/lib/video.js/video-js.css" rel="stylesheet" />
+    <link href="/libs/video.js/video-js.css" rel="stylesheet" />
     <style>
         /* @import url('https://rsms.me/inter/inter.css'); */
         @import url('/css/inter.css');
@@ -498,7 +498,7 @@
 
     <script src="/js/fancybox.umd.js" type="text/javascript" charset="utf-8"></script>
     <script src="/js/typed.umd.js" type="text/javascript" charset="utf-8"></script>
-    <!-- <script src="/lib/video.js/video.min.js"></script> -->
+    <script src="/libs/video.js/video.min.js"></script>
     <script src="/js/common/common.js"></script>
     <script src="/js/biz/fileCommon.js"></script>
     <script src="/js/hls.js"></script>
@@ -546,6 +546,62 @@
                     });
 
                     load_data(request, 1)
+
+                    // Fetch code types and populate dropdown
+                    axios.get(apiUrl + '/api/rest/v1/file/codes')
+                        .then(function(resp) {
+                            if (resp.data.code === 200) {
+                                var codes = resp.data.data || [];
+                                var selectEl = document.getElementById('code');
+                                if (selectEl) {
+                                    selectEl.innerHTML = '<option value="">all</option>';
+                                    codes.forEach(function(c) {
+                                        var opt = document.createElement('option');
+                                        opt.value = c;
+                                        opt.textContent = c;
+                                        selectEl.appendChild(opt);
+                                    });
+                                }
+                            }
+                        })
+                        .catch(function(err) { console.log(err); });
+
+                    // Fetch type types and populate dropdown
+                    axios.get(apiUrl + '/api/rest/v1/file/types')
+                        .then(function(resp) {
+                            if (resp.data.code === 200) {
+                                var types = resp.data.data || [];
+                                var selectEl = document.querySelector('select[name="type"]');
+                                if (selectEl) {
+                                    selectEl.innerHTML = '<option value="">all</option>';
+                                    types.forEach(function(t) {
+                                        var opt = document.createElement('option');
+                                        opt.value = t;
+                                        opt.textContent = t;
+                                        selectEl.appendChild(opt);
+                                    });
+                                }
+                            }
+                        })
+                        .catch(function(err) { console.log(err); });
+
+                    // Handle option checkboxes (hash, heart, random, isDeleted)
+                    document.querySelectorAll('.option-check').forEach(function(checkbox) {
+                        checkbox.addEventListener('change', function(evt) {
+                            var form = document.getElementById('requestForm');
+                            if (!form) return;
+                            var checked = form.querySelector('.option-check:checked');
+                            if (checked) {
+                                form.querySelector('input[name="optionField"]').value = checked.name;
+                                form.querySelector('input[name="optionValue"]').value = checked.value;
+                            } else {
+                                form.querySelector('input[name="optionField"]').value = '';
+                                form.querySelector('input[name="optionValue"]').value = '';
+                            }
+                            request.pageNumber = 1;
+                            load_data(request, 1);
+                        });
+                    });
 
                     document.getElementById('tag-submit')?.addEventListener('click', function(e) {
                         var tagForm = document.getElementById('tag-form');

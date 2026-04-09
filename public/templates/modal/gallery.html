@@ -17,7 +17,7 @@
                     </div>
                 </div>
             </div>
-            <a href="{url}" class="d-block card-img-top entity" id="{id}" action-event="click" target-id="{id}" data-fancybox="{gallery}">
+            <a href="{href}" class="d-block card-img-top entity" id="{id}" action-event="click" target-id="{id}" {gallery} data-url="{dataUrl}" {modal} video="{video}">
                 <img src="{preview}" class="card-img-top">
             </a>
             <div class="card-body container base-info-div">
@@ -50,6 +50,9 @@
                                 </a>
                                 <a class="dropdown-item text-red" action-event="delete-pixiv" target-id="{id}" style="display:{code === 'pixiv' ? 'block' : 'none'}">
                                     delete-pixiv
+                                </a>
+                                <a class="dropdown-item" action-event="restore-pixiv" target-id="{id}" style="display:{code === 'pixiv' ? 'block' : 'none'}">
+                                    restore-pixiv
                                 </a>
                                 <a class="dropdown-item" action-event="restore" target-id="{id}">
                                     restore

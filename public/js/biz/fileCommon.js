@@ -1,4 +1,4 @@
-const apiUrl = Common.server.API_URL
+﻿const apiUrl = Common.server.API_URL
 
 
 var request = {
@@ -64,7 +64,7 @@ var contextHtml = document.getElementById('main-context');
 //     showCursor: false,
 // });
 window.addEventListener('resize', function (event) {
-    // 在这里编写你的代码来处理窗口大小变化
+    // 鍦ㄨ繖閲岀紪鍐欎綘鐨勪唬鐮佹潵澶勭悊绐楀彛澶у皬鍙樺寲
     requestAnimationFrame(() => {
         if (document.getElementById("pageTitle")) {
             document.getElementById("pageTitle").innerHTML = `${Common.checkBreakpoint()}`;
@@ -198,237 +198,7 @@ function action(targetId, actionEvent, currentTarget) {
             });
 
         var video = el.getAttribute('href') === 'javascript:void(0)';
-        if (video) {
-            var videoUrl = el.dataset.url;
-            var videoModalEl = document.getElementById('video-play');
-
-            // Fetch file detail for title and info
-            var fileDetailData = null;
-            axios.get(apiUrl + request.entityUrl.detail + id)
-                .then(function(resp) {
-                    if (resp.data.code === 200) {
-                        fileDetailData = resp.data.data;
-                        console.log('[video] file detail:', fileDetailData);
-                        // Update modal title
-                        var titleEl = document.getElementById('video-play-title');
-                        if (titleEl) titleEl.textContent = fileDetailData.realName || 'Video Player';
-                        // Update file info in custom controls
-                        var nameEl = document.getElementById('video-file-name');
-                        var sizeEl = document.getElementById('video-file-size');
-                        var urlEl = document.getElementById('video-file-url');
-                        if (nameEl) nameEl.textContent = fileDetailData.realName || '';
-                        // sizeDescription may not exist, compute from size if needed
-                        var sizeBytes = fileDetailData.size || 0;
-                        var sizeMB = sizeBytes / 1024 / 1024;
-                        var sizeText = fileDetailData.sizeDescription || (sizeMB >= 1 ? sizeMB.toFixed(1) + ' MB' : (sizeBytes / 1024).toFixed(1) + ' KB');
-                        if (sizeEl) sizeEl.textContent = sizeText;
-                        if (urlEl) urlEl.textContent = fileDetailData.relativePath || '';
-                    }
-                })
-                .catch(function(err) { console.log(err); });
-
-            if (window._videoPlayer) {
-                window._videoPlayer.dispose();
-                window._videoPlayer = null;
-            }
-            videoModalEl.addEventListener('shown.bs.modal', function() {
-                var playerEl = document.getElementById('videojs-player');
-                if (!playerEl) {
-                    var modalBody = videoModalEl.querySelector('.modal-body');
-                    if (modalBody) {
-                        modalBody.innerHTML = '<video id="videojs-player" class="video-js vjs-big-play-centered vjs-fluid" controls preload="auto" width="100%" height="100%"><p class="vjs-no-js">播放器不支持此视频。</p></video>';
-                    }
-                    playerEl = document.getElementById('videojs-player');
-                }
-                if (playerEl) {
-                    window._videoPlayer = videojs(playerEl, {
-                        controls: true,
-                        autoplay: true,
-                        preload: 'auto',
-                        fluid: true,
-                        playbackRates: [0.5, 1, 1.5, 2],
-                    });
-                    window._videoPlayer.src({ src: videoUrl, type: 'video/mp4' });
-                    window._videoPlayer.ready(function() {
-                        // Helper: format time as MM:SS or HH:MM:SS
-                        function formatTime(seconds, showSign) {
-                            var s = Math.abs(Math.floor(seconds));
-                            var h = Math.floor(s / 3600);
-                            var m = Math.floor((s % 3600) / 60);
-                            var sec = s % 60;
-                            var sign = showSign && seconds < 0 ? '-' : '';
-                            if (h > 0) {
-                                return sign + String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(sec).padStart(2, '0');
-                            }
-                            return sign + String(m).padStart(2, '0') + ':' + String(sec).padStart(2, '0');
-                        }
-
-                        // Inject CSS for video control buttons & time display
-                        var style = document.createElement('style');
-                        style.id = 'video-control-btn-css';
-                        style.textContent = `
-                            #video-custom-controls .seek-btn,#video-custom-controls .copy-time-btn{display:inline-flex!important;align-items:center;padding:6px 14px!important;font-size:14px!important;color:#fff!important;cursor:pointer!important;border:none!important;border-radius:6px!important;background:rgba(43,51,63,0.85)!important;transition:all 0.15s ease!important}
-                            #video-custom-controls .seek-btn:hover,#video-custom-controls .copy-time-btn:hover{background:rgba(63,71,83,0.95)!important;transform:scale(1.05)!important}
-                            #video-custom-controls .seek-btn{padding:6px 16px!important;font-size:16px!important;font-weight:bold!important}
-                            #video-custom-controls .video-time{display:inline-flex!important;align-items:center!important;padding:0 10px!important;font-size:14px!important;color:#ccc!important;font-variant-numeric:tabular-nums!important}
-                            .vjs-time-display{display:flex!important;align-items:center!important;font-size:13px!important;color:#fff!important;opacity:.85!important;line-height:1!important}
-                            .vjs-time-display .vjs-current-time{order:1!important}
-                            .vjs-time-display .vjs-time-separator{order:2!important;display:none}
-                            .vjs-time-display .vjs-duration{order:3!important;display:none}
-                            .vjs-time-display .vjs-remaining-time{order:4!important;display:none}
-                            .video-time-left{display:inline-flex!important;align-items:center!important;padding:0 6px!important;font-size:13px!important;color:#fff!important;opacity:.85!important}
-                            .video-time-right{display:inline-flex!important;align-items:center!important;padding:0 6px!important;font-size:13px!important;color:#fff!important;opacity:.85!important}
-                        `;
-                        document.head.appendChild(style);
-
-                        // Remove existing buttons to avoid duplication
-                        document.querySelectorAll('.copy-time-btn,.seek-btn,.video-time-left,.video-time-right').forEach(function(b){ b.remove(); });
-
-                        // Time display elements
-                        var timeLeft = document.createElement('div');
-                        timeLeft.className = 'vjs-control vjs-button video-time-left';
-                        timeLeft.style.cssText = 'display:inline-flex!important;align-items:center;padding:0 6px;font-size:13px;color:#fff;opacity:.85;cursor:default;border:none;background:none;box-shadow:none';
-                        timeLeft.innerHTML = '<span class="vjs-current-time-display">00:00</span>';
-
-                        var timeRight = document.createElement('div');
-                        timeRight.className = 'vjs-control vjs-button video-time-right';
-                        timeRight.style.cssText = 'display:inline-flex!important;align-items:center;padding:0 6px;font-size:13px;color:#fff;opacity:.85;cursor:default;border:none;background:none;box-shadow:none';
-                        timeRight.innerHTML = '<span>-00:00</span>';
-
-                        // Update time display
-                        function updateTimeDisplay() {
-                            if (!window._videoPlayer) return;
-                            var current = window._videoPlayer.currentTime() || 0;
-                            var duration = window._videoPlayer.duration() || 0;
-                            var remaining = duration - current;
-                            var currentEl = timeLeft.querySelector('span');
-                            var remainingEl = timeRight.querySelector('span');
-                            if (currentEl) currentEl.textContent = formatTime(current, false);
-                            if (remainingEl) remainingEl.textContent = '-' + formatTime(remaining, false);
-                        }
-
-                        // Helper: create seek button
-                        function addSeekBtn(seconds, label) {
-                            var btn = document.createElement('div');
-                            btn.className = 'vjs-control vjs-button seek-btn';
-                            btn.textContent = label;
-                            btn.style.cursor = 'pointer';
-                            btn.style.display = 'flex';
-                            btn.style.alignItems = 'center';
-                            btn.style.justifyContent = 'center';
-                            btn.style.color = '#fff';
-                            btn.addEventListener('click', function() {
-                                var newTime = window._videoPlayer.currentTime() + seconds;
-                                var duration = window._videoPlayer.duration() || 0;
-                                if (newTime < 0) newTime = 0;
-                                if (newTime > duration) newTime = duration;
-                                window._videoPlayer.currentTime(newTime);
-                            });
-                            return btn;
-                        }
-
-                        // Copy-time button
-                        var btn = document.createElement('div');
-                        btn.className = 'vjs-control vjs-button copy-time-btn';
-                        btn.textContent = '复制时间';
-                        btn.style.cursor = 'pointer';
-                        btn.style.display = 'flex';
-                        btn.style.alignItems = 'center';
-                        btn.style.justifyContent = 'center';
-                        btn.style.padding = '0 6px';
-                        btn.style.fontSize = '14px';
-                        btn.style.color = '#fff';
-                        btn.style.backgroundColor = 'rgba(43, 51, 63, 0.8)';
-                        btn.style.borderRadius = '4px';
-                        btn.addEventListener('click', function() {
-                            var t = window._videoPlayer.currentTime();
-                            var h = Math.floor(t / 3600);
-                            var m = Math.floor((t % 3600) / 60);
-                            var s = Math.floor(t % 60);
-                            var ts = h > 0
-                                ? String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0')
-                                : String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
-                            navigator.clipboard.writeText(ts).then(function() {
-                                var span = btn;
-                                if (span) span.textContent = '✓ 已复制';
-                                setTimeout(function() {
-                                    var sp2 = btn;
-                                    if (sp2) sp2.textContent = '复制时间';
-                                }, 1000);
-                            });
-                        });
-
-                        // Append buttons to custom footer row instead of ControlBar
-                        var customControls = document.getElementById('video-custom-controls');
-                        var controlBar = window._videoPlayer.getChild('ControlBar');
-                        if (customControls) {
-                            // Insert time display: left of progress bar = current time, right = remaining time
-                            if (controlBar) {
-                                var progressControl = controlBar.getChild('ProgressControl');
-                                if (progressControl) {
-                                    var progressEl = progressControl.el();
-                                    // Hide default time displays
-                                    var currentTimeDisplay = controlBar.getChild('CurrentTimeDisplay');
-                                    var durationDisplay = controlBar.getChild('DurationDisplay');
-                                    var remainingDisplay = controlBar.getChild('RemainingTimeDisplay');
-                                    [currentTimeDisplay, durationDisplay, remainingDisplay].forEach(function(c) {
-                                        if (c && c.el_) c.el_.style.display = 'none';
-                                    });
-                                    // Insert timeLeft before progress bar
-                                    progressEl.parentNode.insertBefore(timeLeft, progressEl);
-                                    // Insert timeRight after progress bar
-                                    progressEl.parentNode.insertBefore(timeRight, progressEl.nextSibling);
-                                    // Start update loop
-                                    updateTimeDisplay();
-                                    window._videoPlayer.on('timeupdate', updateTimeDisplay);
-                                }
-                            }
-                            // Add custom buttons to footer row
-                            customControls.innerHTML = ''; // Clear placeholder
-                            customControls.appendChild(addSeekBtn(-10, '-10'));
-                            customControls.appendChild(btn);
-                            customControls.appendChild(addSeekBtn(10, '+10'));
-                            console.log('[video] time display & buttons added to footer');
-
-                            // Add start/end time capture buttons
-                            var btnSetStart = document.getElementById('btn-set-start');
-                            var btnSetEnd = document.getElementById('btn-set-end');
-                            var inputStart = document.getElementById('video-input-1');
-                            var inputEnd = document.getElementById('video-input-2');
-
-                            // Clear input fields when entering video page
-                            if (inputStart) inputStart.value = '';
-                            if (inputEnd) inputEnd.value = '';
-
-                            if (btnSetStart && inputStart) {
-                                btnSetStart.addEventListener('click', function() {
-                                    var t = window._videoPlayer.currentTime() || 0;
-                                    inputStart.value = formatTime(t, false);
-                                });
-                            }
-                            if (btnSetEnd && inputEnd) {
-                                btnSetEnd.addEventListener('click', function() {
-                                    var t = window._videoPlayer.currentTime() || 0;
-                                    inputEnd.value = formatTime(t, false);
-                                });
-                            }
-                        } else {
-                            console.log('[video] customControls NOT found');
-                        }
-                    });
-                    window._videoPlayer.play();
-                }
-            });
-
-            videoModalEl.addEventListener('hidden.bs.modal', function() {
-                if (window._videoPlayer) {
-                    window._videoPlayer.dispose();
-                    window._videoPlayer = null;
-                }
-            });
-            return;
-        } else {
-        }
+        if (video) { initVideoPlayer(el, id); }
     }
     if ("move" === actionEvent) {
         return
@@ -615,7 +385,7 @@ function action(targetId, actionEvent, currentTarget) {
             tagForm.querySelector('input[name="id"]').value = id;
             tagForm.querySelector('input[name="tag"]').value = '';
         }
-        // 请求全部 tag 并渲染到弹窗
+        // 璇锋眰鍏ㄩ儴 tag 骞舵覆鏌撳埌寮圭獥
         axios.get(apiUrl + '/api/rest/v1/file/tag/all')
             .then(resp => {
                 if (resp.data.code === 200) {
@@ -798,7 +568,7 @@ function action(targetId, actionEvent, currentTarget) {
                 console.log('Manifest parsed, starting playback');
             });
         } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            // 如果浏览器原生支�?HLS (�?Safari)
+            //  如果浏览器原生支�?HLS (�?Safari)
             video.src = `http://ip:8080/static-file/cache/m3u8/${targetId}/${targetId}.m3u8`;
         }
     }
@@ -830,7 +600,7 @@ function upload_build() {
 
             const processItem = async (item) => {
                 console.log(item);
-                // 在这里处理每个文�?
+                // 鍦ㄨ繖閲屽鐞嗘瘡涓枃锟?
                 const form = new FormData();
                 form.append('file', item);
                 var requestForm = Common.getFormData('requestForm')
@@ -852,7 +622,7 @@ function upload_build() {
                 for (const item of files) {
                     await processItem(item);
                 }
-                console.log('所有项按顺序处理完?');
+                console.log('鎵€鏈夐」鎸夐『搴忓鐞嗗畬?');
             };
             processItemsInOrder();
             function reloadParentHtml(parent, uploadedCount, total, uploadedCountPercent, upload_btn_html) {
@@ -1465,6 +1235,426 @@ Array.from(document.getElementsByClassName("last-btn")).forEach(el => {
         load_data(request, 1)
     })
 })
+
+// ==================== video.js player initializer ====================
+function initVideoPlayer(el, id) {
+    var videoUrl = el.dataset.url;
+    var videoModalEl = document.getElementById('video-play');
+
+    var fileDetailData = null;
+    axios.get(apiUrl + request.entityUrl.detail + id)
+        .then(function(resp) {
+            if (resp.data.code === 200) {
+                fileDetailData = resp.data.data;
+                console.log('[video] file detail:', fileDetailData);
+                var titleEl = document.getElementById('video-play-title');
+                if (titleEl) titleEl.textContent = fileDetailData.realName || 'Video Player';
+                var nameEl = document.getElementById('video-file-name');
+                var sizeEl = document.getElementById('video-file-size');
+                var urlEl = document.getElementById('video-file-url');
+                if (nameEl) nameEl.textContent = fileDetailData.realName || '';
+                var sizeBytes = fileDetailData.size || 0;
+                var sizeMB = sizeBytes / 1024 / 1024;
+                var sizeText = fileDetailData.sizeDescription || (sizeMB >= 1 ? sizeMB.toFixed(1) + ' MB' : (sizeBytes / 1024).toFixed(1) + ' KB');
+                if (sizeEl) sizeEl.textContent = sizeText;
+                if (urlEl) urlEl.textContent = videoUrl || '';
+            }
+        });
+
+    // Destroy old player on modal hidden
+    videoModalEl.addEventListener('hidden.bs.modal', function() {
+        if (window._videoPlayer) {
+            window._videoPlayer.dispose();
+            window._videoPlayer = null;
+        }
+    });
+
+    videoModalEl.addEventListener('shown.bs.modal', function() {
+        var playerEl = document.getElementById('videojs-player');
+        if (!playerEl) {
+            var modalBody = videoModalEl.querySelector('.modal-body');
+            if (modalBody) {
+                modalBody.innerHTML = '<video id="videojs-player" class="video-js vjs-big-play-centered vjs-fluid" controls preload="auto" width="100%" height="100%"><p class="vjs-no-js">您的浏览器不支持视频播放<p></video>';
+            }
+            playerEl = document.getElementById('videojs-player');
+        }
+        if (playerEl) {
+            if (window._videoPlayer) {
+                window._videoPlayer.dispose();
+            }
+            window._videoPlayer = videojs(playerEl, {
+                controls: true,
+                autoplay: true,
+                preload: 'auto',
+                fluid: true,
+                playbackRates: [0.5, 1, 1.5, 2],
+            });
+            window._videoPlayer.src({ src: videoUrl, type: 'video/mp4' });
+            window._videoPlayer.ready(function() {
+                function formatTime(seconds, showSign) {
+                    var s = Math.abs(Math.floor(seconds));
+                    var h = Math.floor(s / 3600);
+                    var m = Math.floor((s % 3600) / 60);
+                    var sec = s % 60;
+                    var sign = showSign && seconds < 0 ? '-' : '';
+                    if (h > 0) {
+                        return sign + String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(sec).padStart(2, '0');
+                    }
+                    return sign + String(m).padStart(2, '0') + ':' + String(sec).padStart(2, '0');
+                }
+
+                var style = document.createElement('style');
+                style.id = 'video-control-btn-css';
+                style.textContent = `
+                    #video-custom-controls .seek-btn,#video-custom-controls .vjs-ctrl-btn{display:inline-flex!important;align-items:center;padding:6px 14px!important;font-size:14px!important;color:#fff!important;cursor:pointer!important;border:none!important;border-radius:6px!important;background:rgba(43,51,63,0.85)!important;transition:all 0.15s ease!important;user-select:none!important}
+                    #video-custom-controls .seek-btn:hover,#video-custom-controls .vjs-ctrl-btn:hover{background:rgba(63,71,83,0.95)!important;transform:scale(1.05)!important}
+                    #video-custom-controls .vjs-ctrl-btn{font-size:13px!important;padding:6px 10px!important;gap:4px!important}
+                    #video-custom-controls .vjs-ctrl-btn svg{display:inline-block;vertical-align:middle}
+                    #video-custom-controls .vjs-ctrl-loaded{transition:height 0.15s,top 0.15s}
+                    #video-custom-controls .vjs-ctrl-played{transition:width 0.1s linear}
+                    #video-custom-controls .vjs-ctrl-rate-menu{animation:fadeInUp 0.15s ease}
+                    @keyframes fadeInUp{from{opacity:0;transform:translateX(-50%) translateY(4px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+                    .video-js .vjs-control-bar{display:none!important}
+                    .vjs-time-display{display:flex!important;align-items:center!important;font-size:13px!important;color:#fff!important;opacity:.85!important;line-height:1!important}
+                    .vjs-time-display .vjs-current-time{order:1!important}
+                    .vjs-time-display .vjs-time-separator{order:2!important;display:none}
+                    .vjs-time-display .vjs-duration{order:3!important;display:none}
+                    .vjs-time-display .vjs-remaining-time{order:4!important;display:none}
+                    .video-time-left{display:inline-flex!important;align-items:center!important;padding:0 6px!important;font-size:13px!important;color:#fff!important;opacity:.85!important}
+                    .video-time-right{display:inline-flex!important;align-items:center!important;padding:0 6px!important;font-size:13px!important;color:#fff!important;opacity:.85!important}
+                `;
+                document.head.appendChild(style);
+
+                document.querySelectorAll('.seek-btn,.video-time-left,.video-time-right').forEach(function(b){ b.remove(); });
+
+                var timeLeft = document.createElement('div');
+                timeLeft.className = 'vjs-control vjs-button video-time-left';
+                timeLeft.style.cssText = 'display:inline-flex!important;align-items:center;padding:0 6px;font-size:13px;color:#fff;opacity:.85;cursor:default;border:none;background:none;box-shadow:none';
+                timeLeft.innerHTML = '<span class="vjs-current-time-display">00:00</span>';
+
+                var timeRight = document.createElement('div');
+                timeRight.className = 'vjs-control vjs-button video-time-right';
+                timeRight.style.cssText = 'display:inline-flex!important;align-items:center;padding:0 6px;font-size:13px;color:#fff;opacity:.85;cursor:default;border:none;background:none;box-shadow:none';
+                timeRight.innerHTML = '<span>-00:00</span>';
+
+                function updateTimeDisplay() {
+                    if (!window._videoPlayer) return;
+                    var current = window._videoPlayer.currentTime() || 0;
+                    var duration = window._videoPlayer.duration() || 0;
+                    var remaining = duration - current;
+                    var currentEl = timeLeft.querySelector('span');
+                    var remainingEl = timeRight.querySelector('span');
+                    if (currentEl) currentEl.textContent = formatTime(current, false);
+                    if (remainingEl) remainingEl.textContent = '-' + formatTime(remaining, false);
+                }
+
+                function addSeekBtn(seconds, label) {
+                    var btn = document.createElement('div');
+                    btn.className = 'vjs-control vjs-button seek-btn';
+                    btn.textContent = label;
+                    btn.style.cursor = 'pointer';
+                    btn.style.display = 'flex';
+                    btn.style.alignItems = 'center';
+                    btn.style.justifyContent = 'center';
+                    btn.style.color = '#fff';
+                    btn.addEventListener('click', function() {
+                        var newTime = window._videoPlayer.currentTime() + seconds;
+                        var duration = window._videoPlayer.duration() || 0;
+                        if (newTime < 0) newTime = 0;
+                        if (newTime > duration) newTime = duration;
+                        window._videoPlayer.currentTime(newTime);
+                    });
+                    return btn;
+                }
+
+                var customControls = document.getElementById('video-custom-controls');
+                var controlBar = window._videoPlayer.getChild('ControlBar');
+                if (customControls) {
+                    if (controlBar) {
+                        var progressControl = controlBar.getChild('ProgressControl');
+                        if (progressControl) {
+                            var progressEl = progressControl.el();
+                            var currentTimeDisplay = controlBar.getChild('CurrentTimeDisplay');
+                            var durationDisplay = controlBar.getChild('DurationDisplay');
+                            var remainingDisplay = controlBar.getChild('RemainingTimeDisplay');
+                            [currentTimeDisplay, durationDisplay, remainingDisplay].forEach(function(c) {
+                                if (c && c.el_) c.el_.style.display = 'none';
+                            });
+                            progressEl.parentNode.insertBefore(timeLeft, progressEl);
+                            progressEl.parentNode.insertBefore(timeRight, progressEl.nextSibling);
+                            updateTimeDisplay();
+                            window._videoPlayer.on('timeupdate', updateTimeDisplay);
+                        }
+                    }
+                    customControls.innerHTML = '';
+
+                    function makeCtrlBtn(iconSvg, label, onClick) {
+                        var b = document.createElement('div');
+                        b.className = 'vjs-control vjs-button vjs-ctrl-btn';
+                        b.style.cssText = 'display:inline-flex!important;align-items:center;padding:6px 10px!important;font-size:13px!important;color:#fff!important;cursor:pointer!important;border:none!important;border-radius:6px!important;background:rgba(43,51,63,0.85)!important;transition:all 0.15s ease!important;gap:4px!important;user-select:none!important';
+                        b.innerHTML = iconSvg + '<span style="font-size:12px;line-height:1">' + label + '</span>';
+                        b.addEventListener('click', onClick);
+                        return b;
+                    }
+
+                    // --- PlayToggle ---
+                    var playToggle = controlBar.getChild('PlayToggle');
+                    if (playToggle) {
+                        var playBtn = makeCtrlBtn(
+                            '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>',
+                            '播放',
+                            function() { playToggle.handleClick(); }
+                        );
+                        window._videoPlayer.on('play', function() {
+                            playBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg><span style="font-size:12px;line-height:1">暂停</span>';
+                        });
+                        window._videoPlayer.on('pause', function() {
+                            playBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg><span style="font-size:12px;line-height:1">播放</span>';
+                        });
+                        customControls.appendChild(playBtn);
+                    }
+
+                    // --- CurrentTimeDisplay + DurationDisplay ---
+                    var ctDiv = document.createElement('div');
+                    ctDiv.className = 'vjs-control vjs-button vjs-ctrl-btn';
+                    ctDiv.style.cssText = 'display:inline-flex!important;align-items:center;padding:6px 8px!important;font-size:13px!important;color:#fff!important;cursor:default!important;border:none!important;border-radius:6px!important;background:rgba(43,51,63,0.85)!important;user-select:none!important;min-width:52px;justify-content:center';
+                    ctDiv.innerHTML = '<span>00:00</span>';
+                    customControls.appendChild(ctDiv);
+
+                    var sep1 = document.createElement('span');
+                    sep1.textContent = '/';
+                    sep1.style.cssText = 'color:#888;font-size:13px;padding:0 2px;user-select:none';
+                    customControls.appendChild(sep1);
+
+                    var durDiv = document.createElement('div');
+                    durDiv.className = 'vjs-control vjs-button vjs-ctrl-btn';
+                    durDiv.style.cssText = 'display:inline-flex!important;align-items:center;padding:6px 8px!important;font-size:13px!important;color:#fff!important;cursor:default!important;border:none!important;border-radius:6px!important;background:rgba(43,51,63,0.85)!important;user-select:none!important;min-width:52px;justify-content:center';
+                    durDiv.innerHTML = '<span>00:00</span>';
+                    customControls.appendChild(durDiv);
+
+                    window._videoPlayer.on('timeupdate', function() {
+                        var cur = window._videoPlayer.currentTime() || 0;
+                        var dur2 = window._videoPlayer.duration() || 0;
+                        var curH = Math.floor(cur / 3600);
+                        var curM = Math.floor((cur % 3600) / 60);
+                        var curS = Math.floor(cur % 60);
+                        var durH = Math.floor(dur2 / 3600);
+                        var durM = Math.floor((dur2 % 3600) / 60);
+                        var durS = Math.floor(dur2 % 60);
+                        var fmtTime = function(h, m, s) {
+                            return (h > 0 ? String(h).padStart(2,'0')+':' : '') + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+                        };
+                        ctDiv.querySelector('span').textContent = fmtTime(curH, curM, curS);
+                        durDiv.querySelector('span').textContent = fmtTime(durH, durM, durS);
+                    });
+
+                    // --- Progress bar ---
+                    var progWrap = document.createElement('div');
+                    progWrap.style.cssText = 'flex:1;min-width:120px;max-width:400px;height:20px;display:flex;align-items:center;cursor:pointer;margin:0 8px;position:relative';
+                    progWrap.innerHTML = '<div style="position:relative;width:100%;height:6px;background:rgba(255,255,255,0.15);border-radius:3px;overflow:visible"><div class="vjs-ctrl-loaded" style="position:absolute;top:0;left:0;height:100%;background:rgba(255,255,255,0.3);border-radius:3px;width:0;transition:width 0.3s"></div><div class="vjs-ctrl-played" style="position:absolute;top:0;left:0;height:100%;background:#409fff;border-radius:3px;width:0"></div><div class="vjs-ctrl-thumb" style="position:absolute;top:50%;transform:translate(-50%,-50%);width:12px;height:12px;background:#fff;border-radius:50%;box-shadow:0 1px 4px rgba(0,0,0,0.5);opacity:0;transition:opacity 0.15s;pointer-events:none"></div></div>';
+                    var loadedEl = progWrap.querySelector('.vjs-ctrl-loaded');
+                    var playedEl = progWrap.querySelector('.vjs-ctrl-played');
+                    var thumbEl = progWrap.querySelector('.vjs-ctrl-thumb');
+
+                    function updateProgress() {
+                        if (!window._videoPlayer) return;
+                        var cur = window._videoPlayer.currentTime() || 0;
+                        var dur = window._videoPlayer.duration() || 0;
+                        if (dur <= 0) return;
+                        var pct = (cur / dur * 100).toFixed(2) + '%';
+                        playedEl.style.width = pct;
+                        thumbEl.style.left = pct;
+                    }
+                    function updateBuffered() {
+                        if (!window._videoPlayer) return;
+                        var buf = window._videoPlayer.bufferedPercent() || 0;
+                        loadedEl.style.width = (buf * 100).toFixed(2) + '%';
+                    }
+                    window._videoPlayer.on('timeupdate', updateProgress);
+                    window._videoPlayer.on('progress', updateBuffered);
+                    window._videoPlayer.on('loadedmetadata', function() { updateProgress(); updateBuffered(); });
+                    progWrap.addEventListener('mouseenter', function() { thumbEl.style.opacity = '1'; });
+                    progWrap.addEventListener('mouseleave', function() { thumbEl.style.opacity = '0'; });
+                    progWrap.addEventListener('click', function(e) {
+                        var rect = progWrap.querySelector('div').getBoundingClientRect();
+                        var pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+                        window._videoPlayer.currentTime(pct * (window._videoPlayer.duration() || 0));
+                    });
+                    customControls.appendChild(progWrap);
+
+                    // --- Volume ---
+                    var volWrap = document.createElement('div');
+                    volWrap.style.cssText = 'display:inline-flex!important;align-items:center;gap:4px;background:rgba(43,51,63,0.85);border-radius:6px;padding:0 8px;height:30px';
+                    var volBtn = document.createElement('div');
+                    volBtn.className = 'vjs-control vjs-button vjs-ctrl-btn';
+                    volBtn.style.cssText = 'display:inline-flex!important;align-items:center;padding:0!important;font-size:13px!important;color:#fff!important;cursor:pointer!important;border:none!important;background:none!important;gap:4px!important;user-select:none!important';
+                    volBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07" class="vol-path"/></svg><span style="font-size:12px;line-height:1;min-width:24px">音量</span>';
+                    volBtn.addEventListener('click', function() {
+                        var p = window._videoPlayer;
+                        if (p.muted()) {
+                            p.muted(false);
+                            volBtn.querySelector('span').textContent = '音量';
+                            volBtn.querySelector('.vol-path').setAttribute('d', 'M15.54 8.46a5 5 0 0 1 0 7.07');
+                        } else {
+                            p.muted(true);
+                            volBtn.querySelector('span').textContent = '静音';
+                            volBtn.querySelector('.vol-path').setAttribute('d', 'M11 5 6 9 2 9 2 15 6 15 11 19 11 5');
+                        }
+                    });
+                    volWrap.appendChild(volBtn);
+                    var volSlider = document.createElement('div');
+                    volSlider.style.cssText = 'position:relative;width:70px;height:4px;background:rgba(255,255,255,0.2);border-radius:2px;cursor:pointer';
+                    var volFill = document.createElement('div');
+                    volFill.className = 'vol-fill';
+                    volFill.style.cssText = 'position:absolute;top:0;left:0;height:100%;background:#409fff;border-radius:2px;width:100%';
+                    var volThumb = document.createElement('div');
+                    volThumb.className = 'vol-thumb';
+                    volThumb.style.cssText = 'position:absolute;top:50%;transform:translate(-50%,-50%);width:10px;height:10px;background:#fff;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,0.4)';
+                    volSlider.appendChild(volFill);
+                    volSlider.appendChild(volThumb);
+                    function updateVolSlider() {
+                        var p = window._videoPlayer;
+                        if (!p) return;
+                        var v = p.muted() ? 0 : (p.volume() || 0);
+                        var pct = (v * 100).toFixed(2) + '%';
+                        volFill.style.width = pct;
+                        volThumb.style.left = pct;
+                    }
+                    volSlider.addEventListener('click', function(e) {
+                        var rect = volSlider.getBoundingClientRect();
+                        var pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+                        window._videoPlayer.muted(false);
+                        window._videoPlayer.volume(pct);
+                        updateVolSlider();
+                    });
+                    volSlider.addEventListener('mousedown', function(e) {
+                        function onMove(ev) {
+                            var rect = volSlider.getBoundingClientRect();
+                            var pct = Math.max(0, Math.min(1, (ev.clientX - rect.left) / rect.width));
+                            window._videoPlayer.muted(false);
+                            window._videoPlayer.volume(pct);
+                            updateVolSlider();
+                        }
+                        function onUp() {
+                            document.removeEventListener('mousemove', onMove);
+                            document.removeEventListener('mouseup', onUp);
+                        }
+                        document.addEventListener('mousemove', onMove);
+                        document.addEventListener('mouseup', onUp);
+                    });
+                    volWrap.appendChild(volSlider);
+                    customControls.appendChild(volWrap);
+                    window._videoPlayer.on('volumechange', updateVolSlider);
+                    updateVolSlider();
+
+                    // --- PlaybackRate ---
+                    var playbackRate = controlBar.getChild('PlaybackRateMenuButton');
+                    var rates = playbackRate && playbackRate.rates_ ? playbackRate.rates_.slice() : [0.5, 1, 1.5, 2];
+                    var currentRate = window._videoPlayer.playbackRate ? window._videoPlayer.playbackRate() : 1;
+                    var rateBtnWrap = document.createElement('div');
+                    rateBtnWrap.style.cssText = 'position:relative;display:inline-flex;align-items:center';
+                    var rateBtn = document.createElement('div');
+                    rateBtn.className = 'vjs-control vjs-button vjs-ctrl-btn';
+                    rateBtn.style.cssText = 'display:inline-flex!important;align-items:center;padding:6px 10px!important;font-size:13px!important;color:#fff!important;cursor:pointer!important;border:none!important;border-radius:6px!important;background:rgba(43,51,63,0.85)!important;transition:all 0.15s ease!important;gap:4px!important;user-select:none!important';
+                    rateBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span style="font-size:12px;line-height:1">' + currentRate + 'x</span>';
+                    rateBtnWrap.appendChild(rateBtn);
+                    var rateMenu = document.createElement('div');
+                    rateMenu.className = 'vjs-ctrl-rate-menu';
+                    rateMenu.style.cssText = 'display:none;position:absolute;bottom:100%;left:50%;transform:translateX(-50%);margin-bottom:6px;background:rgba(30,30,30,0.97);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:6px 0;min-width:90px;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,0.5);text-align:center';
+                    rates.forEach(function(r) {
+                        var item = document.createElement('div');
+                        item.className = 'vjs-ctrl-rate-item';
+                        item.style.cssText = 'padding:7px 14px;font-size:13px;color:#ccc;cursor:pointer;border-radius:4px;margin:2px 6px;transition:background 0.15s';
+                        item.textContent = r + 'x';
+                        if (r === currentRate) { item.style.color = '#409fff'; item.style.fontWeight = 'bold'; }
+                        item.addEventListener('click', function(e) {
+                            e.stopPropagation();
+                            window._videoPlayer.playbackRate(r);
+                            rateMenu.querySelectorAll('.vjs-ctrl-rate-item').forEach(function(i) { i.style.color = '#ccc'; i.style.fontWeight = 'normal'; });
+                            item.style.color = '#409fff';
+                            item.style.fontWeight = 'bold';
+                            rateBtn.querySelector('span').textContent = r + 'x';
+                            rateMenu.style.display = 'none';
+                        });
+                        item.addEventListener('mouseenter', function() { item.style.background = 'rgba(255,255,255,0.08)'; item.style.color = '#fff'; });
+                        item.addEventListener('mouseleave', function() {
+                            item.style.background = '';
+                            item.style.color = (r === window._videoPlayer.playbackRate()) ? '#409fff' : '#ccc';
+                            item.style.fontWeight = (r === window._videoPlayer.playbackRate()) ? 'bold' : 'normal';
+                        });
+                        rateMenu.appendChild(item);
+                    });
+                    rateBtnWrap.appendChild(rateMenu);
+                    rateBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        rateMenu.style.display = (rateMenu.style.display === 'block') ? 'none' : 'block';
+                    });
+                    document.addEventListener('click', function(e) {
+                        if (!rateBtnWrap.contains(e.target)) { rateMenu.style.display = 'none'; }
+                    });
+                    window._videoPlayer.on('ratechange', function() {
+                        rateBtn.querySelector('span').textContent = window._videoPlayer.playbackRate() + 'x';
+                    });
+                    customControls.appendChild(rateBtnWrap);
+
+                    // --- PictureInPicture ---
+                    var pipToggle = controlBar.getChild('PictureInPictureToggle');
+                    if (pipToggle) {
+                        var pipBtn = makeCtrlBtn(
+                            '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><rect x="12" y="9" width="8" height="6" rx="1"/></svg>',
+                            'PiP',
+                            function() { pipToggle.handleClick(); }
+                        );
+                        customControls.appendChild(pipBtn);
+                    }
+
+                    // --- Fullscreen ---
+                    var fsToggle = controlBar.getChild('FullscreenToggle');
+                    if (fsToggle) {
+                        var fsBtn = makeCtrlBtn(
+                            '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>',
+                            '全屏',
+                            function() { fsToggle.handleClick(); }
+                        );
+                        window._videoPlayer.on('fullscreenchange', function() {
+                            fsBtn.querySelector('span').textContent = window._videoPlayer.isFullscreen() ? '退出' : '全屏';
+             });
+                        customControls.appendChild(fsBtn);
+                    }
+
+                    // --- 卤10s ---
+                    customControls.appendChild(addSeekBtn(-10, '-10'));
+                    customControls.appendChild(addSeekBtn(10, '+10'));
+
+                    // --- start/end time capture ---
+                    var btnSetStart = document.getElementById('btn-set-start');
+                    var btnSetEnd = document.getElementById('btn-set-end');
+                    var inputStart = document.getElementById('video-input-1');
+                    var inputEnd = document.getElementById('video-input-2');
+                    if (inputStart) inputStart.value = '';
+                    if (inputEnd) inputEnd.value = '';
+                    if (btnSetStart && inputStart) {
+                        btnSetStart.addEventListener('click', function() {
+                            var t = window._videoPlayer.currentTime() || 0;
+                            inputStart.value = formatTime(t, false);
+                        });
+                    }
+                    if (btnSetEnd && inputEnd) {
+                        btnSetEnd.addEventListener('click', function() {
+                            var t = window._videoPlayer.currentTime() || 0;
+                            inputEnd.value = formatTime(t, false);
+                        });
+                    }
+
+                    console.log('[video] all default control buttons added to footer');
+                } else {
+                    console.log('[video] customControls NOT found');
+                }
+            });
+            window._videoPlayer.play();
+        }
+    });
+}
 
 
 
