@@ -1,0 +1,450 @@
+<!doctype html>
+<!--
+* Tabler - Premium and Open Source dashboard template with responsive and high quality UI.
+* @version 1.0.0-beta20
+* @link https://tabler.io
+* Copyright 2018-2023 The Tabler Authors
+* Copyright 2018-2023 codecalm.net Paweł Kuna
+* Licensed under MIT (https://github.com/tabler/tabler/blob/master/LICENSE)
+-->
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>System Config</title>
+    <link href="/tabler/tabler.css?1692870487" rel="stylesheet"/>
+    <link href="/tabler/tabler-theme.css?1692870487" rel="stylesheet"/>
+    <style>
+        @import url('/css/inter.css');
+        :root {
+            --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+        }
+        body {
+            font-feature-settings: "cv03", "cv04", "cv11";
+        }
+        .td-actions { width: 80px; }
+        .td-key code { font-size: 0.85em; }
+    </style>
+</head>
+<body>
+    <script src="/tabler/tabler-theme.js?1692870487" defer></script>
+    <div class="page">
+        <div class="page-wrapper">
+            <!-- Page header -->
+            <div class="page-header d-print-none">
+                <div class="container-xl">
+                    <div class="row g-2 align-items-center">
+                        <div class="col">
+                            <h2 class="page-title">System Config</h2>
+                        </div>
+                        <div class="col-auto">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#configFormModal" id="btnNew">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14"/><path d="M5 12l14 0"/></svg>
+                                New+
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Page body -->
+            <div class="page-body">
+                <div class="container-xl">
+
+                    <!-- Search bar -->
+                    <div class="row g-2 mb-3">
+                        <div class="col-auto">
+                            <input type="text" class="form-control" id="keyword" placeholder="Search keyword...">
+                        </div>
+                        <div class="col-auto">
+                            <select class="form-select" id="configType">
+                                <option value="">All Types</option>
+                                <option value="string">string</option>
+                                <option value="number">number</option>
+                                <option value="boolean">boolean</option>
+                                <option value="json">json</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Key</th>
+                                            <th>Name</th>
+                                            <th>Value</th>
+                                            <th>Type</th>
+                                            <th>Description</th>
+                                            <th>System</th>
+                                            <th>CreateTime</th>
+                                            <th class="td-actions">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="configTableBody">
+                                        <!-- rows injected by js -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pagination top -->
+                    <div class="d-flex mt-2">
+                        <ul class="pagination ms-auto align-items-center" id="paginationTop"></ul>
+                    </div>
+
+                    <!-- Pagination bottom -->
+                    <div class="d-flex mt-2">
+                        <ul class="pagination ms-auto align-items-center" id="paginationBottom"></ul>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Modal -->
+    <div class="modal" id="configFormModal" tabindex="-1">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="formModalTitle">New Config</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="configForm">
+                        <input type="hidden" name="originalKey" id="originalKey">
+                        <div class="row row-cards">
+                            <div class="col-sm-6 col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Key</label>
+                                    <input type="text" class="form-control" name="key" id="fieldKey" placeholder="site.name" required>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Type</label>
+                                    <select class="form-select" name="type" id="fieldType">
+                                        <option value="string">string</option>
+                                        <option value="number">number</option>
+                                        <option value="boolean">boolean</option>
+                                        <option value="json">json</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Name</label>
+                                    <input type="text" class="form-control" name="name" id="fieldName" placeholder="Website Name">
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">System</label>
+                                    <select class="form-select" name="isSystem" id="fieldIsSystem">
+                                        <option value="false">No</option>
+                                        <option value="true">Yes</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mb-3">
+                                    <label class="form-label">Value</label>
+                                    <input type="text" class="form-control" name="value" id="fieldValue" placeholder="value">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="mb-3 mb-0">
+                                    <label class="form-label">Description</label>
+                                    <textarea class="form-control" name="description" id="fieldDescription" rows="3" placeholder="Optional description..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">Cancel</a>
+                    <a href="#" class="btn btn-primary ms-auto" id="formSubmitBtn">Submit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirm Modal -->
+    <div class="modal modal-blur fade" id="deleteConfirmModal" tabindex="-1">
+        <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-status bg-danger"></div>
+                <div class="modal-body text-center py-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-danger icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M10.24 3.957l-8.422 14.06a1.989 1.989 0 0 0 1.7 2.983h16.845a1.989 1.989 0 0 0 1.7 -2.983l-8.423 -14.06a1.989 1.989 0 0 0 -3.4 0z"/>
+                        <path d="M12 9v4"/><path d="M12 17h.01"/>
+                    </svg>
+                    <h3>Delete Config</h3>
+                    <div class="text-secondary" id="deleteConfirmMsg">Are you sure?</div>
+                </div>
+                <div class="modal-footer">
+                    <div class="w-100">
+                        <div class="row">
+                            <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">Cancel</a></div>
+                            <div class="col"><a href="#" class="btn btn-danger w-100" id="deleteConfirmBtn">Delete</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabler Core -->
+    <script src="/tabler/tabler.js?1692870487" defer></script>
+    <script src="/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/axios.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="/js/common/common.js"></script>
+    <script>
+        const apiUrl = typeof Common !== 'undefined' ? Common.server.API_URL : '';
+
+        const state = {
+            pageNumber: 1,
+            pageSize: 10,
+            total: 0,
+            keyword: '',
+            configType: ''
+        };
+
+        // ---- debounce ----
+        function debounce(fn, delay) {
+            let timer = null;
+            return function(...args) {
+                clearTimeout(timer);
+                timer = setTimeout(() => fn.apply(this, args), delay);
+            };
+        }
+
+        // ---- pagination ----
+        function buildPagination(pageNumber, totalPages, containerId) {
+            const el = document.getElementById(containerId);
+            if (!el) return;
+            let html = '';
+            html += `<li class="page-item ${pageNumber === 1 ? 'disabled' : ''}"><a class="page-link" href="#" data-page="first">first</a></li>`;
+            html += `<li class="page-item ${pageNumber === 1 ? 'disabled' : ''}"><a class="page-link" href="#" data-page="prev">prev</a></li>`;
+            const maxVisible = 5;
+            let start = Math.max(1, pageNumber - Math.floor(maxVisible / 2));
+            let end = Math.min(totalPages, start + maxVisible - 1);
+            if (end - start < maxVisible - 1) start = Math.max(1, end - maxVisible + 1);
+            for (let i = start; i <= end; i++) {
+                html += `<li class="page-item ${i === pageNumber ? 'active' : ''}"><a class="page-link" href="#" data-page="${i}">${i}</a></li>`;
+            }
+            html += `<li class="page-item ${pageNumber === totalPages ? 'disabled' : ''}"><a class="page-link" href="#" data-page="next">next</a></li>`;
+            html += `<li class="page-item ${pageNumber === totalPages ? 'disabled' : ''}"><a class="page-link" href="#" data-page="last">last</a></li>`;
+            html += `<li class="page-item ms-2"><select class="form-select page-size-select">`;
+            [5, 10, 20, 50].forEach(s => {
+                html += `<option value="${s}" ${state.pageSize === s ? 'selected' : ''}>${s}/page</option>`;
+            });
+            html += `</select></li>`;
+            html += `<li class="page-item ms-2"><span class="page-link" style="background:transparent;border:0;cursor:default;">Total: ${state.total}</span></li>`;
+            el.innerHTML = html;
+        }
+
+        // ---- render table ----
+        function renderTable(data) {
+            const tbody = document.getElementById('configTableBody');
+            if (!tbody) return;
+            if (!data || data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted py-4">No data</td></tr>';
+                return;
+            }
+            tbody.innerHTML = data.map(item => `
+                <tr data-key="${escapeHtml(item.key || '')}" data-name="${escapeHtml(item.name || '')}" data-value="${escapeHtml(String(item.value || ''))}" data-type="${escapeHtml(item.type || '')}" data-description="${escapeHtml(item.description || '')}" data-issystem="${item.isSystem}" data-createtime="${item.createTime || ''}">
+                    <td class="td-key"><code>${escapeHtml(item.key || '')}</code></td>
+                    <td>${escapeHtml(item.name || '')}</td>
+                    <td class="text-truncate" style="max-width:200px;" title="${escapeHtml(String(item.value || ''))}">${escapeHtml(item.value || '')}</td>
+                    <td><span class="badge bg-secondary">${escapeHtml(item.type || '')}</span></td>
+                    <td class="text-muted text-truncate" style="max-width:150px;" title="${escapeHtml(item.description || '')}">${escapeHtml(item.description || '')}</td>
+                    <td>${item.isSystem ? '<span class="badge bg-danger">Yes</span>' : '<span class="badge bg-success">No</span>'}</td>
+                    <td class="text-secondary">${item.createTime ? new Date(item.createTime).toLocaleString() : ''}</td>
+                    <td>
+                        <a href="#" class="btn btn-sm btn-primary btn-edit" data-bs-toggle="modal" data-bs-target="#configFormModal">Edit</a>
+                        <a href="#" class="btn btn-sm btn-danger btn-delete" data-key="${escapeHtml(item.key || '')}">Del</a>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function escapeHtml(str) {
+            if (str == null) return '';
+            const div = document.createElement('div');
+            div.textContent = String(str);
+            return div.innerHTML;
+        }
+
+        // ---- load data ----
+        async function loadData() {
+            const params = {
+                pageNumber: state.pageNumber,
+                pageSize: state.pageSize,
+                keyword: state.keyword,
+                configType: state.configType
+            };
+            if (!params.keyword) delete params.keyword;
+            if (!params.configType) delete params.configType;
+
+            try {
+                const resp = await axios.get(apiUrl + '/api/rest/v1/sys/config/page', { params });
+                if (resp.data.code === 200) {
+                    state.total = resp.data.total || 0;
+                    renderTable(resp.data.data || []);
+                    const totalPages = Math.max(1, Math.ceil(state.total / state.pageSize));
+                    buildPagination(state.pageNumber, totalPages, 'paginationTop');
+                    buildPagination(state.pageNumber, totalPages, 'paginationBottom');
+                }
+            } catch (err) {
+                console.error(err);
+                document.getElementById('configTableBody').innerHTML =
+                    '<tr><td colspan="8" class="text-center text-danger py-4">Load failed: ' + escapeHtml(err.message) + '</td></tr>';
+            }
+        }
+
+        // ---- form helpers ----
+        function resetForm() {
+            document.getElementById('configForm').reset();
+            document.getElementById('originalKey').value = '';
+            document.getElementById('fieldKey').removeAttribute('readonly');
+            document.getElementById('formModalTitle').textContent = 'New Config';
+            document.getElementById('formSubmitBtn').textContent = 'Submit';
+        }
+
+        function openEditModal(row) {
+            resetForm();
+            document.getElementById('formModalTitle').textContent = 'Edit Config';
+            document.getElementById('formSubmitBtn').textContent = 'Update';
+            document.getElementById('originalKey').value = row.dataset.key;
+            document.getElementById('fieldKey').value = row.dataset.key;
+            document.getElementById('fieldKey').setAttribute('readonly', 'readonly');
+            document.getElementById('fieldName').value = row.dataset.name || '';
+            document.getElementById('fieldValue').value = row.dataset.value || '';
+            document.getElementById('fieldType').value = row.dataset.type || 'string';
+            document.getElementById('fieldDescription').value = row.dataset.description || '';
+            document.getElementById('fieldIsSystem').value = row.dataset.issystem === 'true' ? 'true' : 'false';
+        }
+
+        // ---- submit form ----
+        document.getElementById('formSubmitBtn')?.addEventListener('click', async function(e) {
+            e.preventDefault();
+            const originalKey = document.getElementById('originalKey').value;
+            const key = document.getElementById('fieldKey').value.trim();
+            const name = document.getElementById('fieldName').value.trim();
+            const value = document.getElementById('fieldValue').value;
+            const type = document.getElementById('fieldType').value;
+            const description = document.getElementById('fieldDescription').value.trim();
+            const isSystem = document.getElementById('fieldIsSystem').value === 'true';
+
+            if (!key) {
+                alert('Key is required');
+                return;
+            }
+
+            // close modal
+            bootstrap.Modal.getInstance(document.getElementById('configFormModal'))?.hide();
+
+            try {
+                if (originalKey) {
+                    // update — PUT /api/rest/v1/sys/config/{key}
+                    await axios.put(apiUrl + '/api/rest/v1/sys/config/' + encodeURIComponent(originalKey), {
+                        value, name, description, type
+                    });
+                } else {
+                    // create — POST /api/rest/v1/sys/config
+                    await axios.post(apiUrl + '/api/rest/v1/sys/config', {
+                        key, value, name, description, type, isSystem
+                    });
+                }
+                loadData();
+            } catch (err) {
+                console.error(err);
+                alert('Operation failed: ' + (err.response?.data?.message || err.message));
+            }
+        });
+
+        // ---- New button ----
+        document.getElementById('btnNew')?.addEventListener('click', function() {
+            resetForm();
+        });
+
+        // ---- table row actions ----
+        document.addEventListener('click', function(e) {
+            const editBtn = e.target.closest('.btn-edit');
+            const deleteBtn = e.target.closest('.btn-delete');
+
+            if (editBtn) {
+                const row = editBtn.closest('tr');
+                openEditModal(row);
+            }
+
+            if (deleteBtn) {
+                const key = deleteBtn.dataset.key;
+                document.getElementById('deleteConfirmMsg').textContent = 'Delete config "' + key + '"? This cannot be undone.';
+                document.getElementById('deleteConfirmBtn').onclick = async function() {
+                    bootstrap.Modal.getInstance(document.getElementById('deleteConfirmModal'))?.hide();
+                    try {
+                        await axios.delete(apiUrl + '/api/rest/v1/sys/config/' + encodeURIComponent(key));
+                        loadData();
+                    } catch (err) {
+                        console.error(err);
+                        alert('Delete failed: ' + (err.response?.data?.message || err.message));
+                    }
+                };
+                new bootstrap.Modal(document.getElementById('deleteConfirmModal')).show();
+            }
+        });
+
+        // ---- pagination click ----
+        document.addEventListener('click', function(e) {
+            const btn = e.target.closest('[data-page]');
+            if (!btn) return;
+            e.preventDefault();
+            const totalPages = Math.max(1, Math.ceil(state.total / state.pageSize));
+            const action = btn.dataset.page;
+            if (action === 'first') state.pageNumber = 1;
+            else if (action === 'prev') state.pageNumber = Math.max(1, state.pageNumber - 1);
+            else if (action === 'next') state.pageNumber = Math.min(totalPages, state.pageNumber + 1);
+            else if (action === 'last') state.pageNumber = totalPages;
+            else state.pageNumber = parseInt(action);
+            loadData();
+        });
+
+        // ---- page size change ----
+        document.addEventListener('change', function(e) {
+            if (e.target.classList.contains('page-size-select')) {
+                state.pageSize = parseInt(e.target.value);
+                state.pageNumber = 1;
+                loadData();
+            }
+        });
+
+        // ---- search ----
+        document.getElementById('keyword')?.addEventListener('input', debounce(function() {
+            state.keyword = this.value.trim();
+            state.pageNumber = 1;
+            loadData();
+        }, 400));
+
+        document.getElementById('configType')?.addEventListener('change', function() {
+            state.configType = this.value;
+            state.pageNumber = 1;
+            loadData();
+        });
+
+        // ---- init ----
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+        });
+    </script>
+</body>
+</html>

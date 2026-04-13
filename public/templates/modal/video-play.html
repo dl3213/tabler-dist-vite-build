@@ -1,33 +1,37 @@
 <div class="modal modal-blur fade" id="video-play" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document" style="max-width:900px;">
-        <div class="modal-content" style="background:#1a1a1a;">
-            <div class="modal-header" style="padding:10px 16px;background:#222;border-bottom:1px solid #333;">
-                <h5 class="modal-title" id="video-play-title" style="color:#fff;font-size:16px;">Video Player</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-content">
+            <div class="modal-header" style="padding:10px 16px;border-bottom:1px solid #333;">
+                <h5 class="modal-title" id="video-play-title" style="font-size:16px;">Video Player</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
             </div>
-            <div class="modal-body" style="background:#000;padding:0;">
-                <video id="videojs-player" class="video-js vjs-big-play-centered vjs-fluid" controls preload="auto" style="width:100%;display:block;">
+            <div class="modal-body" style="padding:0;">
+                <video id="videojs-player" class="video-js vjs-big-play-centered vjs-fluid" controls preload="auto"
+                    style="width:100%;display:block;">
                     <p class="vjs-no-js">
                         您的浏览器不支持视频播放。
                     </p>
                 </video>
             </div>
-            <div id="video-file-info" style="display:flex;justify-content:center;align-items:center;gap:16px;background:#222;border-top:1px solid #333;padding:8px 16px;">
-                <span id="video-file-name" style="color:#fff;font-size:13px;font-weight:500;max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
-                <span style="color:#555;">|</span>
-                <span id="video-file-size" style="color:#aaa;font-size:13px;"></span>
-                <span style="color:#555;">|</span>
-                <span id="video-file-url" style="color:#888;font-size:12px;max-width:400px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
+
+            <div class="row row-cards">
+                <div id="video-file-info" style="display:flex;justify-content:center;align-items:center;gap:16px;border-top:1px solid #333;padding:8px 16px;">
+                   
+                    <span id="video-file-url"
+                        style="font-size:12px; overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></span>
+                </div>
+                <div id="video-custom-controls" style="display:flex;justify-content:center;align-items:center;gap:12px;border-top:1px solid #333;padding:8px 16px;">
+                    <!-- Row1: 播放、时间、进度条、音量、倍速 -->
+                </div>
+                <div id="video-custom-controls-row2" style="display:flex;justify-content:center;align-items:center;gap:12px;border-top:1px solid #333;padding:8px 16px;">
+                    <!-- Row2: PiP、全屏、-10、+10 -->
+                </div>
+                <div id="video-custom-controls-row3" style="display:flex;justify-content:center;align-items:center;gap:10px;border-top:1px solid #333;padding:10px 16px;">
+                    <!-- Row3: 时间区间 -->
+                </div>
             </div>
-            <div id="video-custom-controls" style="display:flex;justify-content:center;align-items:center;gap:12px;background:#1a1a1a;border-top:1px solid #333;padding:8px 16px;">
-                <!-- Custom buttons will be inserted here by JS -->
-            </div>
-            <div id="video-input-area" style="display:flex;justify-content:center;align-items:center;gap:10px;background:#1a1a1a;border-top:1px solid #333;padding:10px 16px;">
-                <button id="btn-set-start" type="button" class="btn" style="padding:4px 12px;font-size:13px;background:#444;color:#fff;border:1px solid #555;border-radius:4px;height:30px;">开始时间</button>
-                <input type="text" id="video-input-1" class="form-control" placeholder="00:00" readonly style="width:90px;height:30px;padding:4px 8px;font-size:13px;background:#333;color:#fff;border:1px solid #444;border-radius:4px;text-align:center;">
-                <button id="btn-set-end" type="button" class="btn" style="padding:4px 12px;font-size:13px;background:#444;color:#fff;border:1px solid #555;border-radius:4px;height:30px;">结束时间</button>
-                <input type="text" id="video-input-2" class="form-control" placeholder="00:00" readonly style="width:90px;height:30px;padding:4px 8px;font-size:13px;background:#333;color:#fff;border:1px solid #444;border-radius:4px;text-align:center;">
-            </div>
+
         </div>
     </div>
 </div>

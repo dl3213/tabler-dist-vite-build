@@ -555,12 +555,12 @@ function action(targetId, actionEvent, currentTarget) {
             })
     }
     if ('play2m3u8' == actionEvent) {
-        // 判断浏览器是否支�?HLS
+        // 鍒ゆ柇娴忚鍣ㄦ槸鍚︽敮锟?HLS
         if (Hls.isSupported()) {
             var video = document.getElementById('video');
             var hls = new Hls();
 
-            // 绑定到视频播放器
+            // 缁戝畾鍒拌棰戞挱鏀惧櫒
             hls.loadSource(`http://ip:8080/static-file/cache/m3u8/${targetId}/${targetId}.m3u8`);
             hls.attachMedia(video);
 
@@ -568,7 +568,7 @@ function action(targetId, actionEvent, currentTarget) {
                 console.log('Manifest parsed, starting playback');
             });
         } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-            //  如果浏览器原生支�?HLS (�?Safari)
+            // 濡傛灉娴忚鍣ㄥ師鐢熸敮锟?HLS (锟?Safari)
             video.src = `http://ip:8080/static-file/cache/m3u8/${targetId}/${targetId}.m3u8`;
         }
     }
@@ -1261,37 +1261,44 @@ function initVideoPlayer(el, id) {
             }
         });
 
-    // Destroy old player on modal hidden
-    videoModalEl.addEventListener('hidden.bs.modal', function() {
-        if (window._videoPlayer) {
-            window._videoPlayer.dispose();
-            window._videoPlayer = null;
+        // Destroy old player on modal hidden — named functions to avoid listener accumulation
+        if (window._videoPlayerHiddenHandler) {
+            videoModalEl.removeEventListener('hidden.bs.modal', window._videoPlayerHiddenHandler);
         }
-    });
-
-    videoModalEl.addEventListener('shown.bs.modal', function() {
-        var playerEl = document.getElementById('videojs-player');
-        if (!playerEl) {
-            var modalBody = videoModalEl.querySelector('.modal-body');
-            if (modalBody) {
-                modalBody.innerHTML = '<video id="videojs-player" class="video-js vjs-big-play-centered vjs-fluid" controls preload="auto" width="100%" height="100%"><p class="vjs-no-js">您的浏览器不支持视频播放<p></video>';
-            }
-            playerEl = document.getElementById('videojs-player');
-        }
-        if (playerEl) {
+        window._videoPlayerHiddenHandler = function() {
             if (window._videoPlayer) {
                 window._videoPlayer.dispose();
+                window._videoPlayer = null;
             }
-            window._videoPlayer = videojs(playerEl, {
-                controls: true,
-                autoplay: true,
-                preload: 'auto',
-                fluid: true,
-                playbackRates: [0.5, 1, 1.5, 2],
-            });
-            window._videoPlayer.src({ src: videoUrl, type: 'video/mp4' });
-            window._videoPlayer.ready(function() {
-                function formatTime(seconds, showSign) {
+        };
+        videoModalEl.addEventListener('hidden.bs.modal', window._videoPlayerHiddenHandler);
+
+        if (window._videoPlayerShownHandler) {
+            videoModalEl.removeEventListener('shown.bs.modal', window._videoPlayerShownHandler);
+        }
+        videoModalEl.addEventListener('shown.bs.modal', window._videoPlayerShownHandler = function videoPlayerShownHandler() {
+                var playerEl = document.getElementById('videojs-player');
+                if (!playerEl) {
+                    var modalBody = videoModalEl.querySelector('.modal-body');
+                    if (modalBody) {
+                        modalBody.innerHTML = '<video id="videojs-player" class="video-js vjs-big-play-centered vjs-fluid" controls preload="auto" width="100%" height="100%"><p class="vjs-no-js">您的浏览器不支持视频播放<p></video>';
+                    }
+                    playerEl = document.getElementById('videojs-player');
+                }
+                if (playerEl) {
+                    if (window._videoPlayer) {
+                        window._videoPlayer.dispose();
+                    }
+                    window._videoPlayer = videojs(playerEl, {
+                        controls: true,
+                        autoplay: true,
+                        preload: 'auto',
+                        fluid: true,
+                        playbackRates: [0.5, 1, 1.5, 2],
+                    });
+                    window._videoPlayer.src({ src: videoUrl, type: 'video/mp4' });
+                    window._videoPlayer.ready(function() {
+                        function formatTime(seconds, showSign) {
                     var s = Math.abs(Math.floor(seconds));
                     var h = Math.floor(s / 3600);
                     var m = Math.floor((s % 3600) / 60);
@@ -1350,13 +1357,8 @@ function initVideoPlayer(el, id) {
 
                 function addSeekBtn(seconds, label) {
                     var btn = document.createElement('div');
-                    btn.className = 'vjs-control vjs-button seek-btn';
+                    btn.className = 'btn btn-primary';
                     btn.textContent = label;
-                    btn.style.cursor = 'pointer';
-                    btn.style.display = 'flex';
-                    btn.style.alignItems = 'center';
-                    btn.style.justifyContent = 'center';
-                    btn.style.color = '#fff';
                     btn.addEventListener('click', function() {
                         var newTime = window._videoPlayer.currentTime() + seconds;
                         var duration = window._videoPlayer.duration() || 0;
@@ -1368,6 +1370,8 @@ function initVideoPlayer(el, id) {
                 }
 
                 var customControls = document.getElementById('video-custom-controls');
+                var row2 = document.getElementById('video-custom-controls-row2');
+                var row3 = document.getElementById('video-custom-controls-row3');
                 var controlBar = window._videoPlayer.getChild('ControlBar');
                 if (customControls) {
                     if (controlBar) {
@@ -1387,12 +1391,13 @@ function initVideoPlayer(el, id) {
                         }
                     }
                     customControls.innerHTML = '';
+                    if (row2) row2.innerHTML = '';
+                    if (row3) row3.innerHTML = '';
 
                     function makeCtrlBtn(iconSvg, label, onClick) {
                         var b = document.createElement('div');
-                        b.className = 'vjs-control vjs-button vjs-ctrl-btn';
-                        b.style.cssText = 'display:inline-flex!important;align-items:center;padding:6px 10px!important;font-size:13px!important;color:#fff!important;cursor:pointer!important;border:none!important;border-radius:6px!important;background:rgba(43,51,63,0.85)!important;transition:all 0.15s ease!important;gap:4px!important;user-select:none!important';
-                        b.innerHTML = iconSvg + '<span style="font-size:12px;line-height:1">' + label + '</span>';
+                        b.className = 'btn btn-primary';
+                        b.innerHTML = iconSvg + '<span>' + label + '</span>';
                         b.addEventListener('click', onClick);
                         return b;
                     }
@@ -1406,29 +1411,29 @@ function initVideoPlayer(el, id) {
                             function() { playToggle.handleClick(); }
                         );
                         window._videoPlayer.on('play', function() {
-                            playBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg><span style="font-size:12px;line-height:1">暂停</span>';
+                            playBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg><span>暂停</span>';
                         });
                         window._videoPlayer.on('pause', function() {
-                            playBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg><span style="font-size:12px;line-height:1">播放</span>';
+                            playBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg><span>播放</span>';
                         });
-                        customControls.appendChild(playBtn);
+                        row2.insertBefore(playBtn, row2.firstChild);
                     }
 
                     // --- CurrentTimeDisplay + DurationDisplay ---
                     var ctDiv = document.createElement('div');
-                    ctDiv.className = 'vjs-control vjs-button vjs-ctrl-btn';
-                    ctDiv.style.cssText = 'display:inline-flex!important;align-items:center;padding:6px 8px!important;font-size:13px!important;color:#fff!important;cursor:default!important;border:none!important;border-radius:6px!important;background:rgba(43,51,63,0.85)!important;user-select:none!important;min-width:52px;justify-content:center';
+                    ctDiv.className = 'btn btn-primary';
+                    ctDiv.style.cssText = 'min-width:52px;justify-content:center';
                     ctDiv.innerHTML = '<span>00:00</span>';
                     customControls.appendChild(ctDiv);
 
                     var sep1 = document.createElement('span');
                     sep1.textContent = '/';
-                    sep1.style.cssText = 'color:#888;font-size:13px;padding:0 2px;user-select:none';
+                    sep1.style.cssText = 'padding:0 4px';
                     customControls.appendChild(sep1);
 
                     var durDiv = document.createElement('div');
-                    durDiv.className = 'vjs-control vjs-button vjs-ctrl-btn';
-                    durDiv.style.cssText = 'display:inline-flex!important;align-items:center;padding:6px 8px!important;font-size:13px!important;color:#fff!important;cursor:default!important;border:none!important;border-radius:6px!important;background:rgba(43,51,63,0.85)!important;user-select:none!important;min-width:52px;justify-content:center';
+                    durDiv.className = 'btn btn-primary';
+                    durDiv.style.cssText = 'min-width:52px;justify-content:center';
                     durDiv.innerHTML = '<span>00:00</span>';
                     customControls.appendChild(durDiv);
 
@@ -1484,11 +1489,10 @@ function initVideoPlayer(el, id) {
 
                     // --- Volume ---
                     var volWrap = document.createElement('div');
-                    volWrap.style.cssText = 'display:inline-flex!important;align-items:center;gap:4px;background:rgba(43,51,63,0.85);border-radius:6px;padding:0 8px;height:30px';
+                    volWrap.style.cssText = 'display:inline-flex!important;align-items:center;gap:4px';
                     var volBtn = document.createElement('div');
-                    volBtn.className = 'vjs-control vjs-button vjs-ctrl-btn';
-                    volBtn.style.cssText = 'display:inline-flex!important;align-items:center;padding:0!important;font-size:13px!important;color:#fff!important;cursor:pointer!important;border:none!important;background:none!important;gap:4px!important;user-select:none!important';
-                    volBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07" class="vol-path"/></svg><span style="font-size:12px;line-height:1;min-width:24px">音量</span>';
+                    volBtn.className = 'btn btn-primary';
+                    volBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07" class="vol-path"/></svg><span>音量</span>';
                     volBtn.addEventListener('click', function() {
                         var p = window._videoPlayer;
                         if (p.muted()) {
@@ -1554,32 +1558,29 @@ function initVideoPlayer(el, id) {
                     var rateBtnWrap = document.createElement('div');
                     rateBtnWrap.style.cssText = 'position:relative;display:inline-flex;align-items:center';
                     var rateBtn = document.createElement('div');
-                    rateBtn.className = 'vjs-control vjs-button vjs-ctrl-btn';
-                    rateBtn.style.cssText = 'display:inline-flex!important;align-items:center;padding:6px 10px!important;font-size:13px!important;color:#fff!important;cursor:pointer!important;border:none!important;border-radius:6px!important;background:rgba(43,51,63,0.85)!important;transition:all 0.15s ease!important;gap:4px!important;user-select:none!important';
-                    rateBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span style="font-size:12px;line-height:1">' + currentRate + 'x</span>';
+                    rateBtn.className = 'btn btn-primary';
+                    rateBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span>' + currentRate + 'x</span>';
                     rateBtnWrap.appendChild(rateBtn);
                     var rateMenu = document.createElement('div');
                     rateMenu.className = 'vjs-ctrl-rate-menu';
-                    rateMenu.style.cssText = 'display:none;position:absolute;bottom:100%;left:50%;transform:translateX(-50%);margin-bottom:6px;background:rgba(30,30,30,0.97);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:6px 0;min-width:90px;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,0.5);text-align:center';
+                    rateMenu.style.cssText = 'display:none;position:absolute;bottom:100%;left:50%;transform:translateX(-50%);margin-bottom:6px;border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:6px 0;min-width:90px;z-index:9999;box-shadow:0 4px 16px rgba(0,0,0,0.5);text-align:center';
                     rates.forEach(function(r) {
                         var item = document.createElement('div');
                         item.className = 'vjs-ctrl-rate-item';
-                        item.style.cssText = 'padding:7px 14px;font-size:13px;color:#ccc;cursor:pointer;border-radius:4px;margin:2px 6px;transition:background 0.15s';
+                        item.style.cssText = 'padding:7px 14px;font-size:13px;cursor:pointer;border-radius:4px;margin:2px 6px;transition:background 0.15s';
                         item.textContent = r + 'x';
-                        if (r === currentRate) { item.style.color = '#409fff'; item.style.fontWeight = 'bold'; }
+                        if (r === currentRate) { item.style.fontWeight = 'bold'; }
                         item.addEventListener('click', function(e) {
                             e.stopPropagation();
                             window._videoPlayer.playbackRate(r);
-                            rateMenu.querySelectorAll('.vjs-ctrl-rate-item').forEach(function(i) { i.style.color = '#ccc'; i.style.fontWeight = 'normal'; });
-                            item.style.color = '#409fff';
+                            rateMenu.querySelectorAll('.vjs-ctrl-rate-item').forEach(function(i) { i.style.fontWeight = 'normal'; });
                             item.style.fontWeight = 'bold';
                             rateBtn.querySelector('span').textContent = r + 'x';
                             rateMenu.style.display = 'none';
                         });
-                        item.addEventListener('mouseenter', function() { item.style.background = 'rgba(255,255,255,0.08)'; item.style.color = '#fff'; });
+                        item.addEventListener('mouseenter', function() { item.style.background = 'rgba(255,255,255,0.08)'; });
                         item.addEventListener('mouseleave', function() {
                             item.style.background = '';
-                            item.style.color = (r === window._videoPlayer.playbackRate()) ? '#409fff' : '#ccc';
                             item.style.fontWeight = (r === window._videoPlayer.playbackRate()) ? 'bold' : 'normal';
                         });
                         rateMenu.appendChild(item);
@@ -1595,51 +1596,68 @@ function initVideoPlayer(el, id) {
                     window._videoPlayer.on('ratechange', function() {
                         rateBtn.querySelector('span').textContent = window._videoPlayer.playbackRate() + 'x';
                     });
-                    customControls.appendChild(rateBtnWrap);
+                    // --- Row2: 播放, PiP, Fullscreen, -10, +10, 倍速 ---
+                    if (row2) {
+                        // --- Fullscreen ---
+                        var fsToggle = controlBar.getChild('FullscreenToggle');
+                        if (fsToggle) {
+                            var fsBtn = makeCtrlBtn(
+                                '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>',
+                                '全屏',
+                                function() { fsToggle.handleClick(); }
+                            );
+                            window._videoPlayer.on('fullscreenchange', function() {
+                                fsBtn.querySelector('span').textContent = window._videoPlayer.isFullscreen() ? '退出' : '全屏';
+                            });
+                            row2.appendChild(fsBtn);
+                        }
 
-                    // --- PictureInPicture ---
-                    var pipToggle = controlBar.getChild('PictureInPictureToggle');
-                    if (pipToggle) {
-                        var pipBtn = makeCtrlBtn(
-                            '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><rect x="12" y="9" width="8" height="6" rx="1"/></svg>',
-                            'PiP',
-                            function() { pipToggle.handleClick(); }
-                        );
-                        customControls.appendChild(pipBtn);
+                        // --- -10s / +10s ---
+                        row2.appendChild(addSeekBtn(-10, '-10'));
+                        row2.appendChild(addSeekBtn(10, '+10'));
+                        row2.appendChild(rateBtnWrap);
                     }
 
-                    // --- Fullscreen ---
-                    var fsToggle = controlBar.getChild('FullscreenToggle');
-                    if (fsToggle) {
-                        var fsBtn = makeCtrlBtn(
-                            '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>',
-                            '全屏',
-                            function() { fsToggle.handleClick(); }
-                        );
-                        window._videoPlayer.on('fullscreenchange', function() {
-                            fsBtn.querySelector('span').textContent = window._videoPlayer.isFullscreen() ? '退出' : '全屏';
-             });
-                        customControls.appendChild(fsBtn);
-                    }
+                    // --- Row3: time inputs ---
+                    if (row3) {
+                        var sep3 = document.createElement('span');
+                        sep3.style.cssText = 'margin:0 4px';
+                        sep3.textContent = '|';
+                        row3.appendChild(sep3);
 
-                    // --- 卤10s ---
-                    customControls.appendChild(addSeekBtn(-10, '-10'));
-                    customControls.appendChild(addSeekBtn(10, '+10'));
+                        var btnSetStart = document.createElement('button');
+                        btnSetStart.type = 'button';
+                        btnSetStart.className = 'btn btn-primary';
+                        btnSetStart.textContent = '开始';
+                        var inputStart = document.createElement('input');
+                        inputStart.type = 'text';
+                        inputStart.className = 'form-control';
+                        inputStart.placeholder = '00:00';
+                        inputStart.readOnly = true;
+                        inputStart.style.cssText = 'width:80px;height:30px;padding:4px 8px;font-size:13px;text-align:center';
 
-                    // --- start/end time capture ---
-                    var btnSetStart = document.getElementById('btn-set-start');
-                    var btnSetEnd = document.getElementById('btn-set-end');
-                    var inputStart = document.getElementById('video-input-1');
-                    var inputEnd = document.getElementById('video-input-2');
-                    if (inputStart) inputStart.value = '';
-                    if (inputEnd) inputEnd.value = '';
-                    if (btnSetStart && inputStart) {
+                        var btnSetEnd = document.createElement('button');
+                        btnSetEnd.type = 'button';
+                        btnSetEnd.className = 'btn btn-primary';
+                        btnSetEnd.textContent = '结束';
+                        var inputEnd = document.createElement('input');
+                        inputEnd.type = 'text';
+                        inputEnd.className = 'form-control';
+                        inputEnd.placeholder = '00:00';
+                        inputEnd.readOnly = true;
+                        inputEnd.style.cssText = 'width:80px;height:30px;padding:4px 8px;font-size:13px;text-align:center';
+
+                        row3.appendChild(btnSetStart);
+                        row3.appendChild(inputStart);
+                        row3.appendChild(btnSetEnd);    
+                        row3.appendChild(inputEnd);
+
+                        inputStart.value = '';
+                        inputEnd.value = '';
                         btnSetStart.addEventListener('click', function() {
                             var t = window._videoPlayer.currentTime() || 0;
                             inputStart.value = formatTime(t, false);
                         });
-                    }
-                    if (btnSetEnd && inputEnd) {
                         btnSetEnd.addEventListener('click', function() {
                             var t = window._videoPlayer.currentTime() || 0;
                             inputEnd.value = formatTime(t, false);
@@ -1653,6 +1671,7 @@ function initVideoPlayer(el, id) {
             });
             window._videoPlayer.play();
         }
+ 
     });
 }
 
