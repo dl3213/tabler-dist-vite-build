@@ -1,5 +1,4 @@
-﻿const apiUrl = Common.server.API_URL
-
+﻿var apiUrl = Common.server.API_URL
 
 var request = {
     pageNumber: 1,
@@ -1485,9 +1484,74 @@ function initVideoPlayer(el, id) {
                         var pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
                         window._videoPlayer.currentTime(pct * (window._videoPlayer.duration() || 0));
                     });
-                    customControls.appendChild(progWrap);
-
-                    // --- Volume ---
+                     // 添加进度条到 video-current-time-row
+                     var currentTimeRow = document.getElementById('video-current-time-row');
+                     if (currentTimeRow) {
+                         // 先清空旧内容，避免重复添加
+                         currentTimeRow.innerHTML = '';
+                         
+                         // 创建进度条副本（带独立事件绑定）
+                        var progWrapClone = progWrap.cloneNode(true);
+                        
+                        // 重新获取克隆后的DOM元素
+                        var loadedElClone = progWrapClone.querySelector('.vjs-ctrl-loaded');
+                        var playedElClone = progWrapClone.querySelector('.vjs-ctrl-played');
+                        var thumbElClone = progWrapClone.querySelector('.vjs-ctrl-thumb');
+                        
+                        // 为克隆的进度条绑定独立的事件处理器
+                        progWrapClone.addEventListener('click', function(e) {
+                            var rect = progWrapClone.querySelector('div').getBoundingClientRect();
+                            var pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+                            window._videoPlayer.currentTime(pct * (window._videoPlayer.duration() || 0));
+                        });
+                        
+                        progWrapClone.addEventListener('mouseenter', function() { 
+                            if (thumbElClone) thumbElClone.style.opacity = '1'; 
+                        });
+                        progWrapClone.addEventListener('mouseleave', function() { 
+                            if (thumbElClone) thumbElClone.style.opacity = '0'; 
+                        });
+                        
+                        // 更新克隆进度条的函数
+                        function updateProgressClone() {
+                            if (!window._videoPlayer) return;
+                            var cur = window._videoPlayer.currentTime() || 0;
+                            var dur = window._videoPlayer.duration() || 0;
+                            if (dur <= 0) return;
+                            var pct = (cur / dur * 100).toFixed(2) + '%';
+                            if (playedElClone) playedElClone.style.width = pct;
+                            if (thumbElClone) thumbElClone.style.left = pct;
+                        }
+                        
+                        function updateBufferedClone() {
+                            if (!window._videoPlayer) return;
+                            var buf = window._videoPlayer.bufferedPercent() || 0;
+                            if (loadedElClone) loadedElClone.style.width = (buf * 100).toFixed(2) + '%';
+                        }
+                        
+                        // 绑定事件到克隆进度条
+                        window._videoPlayer.on('timeupdate', updateProgressClone);
+                        window._videoPlayer.on('progress', updateBufferedClone);
+                        window._videoPlayer.on('loadedmetadata', function() { 
+                            updateProgressClone(); 
+                            updateBufferedClone(); 
+                        });
+                        
+                        currentTimeRow.appendChild(progWrapClone);
+                    }
+                    
+                     // --- Close Button ---
+                     var closeBtnWrap = document.createElement('div');
+                     closeBtnWrap.style.cssText = 'display:inline-flex;align-items:center';
+                     var closeBtn = document.createElement('button');
+                     closeBtn.type = 'button';
+                     closeBtn.className = 'btn-close btn-close-white';
+                     closeBtn.setAttribute('data-bs-dismiss', 'modal');
+                     closeBtn.setAttribute('aria-label', 'Close');
+                     closeBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="6"/><line x1="6" y1="18" x2="18" y2="6"/></svg>';
+                      closeBtnWrap.appendChild(closeBtn);
+                      
+                      // --- Volume ---
                     var volWrap = document.createElement('div');
                     volWrap.style.cssText = 'display:inline-flex!important;align-items:center;gap:4px';
                     var volBtn = document.createElement('div');
@@ -1653,18 +1717,30 @@ function initVideoPlayer(el, id) {
                         row3.appendChild(inputEnd);
 
                         inputStart.value = '';
-                        inputEnd.value = '';
-                        btnSetStart.addEventListener('click', function() {
-                            var t = window._videoPlayer.currentTime() || 0;
-                            inputStart.value = formatTime(t, false);
-                        });
-                        btnSetEnd.addEventListener('click', function() {
-                            var t = window._videoPlayer.currentTime() || 0;
-                            inputEnd.value = formatTime(t, false);
-                        });
-                    }
-
-                    console.log('[video] all default control buttons added to footer');
+                         inputEnd.value = '';
+                         btnSetStart.addEventListener('click', function() {
+                             var t = window._videoPlayer.currentTime() || 0;
+                             inputStart.value = formatTime(t, false);
+                         });
+                         btnSetEnd.addEventListener('click', function() {
+                             var t = window._videoPlayer.currentTime() || 0;
+                             inputEnd.value = formatTime(t, false);
+                         });
+                     }
+                     
+                     // --- Close Button ---
+                     var closeBtnWrap = document.createElement('div');
+                     closeBtnWrap.style.cssText = 'display:inline-flex;align-items:center';
+                     var closeBtn = document.createElement('button');
+                     closeBtn.type = 'button';
+                     closeBtn.className = 'btn-close btn-close-white';
+                     closeBtn.setAttribute('data-bs-dismiss', 'modal');
+                     closeBtn.setAttribute('aria-label', 'Close');
+                     closeBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="6"/><line x1="6" y1="18" x2="18" y2="6"/></svg>';
+                     closeBtnWrap.appendChild(closeBtn);
+                     row3.insertBefore(closeBtnWrap, row3.firstChild);
+                     
+                     console.log('[video] all default control buttons added to footer');
                 } else {
                     console.log('[video] customControls NOT found');
                 }
