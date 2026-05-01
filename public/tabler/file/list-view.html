@@ -54,6 +54,7 @@
                     <div html-modal="gallery"></div>
                     <div html-modal="card"></div>
                     <div html-modal="tag-info"></div>
+                    <div html-modal="vtf-converter"></div>
 
                     <div id="custom-menu" class="dropdown-menu">
                         <a class="dropdown-item" event="delete" href="#">
@@ -198,7 +199,7 @@
                                 </svg>
                             </div>
                             <div id="alert-danger-context">
-                                I'm so sorry…
+                                I'm so sorry�?
                             </div>
                         </div>
                         <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a>
@@ -501,6 +502,12 @@
     <script src="/libs/video.js/video.min.js"></script>
     <script src="/js/common/common.js"></script>
     <script src="/js/biz/fileCommon.js"></script>
+    <script src="/libs/vtf-converter/tga.js"></script>
+    <script src="/libs/vtf-converter/libgif.js"></script>
+    <script src="/libs/vtf-converter/dither.js"></script>
+    <script src="/libs/vtf-converter/quantize.js"></script>
+    <script src="/libs/vtf-converter/dxt.js"></script>
+    <script src="/libs/vtf-converter/vtf.js"></script>
     <script src="/js/hls.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -628,6 +635,13 @@
                             load_data(request, 1);
                         }
                     });
+                    
+                    // 修复：动态加载模态框后，重新绑定 VTF 按钮事件
+                    if (typeof vtfSetupEventListeners === 'function') {
+                        vtfSetupEventListeners();
+                        vtfInitCustomSizeInputs();
+                        vtfSetupMipmapFileInput();
+                    }
 
                 })
 

@@ -1,0 +1,114 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - link [ref=e7] [cursor=pointer]:
+          - /url: /
+          - img [ref=e8]
+        - generic [ref=e10]:
+          - generic [ref=e15]:
+            - generic:
+              - img
+            - textbox "Search in website" [ref=e16]:
+              - /placeholder: Search…
+          - link "Show notifications" [ref=e19] [cursor=pointer]:
+            - /url: "#"
+            - img [ref=e20]
+          - link "Open user menu" [ref=e26] [cursor=pointer]:
+            - /url: "#"
+            - generic [ref=e28]:
+              - generic [ref=e29]: Paweł Kuna
+              - generic [ref=e30]: UI Designer
+    - banner [ref=e31]:
+      - generic [ref=e35]:
+        - list [ref=e37]:
+          - listitem [ref=e38]:
+            - generic [ref=e39]:
+              - img [ref=e41]
+              - generic [ref=e46]: Home
+          - listitem [ref=e47]:
+            - generic [ref=e48]:
+              - img [ref=e50]
+              - generic [ref=e54]: File
+          - listitem [ref=e55]:
+            - generic [ref=e56]:
+              - img [ref=e58]
+              - generic [ref=e62]: Pixiv
+          - listitem [ref=e63]:
+            - generic [ref=e64]:
+              - img [ref=e66]
+              - generic [ref=e70]: Book
+          - listitem [ref=e71]:
+            - generic [ref=e72]:
+              - img [ref=e74]
+              - generic [ref=e79]: Box
+          - listitem [ref=e80]:
+            - generic [ref=e81]:
+              - img [ref=e83]
+              - generic [ref=e87]: Music
+          - listitem [ref=e88]:
+            - generic [ref=e89]:
+              - img [ref=e91]
+              - generic [ref=e95]: config
+        - generic [ref=e96]:
+          - list
+  - iframe [ref=e98]:
+    - generic [ref=f1e2]:
+      - generic [ref=f1e3]:
+        - heading "🚀 Tabler Admin Dashboard" [level=1] [ref=f1e4]
+        - paragraph [ref=f1e5]: 基于 Vite + Tabler UI 的现代化后台管理系统
+      - generic [ref=f1e6]:
+        - generic [ref=f1e7] [cursor=pointer]:
+          - generic [ref=f1e8]: ⚡
+          - heading "Vite" [level=3] [ref=f1e9]
+          - generic [ref=f1e10]: v6.2
+          - generic [ref=f1e11]: 下一代前端构建工具，极速 HMR
+        - generic [ref=f1e12] [cursor=pointer]:
+          - generic [ref=f1e13]: 🎨
+          - heading "Tabler UI" [level=3] [ref=f1e14]
+          - generic [ref=f1e15]: Latest
+          - generic [ref=f1e16]: 企业级 Bootstrap 主题框架
+        - generic [ref=f1e17] [cursor=pointer]:
+          - generic [ref=f1e18]: 📡
+          - heading "Axios" [level=3] [ref=f1e19]
+          - generic [ref=f1e20]: Embedded
+          - generic [ref=f1e21]: HTTP 请求库，支持 Promise
+        - generic [ref=f1e22] [cursor=pointer]:
+          - generic [ref=f1e23]: 📝
+          - heading "Mustache" [level=3] [ref=f1e24]
+          - generic [ref=f1e25]: v4.2
+          - generic [ref=f1e26]: 轻量级逻辑-less 模板引擎
+        - generic [ref=f1e27] [cursor=pointer]:
+          - generic [ref=f1e28]: 🖼️
+          - heading "iframe SPA" [level=3] [ref=f1e29]
+          - generic [ref=f1e30]: Custom
+          - generic [ref=f1e31]: 基于 iframe 的单页应用架构
+        - generic [ref=f1e32] [cursor=pointer]:
+          - generic [ref=f1e33]: ✨
+          - heading "Theme Builder" [level=3] [ref=f1e34]
+          - generic [ref=f1e35]: 12 Colors
+          - generic [ref=f1e36]: 支持 12 种主题色，明暗模式
+      - generic [ref=f1e37]:
+        - link "📊 进入管理后台" [ref=f1e38] [cursor=pointer]:
+          - /url: /tabler.html
+          - generic [ref=f1e39]: 📊
+          - text: 进入管理后台
+        - button "📖 Tabler 文档" [ref=f1e40] [cursor=pointer]:
+          - generic [ref=f1e41]: 📖
+          - text: Tabler 文档
+      - generic [ref=f1e42]:
+        - heading "✨ 项目特性" [level=3] [ref=f1e43]
+        - list [ref=f1e44]:
+          - listitem [ref=f1e45]: ✓ 动态菜单加载（后端 API）
+          - listitem [ref=f1e46]: ✓ 支持 Light/Dark 主题切换
+          - listitem [ref=f1e47]: ✓ 12 种主题配色方案
+          - listitem [ref=f1e48]: ✓ 4 种字体家族可选
+          - listitem [ref=f1e49]: ✓ 圆角大小可调节
+          - listitem [ref=f1e50]: ✓ iframe 无刷新页面切换
+          - listitem [ref=f1e51]: ✓ 内置表单处理工具
+          - listitem [ref=f1e52]: ✓ Excel 导出支持
+          - listitem [ref=f1e53]: ✓ 通用弹窗提示组件
+          - listitem [ref=f1e54]: ✓ 响应式布局设计
+  - link [ref=e99] [cursor=pointer]:
+    - /url: "#"
+    - img [ref=e100]

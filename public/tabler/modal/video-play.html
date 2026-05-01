@@ -1,21 +1,21 @@
 <div class="modal modal-blur fade" id="video-play" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document" style="max-width:900px;">
-        <div class="modal-content">
-            <div class="modal-header" style="padding:10px 16px;border-bottom:1px solid #333;">
+    <div class="modal-dialog modal-lg" role="document" style="max-width:900px; margin:auto;">
+        <div class="modal-content" style="display:flex;flex-direction:column;height:100%;">
+            <div class="modal-header" style="padding:10px 16px;border-bottom:1px solid #333;flex-shrink:0;">
                 <h5 class="modal-title" id="video-play-title" style="font-size:16px;">Video Player</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Close"></button>
             </div>
-            <div class="modal-body" style="padding:0;">
+            <div class="modal-body" style="padding:0;flex:1;min-height:0;overflow:hidden;">
                 <video id="videojs-player" class="video-js vjs-big-play-centered vjs-fluid" controls preload="auto"
-                    style="width:100%;display:block;">
+                    style="width:100%;height:100%;display:block;">
                     <p class="vjs-no-js">
                         您的浏览器不支持视频播放。
                     </p>
                 </video>
             </div>
 
-            <div class="row row-cards">
+            <div class="row row-cards" style="flex-shrink:0;">
                 <div id="video-file-info" style="display:flex;justify-content:center;align-items:center;gap:16px;border-top:1px solid #333;padding:8px 16px;">
                     
                     <span id="video-file-url"

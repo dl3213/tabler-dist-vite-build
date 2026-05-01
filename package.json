@@ -19,6 +19,7 @@
     "vite-plugin-static-copy": "^2.3.0"
   },
   "dependencies": {
-    "glob": "^11.0.1"
+    "glob": "^11.0.1",
+    "png-to-vtf": "^0.3.0"
   }
 }

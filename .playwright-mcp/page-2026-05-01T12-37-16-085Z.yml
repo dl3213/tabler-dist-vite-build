@@ -1,0 +1,56 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - heading "🚀 Tabler Admin Dashboard" [level=1] [ref=e4]
+    - paragraph [ref=e5]: 基于 Vite + Tabler UI 的现代化后台管理系统
+  - generic [ref=e6]:
+    - generic [ref=e7] [cursor=pointer]:
+      - generic [ref=e8]: ⚡
+      - heading "Vite" [level=3] [ref=e9]
+      - generic [ref=e10]: v6.2
+      - generic [ref=e11]: 下一代前端构建工具，极速 HMR
+    - generic [ref=e12] [cursor=pointer]:
+      - generic [ref=e13]: 🎨
+      - heading "Tabler UI" [level=3] [ref=e14]
+      - generic [ref=e15]: Latest
+      - generic [ref=e16]: 企业级 Bootstrap 主题框架
+    - generic [ref=e17] [cursor=pointer]:
+      - generic [ref=e18]: 📡
+      - heading "Axios" [level=3] [ref=e19]
+      - generic [ref=e20]: Embedded
+      - generic [ref=e21]: HTTP 请求库，支持 Promise
+    - generic [ref=e22] [cursor=pointer]:
+      - generic [ref=e23]: 📝
+      - heading "Mustache" [level=3] [ref=e24]
+      - generic [ref=e25]: v4.2
+      - generic [ref=e26]: 轻量级逻辑-less 模板引擎
+    - generic [ref=e27] [cursor=pointer]:
+      - generic [ref=e28]: 🖼️
+      - heading "iframe SPA" [level=3] [ref=e29]
+      - generic [ref=e30]: Custom
+      - generic [ref=e31]: 基于 iframe 的单页应用架构
+    - generic [ref=e32] [cursor=pointer]:
+      - generic [ref=e33]: ✨
+      - heading "Theme Builder" [level=3] [ref=e34]
+      - generic [ref=e35]: 12 Colors
+      - generic [ref=e36]: 支持 12 种主题色，明暗模式
+  - generic [ref=e37]:
+    - link "📊 进入管理后台" [ref=e38] [cursor=pointer]:
+      - /url: /tabler/index/index.html
+      - generic [ref=e39]: 📊
+      - text: 进入管理后台
+    - button "📖 Tabler 文档" [ref=e40] [cursor=pointer]:
+      - generic [ref=e41]: 📖
+      - text: Tabler 文档
+  - generic [ref=e42]:
+    - heading "✨ 项目特性" [level=3] [ref=e43]
+    - list [ref=e44]:
+      - listitem [ref=e45]: ✓ 动态菜单加载（后端 API）
+      - listitem [ref=e46]: ✓ 支持 Light/Dark 主题切换
+      - listitem [ref=e47]: ✓ 12 种主题配色方案
+      - listitem [ref=e48]: ✓ 4 种字体家族可选
+      - listitem [ref=e49]: ✓ 圆角大小可调节
+      - listitem [ref=e50]: ✓ iframe 无刷新页面切换
+      - listitem [ref=e51]: ✓ 内置表单处理工具
+      - listitem [ref=e52]: ✓ Excel 导出支持
+      - listitem [ref=e53]: ✓ 通用弹窗提示组件
+      - listitem [ref=e54]: ✓ 响应式布局设计

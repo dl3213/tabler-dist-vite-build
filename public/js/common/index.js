@@ -1,4 +1,4 @@
-function menu_build(apiUrl) {
+function menu_build(apiUrl, pageBase) {
     var elements = document.querySelectorAll('[target-link]');
     elements.forEach(item => {
         item.addEventListener('click', (e) => {
@@ -12,8 +12,7 @@ function menu_build(apiUrl) {
             var main = document.getElementById('index-main-iframe');
             //console.log(main)
             if (main && link) {
-                link = link === '/' ? '/templates/index/home.html' : link
-                link = link.includes("templates") ? link : "/templates/"+link
+                link = link === '/' ? pageBase + 'index/home.html' : link
                 console.log(link)
                 main.src = link
                 elements.forEach(o => o.parentElement.classList.remove('active'));
@@ -23,7 +22,7 @@ function menu_build(apiUrl) {
             let layout_link = item.getAttribute("layout-link")
             if (layout_link) {
                 console.log(layout_link)
-                layout_link = layout_link.includes("templates") ? layout_link : "/templates/index/" + layout_link
+                layout_link = layout_link.includes("index/") ? layout_link : pageBase + "index/" + layout_link
                 window.location.href = layout_link;
             }
 
@@ -42,7 +41,7 @@ function menu_build(apiUrl) {
 
     })
 }
-function load_menu(apiUrl) {
+function load_menu(apiUrl, pageBase) {
     axios
         .get(apiUrl + '/api/rest/v1/menu/tree')
         .then(response => {
@@ -105,14 +104,14 @@ function load_menu(apiUrl) {
 
             })
 
-            menu_build()
+            menu_build(apiUrl, pageBase)
         })
         .catch(error => {
             console.log(error)
         })
 }
 
-function load_menu_base(apiUrl) {
+function load_menu_base(apiUrl, pageBase) {
     axios
         .get(apiUrl + '/api/rest/v1/menu/tree/base')
         .then(response => {
@@ -122,7 +121,7 @@ function load_menu_base(apiUrl) {
                 document.getElementById("base-nav").innerHTML += item.html
             })
 
-            menu_build()
+            menu_build(apiUrl, pageBase)
         })
         .catch(error => {
             console.log(error)

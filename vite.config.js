@@ -1,8 +1,5 @@
 import { defineConfig } from 'vite'
 import { resolve } from 'path'
-import { createHtmlPlugin } from 'vite-plugin-html';  
-import fs from 'fs';
-import path from 'path';
 
 export default defineConfig({
   base: './',
@@ -17,7 +14,7 @@ export default defineConfig({
   server: {
     hmr: true,
     host: true,
-    open: false,
+    open: '/',
     port: 4000,
   },
 
@@ -29,7 +26,7 @@ export default defineConfig({
     assetsInlineLimit: 360000,
     rollupOptions: {
       input: {
-        main: './src/main.js', // 原始入口文件
+        main: './index.html', // 欢迎首页 
       },
       output: {
         // 控制 JS 文件名
@@ -40,31 +37,5 @@ export default defineConfig({
     },
     manifest: false // 关闭 manifest 文件生成
   },
-  plugins: [
-    // createHtmlPlugin({
-    //   minify: true,
-    //   inject: {
-    //     data: {
-    //       title: 'My App',
-
-    //     },
-    //     tags: [
-
-    //     ]
-    //   },
-    //   pages: [
-    //     {
-    //       filename: 'index.html',
-    //       template: 'index.html', 
-    //       injectOptions: {
-    //         data: { 
-    //           home: fs.readFileSync(path.resolve(__dirname, 'src/page/home.html'), 'utf-8'),
-    //         },
-    //       }
-
-    //     },
-    //   ]
-    // }),
-  ],
 
 })

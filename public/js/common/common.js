@@ -357,7 +357,7 @@ function action_event_build(callback) {
             if (!actionEvent) return;
             if (!targetId) return;
             console.log(`targetId = ${targetId}, actionEvent = ${actionEvent}`)
-            callback(targetId, actionEvent, currentTarget)
+            callback(targetId, actionEvent, currentTarget, evt)
         }
     }
 }
@@ -370,7 +370,7 @@ function htmlContentLoaded() {
             let arr = Array.from(elList)
                 .map(item => {
                     var htmlModalValue = item.getAttribute("html-modal")
-                    return fetch('/templates/modal/' + htmlModalValue + '.html')
+                    return fetch('/tabler/modal/' + htmlModalValue + '.html')
                         .then(data => data.text())
                         .then(html => {
                             item.innerHTML = html;
