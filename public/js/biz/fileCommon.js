@@ -1881,6 +1881,7 @@ function initVideoPlayer(el, id) {
 var vtfCurrentImageSrc = null;
 var vtfCurrentFileName = 'texture';
 var vtfConvertedData = null;  // 存储转换后的 VTF 数据
+var _vtfShimsInitialized = false;
 
 const VTF_FORMAT_MAP = {
     'RGBA8888': 0,
@@ -1911,6 +1912,162 @@ const VTF_FORMAT_MAP = {
     'RGBA16161616': 25,
     'UVLX8888': 26
 };
+
+// ==========================================================
+// VTF Shim 元素：vtf.js 硬编码了大量原始 DOM ID（format、
+// widthSetting、preview 等），我们的模板改了 ID，所以必须
+// 在 vtf.js 加载前创建这些 shim 元素，防止 setResolution()
+// 在脚本加载时崩溃。
+// ==========================================================
+(function vtfInitShimElements() {
+    // 仅在 vtflist-view 环境下需要这些 shim（vtf-converter 已包含）
+    var containerId = '_vtf-shim-container';
+    var container = document.getElementById(containerId);
+    if (!container) {
+        container = document.createElement('div');
+        container.id = containerId;
+        container.style.cssText = 'position:absolute;width:0;height:0;overflow:hidden;visibility:hidden;pointer-events:none';
+        document.body.appendChild(container);
+    }
+
+    function shim(tag, id, props) {
+        if (document.getElementById(id)) return;
+        var el = document.createElement(tag);
+        el.id = id;
+        if (props) {
+            for (var k in props) {
+                if (k === 'style') {
+                    for (var sk in props.style) el.style[sk] = props.style[sk];
+                } else {
+                    el[k] = props[k];
+                }
+            }
+        }
+        container.appendChild(el);
+    }
+
+    // ---- vtf.js 在 setResolution() 中直接访问的元素 ----
+    shim('select', 'format', { value: '15' });                          // 格式选择
+    shim('select', 'widthSetting', { value: '512' });                  // 宽度
+    shim('select', 'heightSetting', { value: '512' });                 // 高度
+    shim('input', 'widthSettingCus', { type: 'text', value: '512' });  // 自定义宽度
+    shim('input', 'heightSettingCus', { type: 'text', value: '512' }); // 自定义高度
+    shim('canvas', 'preview', { width: 512, height: 512 });            // 预览画布 ★ 必须是 canvas
+    shim('div', 'contentWrapper', { style: {width:'512px', height:'512px'} });
+    shim('input', 'files', { type: 'file' });
+    shim('button', 'convertButton', { disabled: true });
+    shim('button', 'saveButton', { disabled: true });
+    shim('button', 'saveButtonVMT', { disabled: true });
+    shim('input', 'files0', { type: 'file', disabled: true });
+    shim('div', 'mipmaps', { style: {display:'none'} });
+    shim('div', 'resolutionNotice', { style: {visibility:'hidden'} });
+
+    // ---- convert/convertPixels 中需要的元素 ----
+    shim('input', 'sampling', { type: 'hidden', value: '0' });
+    shim('input', 'dxtquality', { type: 'hidden', value: '2' });
+    shim('input', 'ditherCheck', { type: 'checkbox' });
+    shim('div', 'ditherBlock', { style: {display:'none'} });
+    shim('div', 'dxtSettings', { style: {display:'block'} });
+    shim('input', 'singleFrame', { type: 'checkbox' });
+    shim('input', 'mipmapsCheck', { type: 'checkbox', checked: true });
+    shim('input', 'rescaleCheck', { type: 'checkbox', checked: true });
+
+    // ---- 输出/下载相关 ----
+    shim('input', 'outputFilename', { type: 'text', value: 'spray' });
+    shim('span', 'filesizee');
+    shim('span', 'progress');
+
+    _vtfShimsInitialized = true;
+})();
+
+// 在调用 vtf.js convert() 之前，将我们 UI 的值同步到 shim 元素
+function vtfSyncShimValues() {
+    var formatSelect = document.getElementById('vtf-format');
+    var widthSelect = document.getElementById('vtf-width');
+    var heightSelect = document.getElementById('vtf-height');
+    var widthCustom = document.getElementById('vtf-width-custom');
+    var heightCustom = document.getElementById('vtf-height-custom');
+    var sampling = document.getElementById('vtf-sampling');
+    var quality = document.getElementById('vtf-quality');
+    var dither = document.getElementById('vtf-dither');
+    var filename = document.getElementById('vtf-filename');
+    var mipmaps = document.getElementById('vtf-mipmaps');
+    var rescale = document.getElementById('vtf-rescale');
+
+    // 格式
+    var fmtVal = formatSelect ? formatSelect.value : '15';
+    var shimFormat = document.getElementById('format');
+    if (shimFormat) shimFormat.value = fmtVal;
+
+    // 宽度
+    var wVal = vtfGetActualSize('vtf-width', 'vtf-width-custom', 512);
+    var shimWidth = document.getElementById('widthSetting');
+    var shimWidthCus = document.getElementById('widthSettingCus');
+    if (shimWidth) {
+        if (widthSelect && widthSelect.value === 'custom') {
+            shimWidth.value = 'custom';
+            if (shimWidthCus) {
+                shimWidthCus.value = isNaN(parseInt(wVal)) ? '512' : String(wVal);
+                shimWidthCus.style.display = 'inline';
+            }
+        } else {
+            shimWidth.value = isNaN(parseInt(wVal)) ? '512' : String(wVal);
+            if (shimWidthCus) shimWidthCus.style.display = 'none';
+        }
+    }
+
+    // 高度
+    var hVal = vtfGetActualSize('vtf-height', 'vtf-height-custom', 512);
+    var shimHeight = document.getElementById('heightSetting');
+    var shimHeightCus = document.getElementById('heightSettingCus');
+    if (shimHeight) {
+        if (heightSelect && heightSelect.value === 'custom') {
+            shimHeight.value = 'custom';
+            if (shimHeightCus) {
+                shimHeightCus.value = isNaN(parseInt(hVal)) ? '512' : String(hVal);
+                shimHeightCus.style.display = 'inline';
+            }
+        } else {
+            shimHeight.value = isNaN(parseInt(hVal)) ? '512' : String(hVal);
+            if (shimHeightCus) shimHeightCus.style.display = 'none';
+        }
+    }
+
+    // 抽样方案
+    var shimSampling = document.getElementById('sampling');
+    if (shimSampling) shimSampling.value = sampling ? sampling.value : '0';
+
+    // 压缩质量
+    var shimQuality = document.getElementById('dxtquality');
+    if (shimQuality) shimQuality.value = quality ? quality.value : '2';
+
+    // 抖动
+    var shimDither = document.getElementById('ditherCheck');
+    if (shimDither) shimDither.checked = dither ? dither.checked : false;
+
+    // 文件名
+    var shimFilename = document.getElementById('outputFilename');
+    if (shimFilename) shimFilename.value = (filename ? filename.value : 'spray') || 'spray';
+
+    // mipmaps
+    var shimMipmaps = document.getElementById('mipmapsCheck');
+    if (shimMipmaps) shimMipmaps.checked = mipmaps ? mipmaps.checked !== false : true;
+
+    // rescale
+    var shimRescale = document.getElementById('rescaleCheck');
+    if (shimRescale) shimRescale.checked = rescale ? rescale.checked !== false : true;
+
+    // 确保 dither/dxt 显示选项跟随格式
+    var fmtInt = parseInt(fmtVal);
+    if (fmtInt !== 0 && fmtInt !== 2 && fmtInt !== 13 && fmtInt !== 15) {
+        var db = document.getElementById('ditherBlock');
+        if (db) db.style.display = 'block';
+    }
+    if (fmtInt === 13 || fmtInt === 15) {
+        var ds = document.getElementById('dxtSettings');
+        if (ds) ds.style.display = 'block';
+    }
+}
 
 function vtfInitConverter() {
     return window.convert && window.createVTF ? true : false;
@@ -2054,24 +2211,44 @@ function vtfUpdateFileSizeEstimate() {
 
     var previewImg = document.getElementById('vtf-preview-img');
     var formatValue = parseInt(document.getElementById('vtf-format')?.value || '15');
-    var widthValue = vtfGetActualSize('vtf-width', 'vtf-width-custom', 1024);
-    var heightValue = vtfGetActualSize('vtf-height', 'vtf-height-custom', 1024);
-    var mipmaps = document.getElementById('vtf-mipmaps')?.checked !== false;
+    var widthValue = vtfGetActualSize('vtf-width', 'vtf-width-custom', 512);
+    var heightValue = vtfGetActualSize('vtf-height', 'vtf-height-custom', 512);
+    var mipmapsEnabled = document.getElementById('vtf-mipmaps')?.checked !== false;
 
     if (!previewImg || !previewImg.naturalWidth) return;
 
     var imgWidth = previewImg.naturalWidth;
     var imgHeight = previewImg.naturalHeight;
 
-    // 设置全局变量用于估算
+    // 保存当前全局状态（避免估算污染实际转换）
+    var savedOutputType = outputType;
+    var savedWidth = width;
+    var savedHeight = height;
+    var savedHasMipmaps = hasMipmaps;
+    var savedFrameCount = frameCount;
+    var savedShortened = shortened;
+
+    // 临时设置全局变量用于估算
     outputType = formatValue;
     width = widthValue === 'auto' ? imgWidth : widthValue;
     height = heightValue === 'auto' ? imgHeight : heightValue;
-    hasMipmaps = mipmaps;
+    hasMipmaps = mipmapsEnabled;
     frameCount = 1;
     shortened = false;
 
-    var estimatedSize = getEstFileSize(mipmaps);
+    // 同步 shim 中的 mipmaps 状态，确保 getEstFileSize 能读到正确值
+    var shimMipCheck = document.getElementById('mipmapsCheck');
+    if (shimMipCheck) shimMipCheck.checked = mipmapsEnabled;
+
+    var estimatedSize = getEstFileSize(mipmapsEnabled);
+
+    // 恢复全局状态
+    outputType = savedOutputType;
+    width = savedWidth;
+    height = savedHeight;
+    hasMipmaps = savedHasMipmaps;
+    frameCount = savedFrameCount;
+    shortened = savedShortened;
 
     // 显示估算大小
     var sizeEl = document.getElementById('vtf-file-size');
@@ -2083,10 +2260,8 @@ function vtfUpdateFileSizeEstimate() {
         sizeEl.className = 'alert alert-info small';
         
         // 显示分辨率信息
-        var resNotice = '';
         if (estimatedSize / 1024 > 512) {
-            resNotice = '<br><span class="text-warning">⚠ 超过 512KB 限制，建议减小尺寸或使用压缩格式</span>';
-            sizeEl.innerHTML += resNotice;
+            sizeEl.innerHTML += '<br><span class="text-warning">⚠ 超过 512KB 限制，建议减小尺寸或使用压缩格式</span>';
         }
     }
 }
@@ -2116,51 +2291,24 @@ function vtfConvertToVTF() {
         }
 
         var previewImg = document.getElementById('vtf-preview-img');
-        var formatStr = document.getElementById('vtf-format')?.value || 'DXT5';
-        var targetWidth = vtfGetActualSize('vtf-width', 'vtf-width-custom', 1024);
-        var targetHeight = vtfGetActualSize('vtf-height', 'vtf-height-custom', 1024);
-        var mipmaps = document.getElementById('vtf-mipmaps')?.checked !== false;
-        var sampling = document.getElementById('vtf-sampling')?.value || '0';
-        var quality = document.getElementById('vtf-quality')?.value || '2';
-        var dither = document.getElementById('vtf-dither')?.checked || false;
+        var formatStr = document.getElementById('vtf-format')?.value || '15';
+        var targetWidth = vtfGetActualSize('vtf-width', 'vtf-width-custom', 512);
+        var targetHeight = vtfGetActualSize('vtf-height', 'vtf-height-custom', 512);
+        var enableMipmaps = document.getElementById('vtf-mipmaps')?.checked !== false;
         var filename = document.getElementById('vtf-filename')?.value || 'spray';
 
-        // 创建临时DOM元素供vtf.js使用
-        var tempSampling = document.getElementById('sampling');
-        if (!tempSampling) {
-            tempSampling = document.createElement('input');
-            tempSampling.id = 'sampling';
-            tempSampling.type = 'hidden';
-            document.body.appendChild(tempSampling);
-        }
-        tempSampling.value = sampling;
+        // ★ 同步我们 UI 的值到 vtf.js 期望的原始 DOM shim 元素
+        vtfSyncShimValues();
 
-        // 创建临时DOM元素供dxt.js使用
-        var tempDxtQuality = document.getElementById('dxtquality');
-        if (!tempDxtQuality) {
-            tempDxtQuality = document.createElement('input');
-            tempDxtQuality.id = 'dxtquality';
-            tempDxtQuality.type = 'hidden';
-            document.body.appendChild(tempDxtQuality);
-        }
-        tempDxtQuality.value = quality;
+        // 设置格式 (vtf.js 使用 outputType 全局变量)
+        outputType = parseInt(formatStr) || 15;
 
-        // 创建临时DOM元素供dither使用
-        var tempDitherCheck = document.getElementById('ditherCheck');
-        if (!tempDitherCheck) {
-            tempDitherCheck = document.createElement('input');
-            tempDitherCheck.id = 'ditherCheck';
-            tempDitherCheck.type = 'checkbox';
-            tempDitherCheck.style.display = 'none';
-            document.body.appendChild(tempDitherCheck);
-        }
-        tempDitherCheck.checked = dither;
+        // 读取用户选择的实际值（用于确认同步后的值）
+        var samplingVal = document.getElementById('sampling').value;
+        var qualityVal = document.getElementById('dxtquality').value;
+        var ditherVal = document.getElementById('ditherCheck').checked;
 
-        // 设置格式 (vtf.js 使用 outputType 变量)
-        var formatCode = VTF_FORMAT_MAP[formatStr] || 15;
-        outputType = formatCode;
-
-        // 创建图像并加载到canvas
+        // 创建图像并加载
         var img = new Image();
         img.crossOrigin = 'anonymous';
         img.onload = function() {
@@ -2172,8 +2320,10 @@ function vtfConvertToVTF() {
                 // 更新全局变量
                 width = w;
                 height = h;
+                frameCount = 1;
+                currFrame = 0;
 
-                // 创建canvas并绘制图像
+                // 创建主画布并绘制图像
                 var canvas = document.createElement('canvas');
                 canvas.width = w;
                 canvas.height = h;
@@ -2182,7 +2332,6 @@ function vtfConvertToVTF() {
                 // 获取 rescale 选项
                 var rescale = document.getElementById('vtf-rescale')?.checked !== false;
                 
-                // 如果启用了 rescale，图像居中缩放，否则拉伸
                 if (rescale) {
                     var scale = Math.min(w / img.width, h / img.height);
                     var drawW = img.width * scale;
@@ -2195,57 +2344,78 @@ function vtfConvertToVTF() {
                     ctx.drawImage(img, 0, 0, w, h);
                 }
 
-                // 设置frames数组（模拟文件加载）
+                // 设置 frames 数组（模拟 vtf.js 文件加载后的状态）
                 frames = [[]];
                 frames[0] = [canvas];
 
-                // 创建mipmap canvas
+                // 创建 mipmap canvas 并绑定到全局
                 window.mipmaps = [document.createElement('canvas')];
-                // Set global mipmaps so vtf.js can see it, and assign to bare variable for local scope safety
                 mipmaps = window.mipmaps;
                 window.mipmaps[0].width = w;
                 window.mipmaps[0].height = h;
-
-                // 复制图像到mipmap canvas
                 var mipCtx = window.mipmaps[0].getContext('2d');
                 mipCtx.drawImage(canvas, 0, 0);
 
-                // 初始化全局变量
+                // ★ 设置 shim preview canvas 的尺寸（vtf.js 的 generatePreview 需要）
+                var shimPreview = document.getElementById('preview');
+                if (shimPreview) {
+                    shimPreview.width = w;
+                    shimPreview.height = h;
+                }
+
+                // ★ 设置 shim contentWrapper 的尺寸
+                var shimCW = document.getElementById('contentWrapper');
+                if (shimCW) {
+                    shimCW.style.width = w + 'px';
+                    shimCW.style.height = h + 'px';
+                }
+
+                // ★ 清空 shim mipmaps div（上次转换的残留）
+                var shimMipDiv = document.getElementById('mipmaps');
+                if (shimMipDiv) shimMipDiv.innerHTML = '';
+
+                // 重置所有全局变量（避免上次转换的残留值）
                 valueTable = [];
                 alphaValueTable = [];
                 alphaLookupTable = [];
                 outputImage = [];
                 blockCount = 0;
                 blockPosition = 0;
-                currFrame = 0;
                 converted = false;
                 shortened = false;
                 autores = false;
                 colorTable = [];
                 pixelTable = [];
                 mipmapCount = 0;
-                hasMipmaps = document.getElementById('vtf-mipmaps')?.checked !== false;
+                hasMipmaps = enableMipmaps;
 
-                // 调用convert函数
+                // ★ 同步 shim 中的 mipmaps 复选框状态
+                var shimMipCheck = document.getElementById('mipmapsCheck');
+                if (shimMipCheck) shimMipCheck.checked = enableMipmaps;
+
+                // ★ 同步 shim 中的 rescale 复选框状态
+                var shimRescale = document.getElementById('rescaleCheck');
+                if (shimRescale) shimRescale.checked = rescale;
+
+                // ★ 调用 vtf.js 的 convert() 进行实际转换
                 convert();
 
                 // 检查转换是否成功
                 if (converted) {
-                    // 使用 createVTFData 获取数据而不是直接下载
                     var vtfData = createVTFData();
                     resolve({
                         vtfData: vtfData,
                         filename: filename
                     });
                 } else {
-                    reject(new Error('VTF转换失败'));
+                    reject(new Error('VTF转换失败：未知错误'));
                 }
             } catch (e) {
                 reject(e);
             }
         };
         img.onerror = function() {
-            reject(new Error('图片加载失败'));
+            reject(new Error('图片加载失败，请检查图片地址是否可访问'));
         };
         img.src = previewImg.src;
     });
@@ -2441,9 +2611,8 @@ function vtfSetupEventListeners() {
     var formatSelect = document.getElementById('vtf-format');
     if (formatSelect && !formatSelect.dataset.vtfBound) {
         formatSelect.addEventListener('change', function() {
-            // 更新 outputType 全局变量
-            var formatStr = this.value;
-            outputType = VTF_FORMAT_MAP[formatStr] || 15;
+            // 更新 outputType 全局变量（select value 是数字字符串）
+            outputType = parseInt(this.value) || 15;
             vtfUpdateFileSizeEstimate();
         });
         formatSelect.dataset.vtfBound = true;
