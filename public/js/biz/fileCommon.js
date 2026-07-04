@@ -200,6 +200,35 @@ function action(targetId, actionEvent, currentTarget, evt) {
         var video = el.getAttribute('href') === 'javascript:void(0)';
         if (video) { initVideoPlayer(el, id); }
     }
+    if ("refresh" === actionEvent) {
+        var cardEl = document.querySelector('#main-context [data-file-id="' + id + '"]');
+        if (!cardEl) return;
+        cardEl.innerHTML = '<div class="col-xs-12 col-sm-12 col-md-12"><div class="spinner-border spinner-border-sm text-secondary" role="status"></div></div>';
+        axios.post(apiUrl + '/api/rest/v1/file/sql/page', { id: id, withTags: 1 })
+            .then(function(resp) {
+                if (resp.data.code !== 200) return;
+                var items = resp.data.data;
+                if (!items || items.length === 0) return;
+                var item = items[0];
+                var prevUrl = resp.data.prevUrl || '';
+                item.apiUrl = apiUrl;
+                item.prevUrl = prevUrl;
+                item.url = apiUrl + prevUrl + item.relativePath;
+                item.preview = item.type && item.type.startsWith('video') ? apiUrl + prevUrl + item.relativePath + '.jpg' : apiUrl + prevUrl + item.relativePath;
+                item.bookFisrt = apiUrl + '/api/rest/v1/book/detail/first/' + item.id;
+                var isVideo = item.type && item.type.startsWith('video');
+                item.video = isVideo;
+                item.href = isVideo ? 'javascript:void(0)' : item.url;
+                item.dataUrl = isVideo ? item.url : '';
+                item.modal = isVideo ? 'data-bs-toggle="modal" data-bs-target="#video-play"' : '';
+                var newHtml = render(Common.templateId(item.htmlTemplate), item);
+                var wrapper = document.createElement('div');
+                wrapper.innerHTML = newHtml;
+                cardEl.replaceWith(wrapper.firstChild);
+            })
+            .catch(function(err) { console.log(err); });
+        return;
+    }
     if ("move" === actionEvent) {
         return
     }
@@ -515,8 +544,25 @@ function action(targetId, actionEvent, currentTarget, evt) {
                     var tagsList = document.querySelector('#tag-info .tags-list');
                     if (tagsList) {
                         tagsList.innerHTML = tags.map(function(t) {
-                            return '<span class="tag">' + t.name + '<a href="#" class="btn-close" onclick="return false;"></a></span>';
+                            var safeName = t.name.replace(/"/g, '&quot;');
+                            return '<span class="tag" data-tag-name="' + safeName + '">' + t.name + '<a href="#" class="btn-close" onclick="return false;"></a></span>';
                         }).join('');
+                        tagsList.addEventListener('click', function(evt) {
+                            var tag = evt.target.closest('.tag');
+                            if (!tag || evt.target.closest('.btn-close')) return;
+                            var input = document.querySelector('#tag-form input[name="tag"]');
+                            if (!input) return;
+                            var newName = tag.dataset.tagName;
+                            var current = input.value.trim();
+                            if (current) {
+                                var names = current.split(',').map(function(s) { return s.trim(); });
+                                if (names.indexOf(newName) === -1) {
+                                    input.value = current + ', ' + newName;
+                                }
+                            } else {
+                                input.value = newName;
+                            }
+                        });
                     }
                 }
             })
@@ -577,6 +623,7 @@ function action(targetId, actionEvent, currentTarget, evt) {
 
     }
     if ("unbind-tag" === actionEvent) {
+        if (evt) evt.preventDefault();
         var tagId = currentTarget?.getAttribute('tag-id');
         if (id && tagId) {
             axios.post(apiUrl + '/api/rest/v1/file/tag/remove', {
@@ -585,7 +632,33 @@ function action(targetId, actionEvent, currentTarget, evt) {
             })
             .then(function(resp) {
                 if (resp.data.code === 200) {
-                    load_data(request, 1);
+                    // 只刷新当前文件卡片，不刷新整个分页
+                    var cardEl = document.querySelector('#main-context [data-file-id="' + id + '"]');
+                    if (cardEl) {
+                        axios.post(apiUrl + '/api/rest/v1/file/sql/page', { id: id, withTags: 1 })
+                            .then(function(resp2) {
+                                if (resp2.data.code !== 200) return;
+                                var items = resp2.data.data;
+                                if (!items || items.length === 0) return;
+                                var item = items[0];
+                                var prevUrl = resp2.data.prevUrl || '';
+                                item.apiUrl = apiUrl;
+                                item.prevUrl = prevUrl;
+                                item.url = apiUrl + prevUrl + item.relativePath;
+                                item.preview = item.type && item.type.startsWith('video') ? apiUrl + prevUrl + item.relativePath + '.jpg' : apiUrl + prevUrl + item.relativePath;
+                                item.bookFisrt = apiUrl + '/api/rest/v1/book/detail/first/' + item.id;
+                                var isVideo = item.type && item.type.startsWith('video');
+                                item.video = isVideo;
+                                item.href = isVideo ? 'javascript:void(0)' : item.url;
+                                item.dataUrl = isVideo ? item.url : '';
+                                item.modal = isVideo ? 'data-bs-toggle="modal" data-bs-target="#video-play"' : '';
+                                var newHtml = render(Common.templateId(item.htmlTemplate), item);
+                                var wrapper = document.createElement('div');
+                                wrapper.innerHTML = newHtml;
+                                cardEl.replaceWith(wrapper.firstChild);
+                            })
+                            .catch(function(err) { console.log(err); });
+                    }
                 } else {
                     tablerCommon.alertDanger(resp.data.msg || resp.data.message);
                 }

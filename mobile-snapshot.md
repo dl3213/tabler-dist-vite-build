@@ -1,0 +1,36 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - button "Toggle navigation" [ref=e106] [cursor=pointer]
+        - link [ref=e7] [cursor=pointer]:
+          - /url: .
+        - link "Open user menu" [ref=e27] [cursor=pointer]:
+          - /url: "#"
+    - banner
+  - iframe [ref=e99]:
+    - generic [ref=f1e4]:
+      - generic [ref=f1e7]:
+        - generic [ref=f1e8]
+        - link "Create new report" [ref=f1e850] [cursor=pointer]:
+          - /url: "#"
+      - generic [ref=f1e20]:
+        - generic [ref=f1e23]
+        - generic [ref=f1e40]
+        - generic [ref=f1e52]
+        - generic [ref=f1e64]
+        - generic [ref=f1e80]
+        - heading "Traffic summary" [level=3] [ref=f1e135]
+        - heading "Locations" [level=3] [ref=f1e140]
+        - generic [ref=f1e145]
+        - generic [ref=f1e340]
+        - generic [ref=f1e393]
+        - generic [ref=f1e403]
+        - link "Sponsor Tabler!" [ref=f1e494] [cursor=pointer]:
+          - /url: /static-file/2024-12-05/1864677661977219072.jpg
+        - generic [ref=f1e497]
+        - generic [ref=f1e549]
+        - generic [ref=f1e682]
+  - link [ref=e100] [cursor=pointer]:
+    - /url: "#"
+    - img [ref=e101]

@@ -1,5 +1,5 @@
 <div style="display: none;">
-    <div class="col-md-4 col-sm-12" template-id="card">
+    <div class="col-md-4 col-sm-12" template-id="card" data-file-id="{id}">
         <div class="card">
             <div class="card-body">
                 <h3 class="card-title">{realName}</h3>
@@ -27,6 +27,9 @@
                                 </a>
                                 <a class="dropdown-item edit-btn" target-id="{id}" data-bs-toggle="modal" data-bs-target="#modal-info-view">
                                     edit
+                                </a>
+                                <a class="dropdown-item" action-event="refresh" target-id="{id}">
+                                    refresh
                                 </a>
                                 <a class="dropdown-item" action-event="add-tag" target-id="{id}" data-bs-toggle="modal" data-bs-target="#tag-info">
                                     add tag

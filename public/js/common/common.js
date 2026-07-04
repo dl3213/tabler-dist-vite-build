@@ -1,7 +1,7 @@
 var Common = {
     NumberOfDecimal: 2,
     server: {   
-        API_URL: "http://192.168.10.55:8080",
+        API_URL: "http://192.168.10.63:8080",
     },
     showLoading: (el, msg) => {
         var target = document.getElementById(el)
@@ -325,22 +325,17 @@ function checkBreakpoint() {
 
 function htmlObserver(htmlElId, callback) {
     var observer = new MutationObserver((mutations) => {
-        mutations.forEach(function (mutation) {
-            //console.log(mutation)
+        for (const mutation of mutations) {
             if ('childList' === mutation.type) {
                 action_event_build(callback)
+                return // 一次 childList 变更就够了，不需要处理队列里剩余的同批次记录
             }
-
-        });
+        }
     });
 
     observer.observe(document.getElementById(htmlElId), {
-        childList: true,        // 子节点的增减
-        attributes: true,       // 属性的变动
-        characterData: true,    // 节点内容或节点文本的变动
-        subtree: true,          // 是否将观察器应用于该节点的所有后代节点
-        attributeOldValue: true, // 记录变动前的属性值（attributes变动时）
-        characterDataOldValue: true, // 记录变动前的数据（characterData变动时）
+        childList: true,        // 只需要监听子节点增删
+        subtree: true,          // 监听整个子树
     });
 
     return observer;

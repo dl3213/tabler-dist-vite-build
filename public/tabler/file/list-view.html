@@ -444,8 +444,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="row row-cards" id="main-context"
-                        style="will-change: transform; backface-visibility: hidden;">
+                    <div class="row row-cards" id="main-context">
                     </div>
 
                     <div class="d-flex">
@@ -539,19 +538,14 @@
 
                     htmlObserver('main-context', action)
 
-                    var observer = new MutationObserver((mutations) => {
-                        mutations.forEach(function (mutation) {
-                            console.log(mutation)
-                            if ('childList' === mutation.type) {
-                            }
-
-                        });
-                    });
-                    console.log(document.getElementById('requestForm'))
-                    observer.observe(document.getElementById('requestForm'), {
-                        attributes: true,       // 属性的变动
-                        characterData: true,    // 节点内容或节点文本的变动  
-                    });
+                    // Fancybox 实例优化：翻页前清理旧的 gallery 引用
+                    var _origLoadData = load_data;
+                    load_data = function(req) {
+                        if (window.Fancybox) {
+                            try { Fancybox.close(); } catch(e) {}
+                        }
+                        _origLoadData(req);
+                    };
 
                     load_data(request, 1)
 
@@ -693,6 +687,7 @@
                         var tag = tagForm.querySelector('input[name="tag"]').value;
                         if (!tag || !tag.trim()) return;
                         window._tagSubmitPending = true;
+                        window._tagRefreshTargetId = targetId;
                         axios.post(apiUrl + '/api/rest/v1/file/tag/bind', {
                             entityId: targetId,
                             tag: tag.trim()
@@ -708,7 +703,36 @@
                     document.getElementById('tag-info')?.addEventListener('hidden.bs.modal', function() {
                         if (window._tagSubmitPending) {
                             window._tagSubmitPending = false;
-                            load_data(request, 1);
+                            var refreshId = window._tagRefreshTargetId;
+                            if (refreshId) {
+                                // 只重新渲染当前文件，不刷新整个分页
+                                var cardEl = document.querySelector('#main-context [data-file-id="' + refreshId + '"]');
+                                if (cardEl) {
+                                    axios.post(apiUrl + '/api/rest/v1/file/sql/page', { id: refreshId, withTags: 1 })
+                                        .then(function(resp) {
+                                            if (resp.data.code !== 200) return;
+                                            var items = resp.data.data;
+                                            if (!items || items.length === 0) return;
+                                            var item = items[0];
+                                            var prevUrl = resp.data.prevUrl || '';
+                                            item.apiUrl = apiUrl;
+                                            item.prevUrl = prevUrl;
+                                            item.url = apiUrl + prevUrl + item.relativePath;
+                                            item.preview = item.type && item.type.startsWith('video') ? apiUrl + prevUrl + item.relativePath + '.jpg' : apiUrl + prevUrl + item.relativePath;
+                                            item.bookFisrt = apiUrl + '/api/rest/v1/book/detail/first/' + item.id;
+                                            var isVideo = item.type && item.type.startsWith('video');
+                                            item.video = isVideo;
+                                            item.href = isVideo ? 'javascript:void(0)' : item.url;
+                                            item.dataUrl = isVideo ? item.url : '';
+                                            item.modal = isVideo ? 'data-bs-toggle="modal" data-bs-target="#video-play"' : '';
+                                            var newHtml = render(Common.templateId(item.htmlTemplate), item);
+                                            var wrapper = document.createElement('div');
+                                            wrapper.innerHTML = newHtml;
+                                            cardEl.replaceWith(wrapper.firstChild);
+                                        })
+                                        .catch(function(err) { console.log(err); });
+                                }
+                            }
                         }
                     });
                     

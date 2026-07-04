@@ -604,7 +604,13 @@
 					e.stopPropagation();
 
 					document.getElementById("user-profile-picture")?.classList.remove("show")
-					document.getElementById("navbar-menu-btn")?.click()
+					// 直接用 Bootstrap API 收起菜单，避免 tabler.js 和 tabler.min.js
+					// 双重 Bootstrap 导致 click() 触发两次 collapse toggle 的问题
+					var menuCollapse = document.getElementById('navbar-menu');
+					if (menuCollapse && menuCollapse.classList.contains('show')) {
+						var bsCollapse = bootstrap.Collapse.getInstance(menuCollapse);
+						if (bsCollapse) bsCollapse.hide();
+					}
 
 					let link = item.getAttribute("target-link")
 					console.log(link)

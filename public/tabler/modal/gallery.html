@@ -1,5 +1,5 @@
 <div style="display: none;">
-    <div class="col-md-4 col-sm-12" id="" template-id="gallery">
+    <div class="col-md-4 col-sm-12" id="" template-id="gallery" data-file-id="{id}">
         <div class="card">
             <div class="card-body">
                 <div class="row row-cards">
@@ -18,16 +18,17 @@
                 </div>
             </div>
             <a href="{href}" class="d-block card-img-top entity" id="{id}" action-event="click" target-id="{id}" {gallery} data-url="{dataUrl}" {modal} video="{video}">
-                <img src="{preview}" class="card-img-top">
+                <img src="{preview}" class="card-img-top" loading="lazy">
             </a>
             <div class="card-body container base-info-div">
                 <div class="row row-cards">
-                    <div class="col">
-                        <div class="mb-3">
+                    <div class="col-auto">
+                        <div class="mb-3 d-flex align-items-center gap-2">
                             <a action-event="delete" target-id="{id}" class="btn btn-link delete-btn">delete</a>
+                            <a action-event="delete-pixiv" target-id="{id}" class="btn btn-link text-red" style="display:{code === 'pixiv' ? 'inline-block' : 'none'}">delete-pixiv</a>
                         </div>
                     </div>
-                    <div class="col-6">
+                    <div class="col">
                         <div class="mb-3">
                             <input type="text" class="form-control-plaintext" name="example-disabled-input" placeholder="Readonly..." value="{createTime}" readonly="" disabled>
                         </div>
@@ -39,6 +40,9 @@
                             </button>
                             <div class="dropdown-menu">
 
+                                <a class="dropdown-item" action-event="refresh" target-id="{id}">
+                                    refresh
+                                </a>
                                 <a class="dropdown-item" action-event="add-tag" target-id="{id}" data-bs-toggle="modal" data-bs-target="#tag-info">
                                     add tag
                                 </a>

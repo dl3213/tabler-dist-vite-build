@@ -1,0 +1,680 @@
+- generic [ref=e2]:
+  - generic [ref=e3]:
+    - banner [ref=e4]:
+      - generic [ref=e5]:
+        - button "Toggle navigation" [ref=e6] [cursor=pointer]
+        - link [ref=e9] [cursor=pointer]:
+          - /url: .
+          - img [ref=e10]
+        - link "Open user menu" [ref=e15] [cursor=pointer]:
+          - /url: "#"
+    - banner
+  - iframe [ref=e18]:
+    - generic [ref=f4e4]:
+      - generic [ref=f4e7]:
+        - generic [ref=f4e8]:
+          - generic [ref=f4e9]: Overview
+          - heading "Dashboard" [level=2] [ref=f4e10]
+        - link "Create new report" [ref=f4e13] [cursor=pointer]:
+          - /url: "#"
+          - img [ref=f4e14]
+      - generic [ref=f4e18]:
+        - generic [ref=f4e21]:
+          - generic [ref=f4e23]: "CPU:"
+          - generic [ref=f4e24]: 75%
+          - generic [ref=f4e25]:
+            - generic [ref=f4e26]: CPU used rate
+            - generic [ref=f4e28]:
+              - text: 7%
+              - img [ref=f4e29]
+          - progressbar "75% Complete" [ref=f4e34]:
+            - generic [ref=f4e35]: 75% Complete
+        - generic [ref=f4e38]:
+          - generic [ref=f4e40]: OS-Memory
+          - generic [ref=f4e41]:
+            - generic [ref=f4e42]: GB
+            - generic [ref=f4e44]:
+              - text: 0%
+              - img [ref=f4e45]
+        - generic [ref=f4e50]:
+          - generic [ref=f4e52]: JVM-Memory
+          - generic [ref=f4e53]:
+            - generic [ref=f4e54]: 6,782
+            - generic [ref=f4e56]:
+              - text: 0%
+              - img [ref=f4e57]
+        - generic [ref=f4e62]:
+          - generic [ref=f4e63]:
+            - generic [ref=f4e64]: Active users
+            - link "Last 7 days" [ref=f4e67] [cursor=pointer]:
+              - /url: "#"
+          - generic [ref=f4e68]:
+            - generic [ref=f4e69]: 2,986
+            - generic [ref=f4e71]:
+              - text: 4%
+              - img [ref=f4e72]
+        - generic [ref=f4e78]:
+          - generic [ref=f4e82]:
+            - img [ref=f4e85]
+            - generic [ref=f4e88]:
+              - generic [ref=f4e89]: 132 Sales
+              - generic [ref=f4e90]: 12 waiting payments
+          - generic [ref=f4e94]:
+            - img [ref=f4e97]
+            - generic [ref=f4e103]:
+              - generic [ref=f4e104]: 78 Orders
+              - generic [ref=f4e105]: 32 shipped
+          - generic [ref=f4e109]:
+            - img [ref=f4e112]
+            - generic [ref=f4e115]:
+              - generic [ref=f4e116]: 623 Shares
+              - generic [ref=f4e117]: 16 today
+          - generic [ref=f4e121]:
+            - img [ref=f4e124]
+            - generic [ref=f4e127]:
+              - generic [ref=f4e128]: 132 Likes
+              - generic [ref=f4e129]: 21 today
+        - heading "Traffic summary" [level=3] [ref=f4e133]
+        - heading "Locations" [level=3] [ref=f4e138]
+        - generic [ref=f4e143]:
+          - generic [ref=f4e146]:
+            - paragraph [ref=f4e147]:
+              - text: Using Storage
+              - strong [ref=f4e148]: 6854.45 MB
+              - text: of 8 GB
+            - generic [ref=f4e149]:
+              - progressbar "Regular" [ref=f4e150]
+              - progressbar "System" [ref=f4e151]
+              - progressbar "Shared" [ref=f4e152]
+            - generic [ref=f4e153]:
+              - generic [ref=f4e156]: Regular
+              - generic [ref=f4e159]: System
+              - generic [ref=f4e162]: Shared
+              - generic [ref=f4e165]: Free
+          - generic [ref=f4e169]:
+            - generic [ref=f4e171]:
+              - generic [ref=f4e173]: JL
+              - generic [ref=f4e174]:
+                - generic [ref=f4e175]:
+                  - strong [ref=f4e176]: Jeffie Lewzey
+                  - text: commented on your
+                  - strong [ref=f4e177]: "\"I'm not a witch.\""
+                  - text: post.
+                - generic [ref=f4e178]: yesterday
+            - generic [ref=f4e185]:
+              - generic [ref=f4e186]:
+                - text: It's
+                - strong [ref=f4e187]: Mallory Hulme
+                - text: "'s birthday. Wish him well!"
+              - generic [ref=f4e188]: 2 days ago
+            - generic [ref=f4e195]:
+              - generic [ref=f4e196]:
+                - strong [ref=f4e197]: Dunn Slane
+                - text: posted
+                - strong [ref=f4e198]: "\"Well, what do you want?\""
+                - text: .
+              - generic [ref=f4e199]: today
+            - generic [ref=f4e206]:
+              - generic [ref=f4e207]:
+                - strong [ref=f4e208]: Emmy Levet
+                - text: created a new project
+                - strong [ref=f4e209]: Morning alarm clock
+                - text: .
+              - generic [ref=f4e210]: 4 days ago
+            - generic [ref=f4e217]:
+              - generic [ref=f4e218]:
+                - strong [ref=f4e219]: Maryjo Lebarree
+                - text: liked your photo.
+              - generic [ref=f4e220]: 2 days ago
+            - generic [ref=f4e222]:
+              - generic [ref=f4e224]: EP
+              - generic [ref=f4e225]:
+                - generic [ref=f4e226]:
+                  - strong [ref=f4e227]: Egan Poetz
+                  - text: registered new client as
+                  - strong [ref=f4e228]: Trilia
+                  - text: .
+                - generic [ref=f4e229]: yesterday
+            - generic [ref=f4e234]:
+              - generic [ref=f4e235]:
+                - strong [ref=f4e236]: Kellie Skingley
+                - text: closed a new deal on project
+                - strong [ref=f4e237]: Pen Pineapple Apple Pen
+                - text: .
+              - generic [ref=f4e238]: 2 days ago
+            - generic [ref=f4e243]:
+              - generic [ref=f4e244]:
+                - strong [ref=f4e245]: Christabel Charlwood
+                - text: created a new project for
+                - strong [ref=f4e246]: Wikibox
+                - text: .
+              - generic [ref=f4e247]: 4 days ago
+            - generic [ref=f4e249]:
+              - generic [ref=f4e251]: HS
+              - generic [ref=f4e252]:
+                - generic [ref=f4e253]:
+                  - strong [ref=f4e254]: Haskel Shelper
+                  - text: change status of
+                  - strong [ref=f4e255]: Tabler Icons
+                  - text: from
+                  - strong [ref=f4e256]: open
+                  - text: to
+                  - strong [ref=f4e257]: closed
+                  - text: .
+                - generic [ref=f4e258]: today
+            - generic [ref=f4e263]:
+              - generic [ref=f4e264]:
+                - strong [ref=f4e265]: Lorry Mion
+                - text: liked
+                - strong [ref=f4e266]: Tabler UI Kit
+                - text: .
+              - generic [ref=f4e267]: yesterday
+            - generic [ref=f4e272]:
+              - generic [ref=f4e273]:
+                - strong [ref=f4e274]: Leesa Beaty
+                - text: posted new video.
+              - generic [ref=f4e275]: 2 days ago
+            - generic [ref=f4e280]:
+              - generic [ref=f4e281]:
+                - strong [ref=f4e282]: Perren Keemar
+                - text: and 3 others followed you.
+              - generic [ref=f4e283]: 2 days ago
+            - generic [ref=f4e285]:
+              - generic [ref=f4e287]: SA
+              - generic [ref=f4e288]:
+                - generic [ref=f4e289]:
+                  - strong [ref=f4e290]: Sunny Airey
+                  - text: upload 3 new photos to category
+                  - strong [ref=f4e291]: Inspirations
+                  - text: .
+                - generic [ref=f4e292]: 2 days ago
+            - generic [ref=f4e297]:
+              - generic [ref=f4e298]:
+                - strong [ref=f4e299]: Geoffry Flaunders
+                - text: made a
+                - strong [ref=f4e300]: $10
+                - text: donation.
+              - generic [ref=f4e301]: 2 days ago
+            - generic [ref=f4e306]:
+              - generic [ref=f4e307]:
+                - strong [ref=f4e308]: Thatcher Keel
+                - text: created a profile.
+              - generic [ref=f4e309]: 3 days ago
+            - generic [ref=f4e314]:
+              - generic [ref=f4e315]:
+                - strong [ref=f4e316]: Dyann Escala
+                - text: hosted the event
+                - strong [ref=f4e317]: Tabler UI Birthday
+                - text: .
+              - generic [ref=f4e318]: 4 days ago
+            - generic [ref=f4e323]:
+              - generic [ref=f4e324]:
+                - strong [ref=f4e325]: Avivah Mugleston
+                - text: mentioned you on
+                - strong [ref=f4e326]: Best of 2020
+                - text: .
+              - generic [ref=f4e327]: 2 days ago
+            - generic [ref=f4e329]:
+              - generic [ref=f4e331]: AA
+              - generic [ref=f4e332]:
+                - generic [ref=f4e333]:
+                  - strong [ref=f4e334]: Arlie Armstead
+                  - text: sent a Review Request to
+                  - strong [ref=f4e335]: Amanda Blake
+                  - text: .
+                - generic [ref=f4e336]: 2 days ago
+        - generic [ref=f4e338]:
+          - generic [ref=f4e340]: Development activity
+          - generic [ref=f4e345]:
+            - generic [ref=f4e346]: "Today's Earning: $4,262.40"
+            - generic [ref=f4e347]:
+              - img [ref=f4e348]
+              - text: +5% more than yesterday
+          - table [ref=f4e353]:
+            - rowgroup [ref=f4e354]:
+              - row "User Commit Date" [ref=f4e355]:
+                - columnheader "User" [ref=f4e356]
+                - columnheader "Commit" [ref=f4e357]
+                - columnheader "Date" [ref=f4e358]
+            - rowgroup [ref=f4e359]:
+              - row "Fix dart Sass compatibility (#29755) 28 Nov 2019" [ref=f4e360]:
+                - cell [ref=f4e361]
+                - cell "Fix dart Sass compatibility (#29755)" [ref=f4e363]:
+                  - generic [ref=f4e364]: Fix dart Sass compatibility (#29755)
+                - cell "28 Nov 2019" [ref=f4e365]
+              - row "JL Change deprecated html tags to text decoration classes (#29604) 27 Nov 2019" [ref=f4e366]:
+                - cell "JL" [ref=f4e367]:
+                  - generic [ref=f4e368]: JL
+                - cell "Change deprecated html tags to text decoration classes (#29604)" [ref=f4e369]:
+                  - generic [ref=f4e370]: Change deprecated html tags to text decoration classes (#29604)
+                - cell "27 Nov 2019" [ref=f4e371]
+              - row "justify-content:between ⇒ justify-content:space-between (#29734) 26 Nov 2019" [ref=f4e372]:
+                - cell [ref=f4e373]
+                - cell "justify-content:between ⇒ justify-content:space-between (#29734)" [ref=f4e375]:
+                  - generic [ref=f4e376]: justify-content:between ⇒ justify-content:space-between (#29734)
+                - cell "26 Nov 2019" [ref=f4e377]
+              - row "Update change-version.js (#29736) 26 Nov 2019" [ref=f4e378]:
+                - cell [ref=f4e379]
+                - cell "Update change-version.js (#29736)" [ref=f4e381]:
+                  - generic [ref=f4e382]: Update change-version.js (#29736)
+                - cell "26 Nov 2019" [ref=f4e383]
+              - row "Regenerate package-lock.json (#29730) 25 Nov 2019" [ref=f4e384]:
+                - cell [ref=f4e385]
+                - cell "Regenerate package-lock.json (#29730)" [ref=f4e387]:
+                  - generic [ref=f4e388]: Regenerate package-lock.json (#29730)
+                - cell "25 Nov 2019" [ref=f4e389]
+        - generic [ref=f4e391]:
+          - generic:
+            - generic:
+              - img
+          - generic [ref=f4e394]:
+            - heading "Tabler Icons" [level=3] [ref=f4e395]
+            - generic [ref=f4e396]:
+              - text: All icons come from the Tabler Icons set and are MIT-licensed. Visit
+              - link "tabler-icons.io" [ref=f4e397] [cursor=pointer]:
+                - /url: https://tabler-icons.io
+              - text: ", download any of the 4637 icons in SVG, PNG or React and use them in your favourite design tools."
+            - link "Download icons" [ref=f4e399] [cursor=pointer]:
+              - /url: https://tabler-icons.io
+        - generic [ref=f4e401]:
+          - heading "Most Visited Pages" [level=3] [ref=f4e403]
+          - table [ref=f4e405]:
+            - rowgroup [ref=f4e406]:
+              - row "Page name Visitors Unique Bounce rate" [ref=f4e407]:
+                - columnheader "Page name" [ref=f4e408]
+                - columnheader "Visitors" [ref=f4e409]
+                - columnheader "Unique" [ref=f4e410]
+                - columnheader "Bounce rate" [ref=f4e411]
+            - rowgroup [ref=f4e412]:
+              - row "/ Open website 4,896 3,654 82.54%" [ref=f4e413]:
+                - cell "/ Open website" [ref=f4e414]:
+                  - text: /
+                  - link "Open website" [ref=f4e415] [cursor=pointer]:
+                    - /url: "#"
+                    - img [ref=f4e416]
+                - cell "4,896" [ref=f4e421]
+                - cell "3,654" [ref=f4e422]
+                - cell "82.54%" [ref=f4e423]
+                - cell [ref=f4e424]
+              - row "/form-elements.html Open website 3,652 3,215 76.29%" [ref=f4e426]:
+                - cell "/form-elements.html Open website" [ref=f4e427]:
+                  - text: /form-elements.html
+                  - link "Open website" [ref=f4e428] [cursor=pointer]:
+                    - /url: "#"
+                    - img [ref=f4e429]
+                - cell "3,652" [ref=f4e434]
+                - cell "3,215" [ref=f4e435]
+                - cell "76.29%" [ref=f4e436]
+                - cell [ref=f4e437]
+              - row "/index.html Open website 3,256 2,865 72.65%" [ref=f4e439]:
+                - cell "/index.html Open website" [ref=f4e440]:
+                  - text: /index.html
+                  - link "Open website" [ref=f4e441] [cursor=pointer]:
+                    - /url: "#"
+                    - img [ref=f4e442]
+                - cell "3,256" [ref=f4e447]
+                - cell "2,865" [ref=f4e448]
+                - cell "72.65%" [ref=f4e449]
+                - cell [ref=f4e450]
+              - row "/icons.html Open website 986 865 44.89%" [ref=f4e452]:
+                - cell "/icons.html Open website" [ref=f4e453]:
+                  - text: /icons.html
+                  - link "Open website" [ref=f4e454] [cursor=pointer]:
+                    - /url: "#"
+                    - img [ref=f4e455]
+                - cell "986" [ref=f4e460]
+                - cell "865" [ref=f4e461]
+                - cell "44.89%" [ref=f4e462]
+                - cell [ref=f4e463]
+              - row "/docs/ Open website 912 822 41.12%" [ref=f4e465]:
+                - cell "/docs/ Open website" [ref=f4e466]:
+                  - text: /docs/
+                  - link "Open website" [ref=f4e467] [cursor=pointer]:
+                    - /url: "#"
+                    - img [ref=f4e468]
+                - cell "912" [ref=f4e473]
+                - cell "822" [ref=f4e474]
+                - cell "41.12%" [ref=f4e475]
+                - cell [ref=f4e476]
+              - row "/accordion.html Open website 855 798 32.65%" [ref=f4e478]:
+                - cell "/accordion.html Open website" [ref=f4e479]:
+                  - text: /accordion.html
+                  - link "Open website" [ref=f4e480] [cursor=pointer]:
+                    - /url: "#"
+                    - img [ref=f4e481]
+                - cell "855" [ref=f4e486]
+                - cell "798" [ref=f4e487]
+                - cell "32.65%" [ref=f4e488]
+                - cell [ref=f4e489]
+        - link "Sponsor Tabler!" [ref=f4e492] [cursor=pointer]:
+          - /url: /static-file/2024-12-05/1864677661977219072.jpg
+        - generic [ref=f4e495]:
+          - heading "Social Media Traffic" [level=3] [ref=f4e497]
+          - table [ref=f4e498]:
+            - rowgroup [ref=f4e499]:
+              - row "Network Visitors" [ref=f4e500]:
+                - columnheader "Network" [ref=f4e501]
+                - columnheader "Visitors" [ref=f4e502]
+            - rowgroup [ref=f4e503]:
+              - row "Instagram 3,550" [ref=f4e504]:
+                - cell "Instagram" [ref=f4e505]
+                - cell "3,550" [ref=f4e506]
+                - cell [ref=f4e507]
+              - row "Twitter 1,798" [ref=f4e510]:
+                - cell "Twitter" [ref=f4e511]
+                - cell "1,798" [ref=f4e512]
+                - cell [ref=f4e513]
+              - row "Facebook 1,245" [ref=f4e516]:
+                - cell "Facebook" [ref=f4e517]
+                - cell "1,245" [ref=f4e518]
+                - cell [ref=f4e519]
+              - row "TikTok 986" [ref=f4e522]:
+                - cell "TikTok" [ref=f4e523]
+                - cell "986" [ref=f4e524]
+                - cell [ref=f4e525]
+              - row "Pinterest 854" [ref=f4e528]:
+                - cell "Pinterest" [ref=f4e529]
+                - cell "854" [ref=f4e530]
+                - cell [ref=f4e531]
+              - row "VK 650" [ref=f4e534]:
+                - cell "VK" [ref=f4e535]
+                - cell "650" [ref=f4e536]
+                - cell [ref=f4e537]
+              - row "Pinterest 420" [ref=f4e540]:
+                - cell "Pinterest" [ref=f4e541]
+                - cell "420" [ref=f4e542]
+                - cell [ref=f4e543]
+        - generic [ref=f4e547]:
+          - heading "Tasks" [level=3] [ref=f4e549]
+          - table [ref=f4e551]:
+            - rowgroup [ref=f4e552]:
+              - row "Select task Extend the data model. August 04, 2021 2/7 3" [ref=f4e553]:
+                - cell "Select task" [ref=f4e554]:
+                  - checkbox "Select task" [checked] [ref=f4e555]
+                - cell "Extend the data model." [ref=f4e556]:
+                  - link "Extend the data model." [ref=f4e557] [cursor=pointer]:
+                    - /url: "#"
+                - cell "August 04, 2021" [ref=f4e558]:
+                  - img [ref=f4e559]
+                  - text: August 04, 2021
+                - cell "2/7" [ref=f4e562]:
+                  - link "2/7" [ref=f4e563] [cursor=pointer]:
+                    - /url: "#"
+                    - img [ref=f4e564]
+                    - text: 2/7
+                - cell "3" [ref=f4e567]:
+                  - link "3" [ref=f4e568] [cursor=pointer]:
+                    - /url: "#"
+                    - img [ref=f4e569]
+                    - text: "3"
+                - cell [ref=f4e572]
+              - row "Select task Verify the event flow. January 03, 2019 3/10 6 JL" [ref=f4e574]:
+                - cell "Select task" [ref=f4e575]:
+                  - checkbox "Select task" [ref=f4e576]
+                - cell "Verify the event flow." [ref=f4e577]:
+                  - link "Verify the event flow." [ref=f4e578] [cursor=pointer]:
+                    - /url: "#"
+                - cell "January 03, 2019" [ref=f4e579]:
+                  - img [ref=f4e580]
+                  - text: January 03, 2019
+                - cell "3/10" [ref=f4e583]:
+                  - link "3/10" [ref=f4e584] [cursor=pointer]:
+                    - /url: "#"
+                    - img [ref=f4e585]
+                    - text: 3/10
+                - cell "6" [ref=f4e588]:
+                  - link "6" [ref=f4e589] [cursor=pointer]:
+                    - /url: "#"
+                    - img [ref=f4e590]
+                    - text: "6"
+                - cell "JL" [ref=f4e593]:
+                  - generic [ref=f4e594]: JL
+              - row "Select task Database backup and maintenance December 28, 2018 0/6 1" [ref=f4e595]:
+                - cell "Select task" [ref=f4e596]:
+                  - checkbox "Select task" [ref=f4e597]
+                - cell "Database backup and maintenance" [ref=f4e598]:
+                  - link "Database backup and maintenance" [ref=f4e599] [cursor=pointer]:
+                    - /url: "#"
+                - cell "December 28, 2018" [ref=f4e600]:
+                  - img [ref=f4e601]
+                  - text: December 28, 2018
+                - cell "0/6" [ref=f4e604]:
+                  - link "0/6" [ref=f4e605] [cursor=pointer]:
+                    - /url: "#"
+                    - img [ref=f4e606]
+                    - text: 0/6
+                - cell "1" [ref=f4e609]:
+                  - link "1" [ref=f4e610] [cursor=pointer]:
+                    - /url: "#"
+                    - img [ref=f4e611]
+                    - text: "1"
+                - cell [ref=f4e614]
+              - row "Select task Identify the implementation team. November 07, 2020 6/10 12" [ref=f4e616]:
+                - cell "Select task" [ref=f4e617]:
+                  - checkbox "Select task" [checked] [ref=f4e618]
+                - cell "Identify the implementation team." [ref=f4e619]:
+                  - link "Identify the implementation team." [ref=f4e620] [cursor=pointer]:
+                    - /url: "#"
+                - cell "November 07, 2020" [ref=f4e621]:
+                  - img [ref=f4e622]
+                  - text: November 07, 2020
+                - cell "6/10" [ref=f4e625]:
+                  - link "6/10" [ref=f4e626] [cursor=pointer]:
+                    - /url: "#"
+                    - img [ref=f4e627]
+                    - text: 6/10
+                - cell "12" [ref=f4e630]:
+                  - link "12" [ref=f4e631] [cursor=pointer]:
+                    - /url: "#"
+                    - img [ref=f4e632]
+                    - text: "12"
+                - cell [ref=f4e635]
+              - row "Select task Define users and workflow November 23, 2021 3/7 5" [ref=f4e637]:
+                - cell "Select task" [ref=f4e638]:
+                  - checkbox "Select task" [ref=f4e639]
+                - cell "Define users and workflow" [ref=f4e640]:
+                  - link "Define users and workflow" [ref=f4e641] [cursor=pointer]:
+                    - /url: "#"
+                - cell "November 23, 2021" [ref=f4e642]:
+                  - img [ref=f4e643]
+                  - text: November 23, 2021
+                - cell "3/7" [ref=f4e646]:
+                  - link "3/7" [ref=f4e647] [cursor=pointer]:
+                    - /url: "#"
+                    - img [ref=f4e648]
+                    - text: 3/7
+                - cell "5" [ref=f4e651]:
+                  - link "5" [ref=f4e652] [cursor=pointer]:
+                    - /url: "#"
+                    - img [ref=f4e653]
+                    - text: "5"
+                - cell [ref=f4e656]
+              - row "Select task Check Pull Requests January 14, 2021 2/9 3" [ref=f4e658]:
+                - cell "Select task" [ref=f4e659]:
+                  - checkbox "Select task" [checked] [ref=f4e660]
+                - cell "Check Pull Requests" [ref=f4e661]:
+                  - link "Check Pull Requests" [ref=f4e662] [cursor=pointer]:
+                    - /url: "#"
+                - cell "January 14, 2021" [ref=f4e663]:
+                  - img [ref=f4e664]
+                  - text: January 14, 2021
+                - cell "2/9" [ref=f4e667]:
+                  - link "2/9" [ref=f4e668] [cursor=pointer]:
+                    - /url: "#"
+                    - img [ref=f4e669]
+                    - text: 2/9
+                - cell "3" [ref=f4e672]:
+                  - link "3" [ref=f4e673] [cursor=pointer]:
+                    - /url: "#"
+                    - img [ref=f4e674]
+                    - text: "3"
+                - cell [ref=f4e677]
+        - generic [ref=f4e680]:
+          - heading "Invoices" [level=3] [ref=f4e682]
+          - generic [ref=f4e684]:
+            - generic [ref=f4e685]:
+              - text: Show
+              - textbox "Invoices count" [ref=f4e687]: "8"
+              - text: entries
+            - generic [ref=f4e688]:
+              - text: "Search:"
+              - textbox "Search invoice" [ref=f4e690]
+          - table [ref=f4e692]:
+            - rowgroup [ref=f4e693]:
+              - row "Select all invoices No. Invoice Subject Client VAT No. Created Status Price" [ref=f4e694]:
+                - columnheader "Select all invoices" [ref=f4e695]:
+                  - checkbox "Select all invoices" [ref=f4e696]
+                - columnheader "No." [ref=f4e697]:
+                  - text: No.
+                  - img [ref=f4e698]
+                - columnheader "Invoice Subject" [ref=f4e701]
+                - columnheader "Client" [ref=f4e702]
+                - columnheader "VAT No." [ref=f4e703]
+                - columnheader "Created" [ref=f4e704]
+                - columnheader "Status" [ref=f4e705]
+                - columnheader "Price" [ref=f4e706]
+                - columnheader [ref=f4e707]
+            - rowgroup [ref=f4e708]:
+              - row "Select invoice 001401 Design Works Carlson Limited 87956621 15 Dec 2017 Paid $887 Actions" [ref=f4e709]:
+                - cell "Select invoice" [ref=f4e710]:
+                  - checkbox "Select invoice" [ref=f4e711]
+                - cell "001401" [ref=f4e712]
+                - cell "Design Works" [ref=f4e713]:
+                  - link "Design Works" [ref=f4e714] [cursor=pointer]:
+                    - /url: ../invoice.html
+                - cell "Carlson Limited" [ref=f4e715]: Carlson Limited
+                - cell "87956621" [ref=f4e716]
+                - cell "15 Dec 2017" [ref=f4e717]
+                - cell "Paid" [ref=f4e718]: Paid
+                - cell "$887" [ref=f4e720]
+                - cell "Actions" [ref=f4e721]:
+                  - button "Actions" [ref=f4e723] [cursor=pointer]
+              - row "Select invoice 001402 UX Wireframes Adobe 87956421 12 Apr 2017 Pending $1200 Actions" [ref=f4e724]:
+                - cell "Select invoice" [ref=f4e725]:
+                  - checkbox "Select invoice" [ref=f4e726]
+                - cell "001402" [ref=f4e727]
+                - cell "UX Wireframes" [ref=f4e728]:
+                  - link "UX Wireframes" [ref=f4e729] [cursor=pointer]:
+                    - /url: ../invoice.html
+                - cell "Adobe" [ref=f4e730]: Adobe
+                - cell "87956421" [ref=f4e731]
+                - cell "12 Apr 2017" [ref=f4e732]
+                - cell "Pending" [ref=f4e733]: Pending
+                - cell "$1200" [ref=f4e735]
+                - cell "Actions" [ref=f4e736]:
+                  - button "Actions" [ref=f4e738] [cursor=pointer]
+              - row "Select invoice 001403 New Dashboard Bluewolf 87952621 23 Oct 2017 Pending $534 Actions" [ref=f4e739]:
+                - cell "Select invoice" [ref=f4e740]:
+                  - checkbox "Select invoice" [ref=f4e741]
+                - cell "001403" [ref=f4e742]
+                - cell "New Dashboard" [ref=f4e743]:
+                  - link "New Dashboard" [ref=f4e744] [cursor=pointer]:
+                    - /url: ../invoice.html
+                - cell "Bluewolf" [ref=f4e745]: Bluewolf
+                - cell "87952621" [ref=f4e746]
+                - cell "23 Oct 2017" [ref=f4e747]
+                - cell "Pending" [ref=f4e748]: Pending
+                - cell "$534" [ref=f4e750]
+                - cell "Actions" [ref=f4e751]:
+                  - button "Actions" [ref=f4e753] [cursor=pointer]
+              - row "Select invoice 001404 Landing Page Salesforce 87953421 2 Sep 2017 Due in 2 Weeks $1500 Actions" [ref=f4e754]:
+                - cell "Select invoice" [ref=f4e755]:
+                  - checkbox "Select invoice" [ref=f4e756]
+                - cell "001404" [ref=f4e757]
+                - cell "Landing Page" [ref=f4e758]:
+                  - link "Landing Page" [ref=f4e759] [cursor=pointer]:
+                    - /url: ../invoice.html
+                - cell "Salesforce" [ref=f4e760]: Salesforce
+                - cell "87953421" [ref=f4e761]
+                - cell "2 Sep 2017" [ref=f4e762]
+                - cell "Due in 2 Weeks" [ref=f4e763]: Due in 2 Weeks
+                - cell "$1500" [ref=f4e765]
+                - cell "Actions" [ref=f4e766]:
+                  - button "Actions" [ref=f4e768] [cursor=pointer]
+              - row "Select invoice 001405 Marketing Templates Printic 87956621 29 Jan 2018 Paid Today $648 Actions" [ref=f4e769]:
+                - cell "Select invoice" [ref=f4e770]:
+                  - checkbox "Select invoice" [ref=f4e771]
+                - cell "001405" [ref=f4e772]
+                - cell "Marketing Templates" [ref=f4e773]:
+                  - link "Marketing Templates" [ref=f4e774] [cursor=pointer]:
+                    - /url: ../invoice.html
+                - cell "Printic" [ref=f4e775]: Printic
+                - cell "87956621" [ref=f4e776]
+                - cell "29 Jan 2018" [ref=f4e777]
+                - cell "Paid Today" [ref=f4e778]: Paid Today
+                - cell "$648" [ref=f4e780]
+                - cell "Actions" [ref=f4e781]:
+                  - button "Actions" [ref=f4e783] [cursor=pointer]
+              - row "Select invoice 001406 Sales Presentation Tabdaq 87956621 4 Feb 2018 Due in 3 Weeks $300 Actions" [ref=f4e784]:
+                - cell "Select invoice" [ref=f4e785]:
+                  - checkbox "Select invoice" [ref=f4e786]
+                - cell "001406" [ref=f4e787]
+                - cell "Sales Presentation" [ref=f4e788]:
+                  - link "Sales Presentation" [ref=f4e789] [cursor=pointer]:
+                    - /url: ../invoice.html
+                - cell "Tabdaq" [ref=f4e790]: Tabdaq
+                - cell "87956621" [ref=f4e791]
+                - cell "4 Feb 2018" [ref=f4e792]
+                - cell "Due in 3 Weeks" [ref=f4e793]: Due in 3 Weeks
+                - cell "$300" [ref=f4e795]
+                - cell "Actions" [ref=f4e796]:
+                  - button "Actions" [ref=f4e798] [cursor=pointer]
+              - row "Select invoice 001407 Logo & Print Apple 87956621 22 Mar 2018 Paid Today $2500 Actions" [ref=f4e799]:
+                - cell "Select invoice" [ref=f4e800]:
+                  - checkbox "Select invoice" [ref=f4e801]
+                - cell "001407" [ref=f4e802]
+                - cell "Logo & Print" [ref=f4e803]:
+                  - link "Logo & Print" [ref=f4e804] [cursor=pointer]:
+                    - /url: ../invoice.html
+                - cell "Apple" [ref=f4e805]: Apple
+                - cell "87956621" [ref=f4e806]
+                - cell "22 Mar 2018" [ref=f4e807]
+                - cell "Paid Today" [ref=f4e808]: Paid Today
+                - cell "$2500" [ref=f4e810]
+                - cell "Actions" [ref=f4e811]:
+                  - button "Actions" [ref=f4e813] [cursor=pointer]
+              - row "Select invoice 001408 Icons Tookapic 87956621 13 May 2018 Paid Today $940 Actions" [ref=f4e814]:
+                - cell "Select invoice" [ref=f4e815]:
+                  - checkbox "Select invoice" [ref=f4e816]
+                - cell "001408" [ref=f4e817]
+                - cell "Icons" [ref=f4e818]:
+                  - link "Icons" [ref=f4e819] [cursor=pointer]:
+                    - /url: ../invoice.html
+                - cell "Tookapic" [ref=f4e820]: Tookapic
+                - cell "87956621" [ref=f4e821]
+                - cell "13 May 2018" [ref=f4e822]
+                - cell "Paid Today" [ref=f4e823]: Paid Today
+                - cell "$940" [ref=f4e825]
+                - cell "Actions" [ref=f4e826]:
+                  - button "Actions" [ref=f4e828] [cursor=pointer]
+          - generic [ref=f4e829]:
+            - paragraph [ref=f4e830]: Showing 1 to 8 of 16 entries
+            - list [ref=f4e831]:
+              - listitem [ref=f4e832]:
+                - link "prev" [disabled]:
+                  - /url: "#"
+                  - img
+                  - text: prev
+              - listitem [ref=f4e833]:
+                - link "1" [ref=f4e834] [cursor=pointer]:
+                  - /url: "#"
+              - listitem [ref=f4e835]:
+                - link "2" [ref=f4e836] [cursor=pointer]:
+                  - /url: "#"
+              - listitem [ref=f4e837]:
+                - link "3" [ref=f4e838] [cursor=pointer]:
+                  - /url: "#"
+              - listitem [ref=f4e839]:
+                - link "4" [ref=f4e840] [cursor=pointer]:
+                  - /url: "#"
+              - listitem [ref=f4e841]:
+                - link "5" [ref=f4e842] [cursor=pointer]:
+                  - /url: "#"
+              - listitem [ref=f4e843]:
+                - link "next" [ref=f4e844] [cursor=pointer]:
+                  - /url: "#"
+                  - text: next
+                  - img [ref=f4e845]
+  - link [ref=e19] [cursor=pointer]:
+    - /url: "#"
+    - img [ref=e20]
